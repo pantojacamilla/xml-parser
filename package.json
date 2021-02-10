@@ -1,0 +1,19 @@
+{
+  "name": "xml-parser",
+  "version": "1.0.0",
+  "description": "A XML parser built with JavaScript",
+  "main": "/js/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantojacamilla/xml-parser.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pantojacamilla/xml-parser/issues"
+  },
+  "homepage": "https://github.com/pantojacamilla/xml-parser#readme"
+}
