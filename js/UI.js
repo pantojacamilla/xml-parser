@@ -1,3 +1,3 @@
-class Ui {
-  constructor();
+class UI {
+
 }

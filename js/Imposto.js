@@ -1,7 +1,6 @@
 class Imposto {
-  contructor();
   tipoProduto;
-  ato;
+  lato;
   dataInicio;
   dataFim;
   valor;

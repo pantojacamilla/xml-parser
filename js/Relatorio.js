@@ -1,5 +1,4 @@
 class Relatorio {
-  constructor();
   numeroSequencial;
   //empresa empresa
   //produduto: Produto
@@ -10,5 +9,4 @@ class Relatorio {
   valorTotalPraticadoNoMes;
   diferencaEntreOTotalPresumidoEOPraticado;
   valorDeIcmsASerDistituidoNoMes;
-
 }

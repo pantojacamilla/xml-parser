@@ -3,4 +3,4 @@ class NotaFiscal {
   //produto:Produto
   //empresa:Empresa
   tipoDeNota; //(entrada ou saída)
-}
+};
