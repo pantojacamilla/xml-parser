@@ -1,4 +1,0 @@
-class Empresa {
-    nomeEmpresa;
-    cnpj;
-};
