@@ -1,6 +1,6 @@
 export default class Empresa {
-  constructor(nomeEmpresa, cnpj) {
+  constructor(nomeEmpresa, cnpjFormatado) {
     this.nomeEmpresa = nomeEmpresa;
-    this.cnpj = cnpj;
+    this.cnpjFormatado = cnpjFormatado;
   }
 }

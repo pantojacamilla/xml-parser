@@ -11,20 +11,33 @@
 //   valorDeIcmsASerDistituidoNoMes;
 // }
 
-const mostraNomeDaEmpresaNaTela = (nomeEmpresa) => {
+const objetoEmpresa = JSON.parse(window.localStorage.getItem('empresa'));
+const cnpjSoNumeros = objetoEmpresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
+
+const mostraNomeDaEmpresaNaTela = () => {
+  const { nomeEmpresa } = objetoEmpresa;
   const divNome = document.querySelector('#nome-empresa');
-  divNome.innerHTML = nomeEmpresa;
+  divNome.textContent = nomeEmpresa;
 };
 
-const mostraCnpjDaEmpresaNaTela = (cnpj) => {
+const mostraCnpjDaEmpresaNaTela = () => {
+  const { cnpjFormatado } = objetoEmpresa;
   const divCnpj = document.querySelector('#cnpj-empresa');
-  divCnpj.innerHTML = cnpj;
+  divCnpj.textContent = cnpjFormatado;
+};
+
+const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
+  const nfsEmpresaSelecionada = notasFiscais.filter((nf) => nf.name.includes(cnpjSoNumeros));
+  return nfsEmpresaSelecionada;
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const objetoEmpresa = JSON.parse(window.localStorage.getItem('empresa'));
-  const { nomeEmpresa } = objetoEmpresa;
-  const { cnpj } = objetoEmpresa;
-  mostraNomeDaEmpresaNaTela(nomeEmpresa);
-  mostraCnpjDaEmpresaNaTela(cnpj);
+  mostraNomeDaEmpresaNaTela();
+  mostraCnpjDaEmpresaNaTela();
+});
+
+document.querySelector('#notasFiscais').addEventListener('change', (event) => {
+  const notasFiscais = Array.from(event.target.files);
+  const notasFiscaisDaEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
+  console.log(notasFiscaisDaEmpresaSelecionada);
 });
