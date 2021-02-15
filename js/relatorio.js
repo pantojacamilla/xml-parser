@@ -31,6 +31,16 @@ const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
   return nfsEmpresaSelecionada;
 };
 
+// Remove as notas canceladas -nfce e -nfe deixando as -can
+const removeNotasFiscaisCanceladas = (notasFiscais) => {
+  let nfsCanceladas = notasFiscais.filter((nf) => nf.name.includes('-can'));
+  nfsCanceladas = nfsCanceladas.map((nfCancelada) => nfCancelada.name.replace('-can.xml', '-nf'));
+
+  // semNFCanc (Sem Nota Fiscal Cancelada)
+  const semNFCanc = notasFiscais.filter((nf) => !nfsCanceladas.includes(nf.name.substr(0, 47)));
+  return semNFCanc;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   mostraNomeDaEmpresaNaTela();
   mostraCnpjDaEmpresaNaTela();
@@ -39,5 +49,5 @@ document.addEventListener('DOMContentLoaded', () => {
 document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const notasFiscais = Array.from(event.target.files);
   const notasFiscaisDaEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
-  console.log(notasFiscaisDaEmpresaSelecionada);
+  const notasFiscaisNaoCanceladas = removeNotasFiscaisCanceladas(notasFiscaisDaEmpresaSelecionada);
 });
