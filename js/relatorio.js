@@ -1,3 +1,5 @@
+import NotaFiscal from './NotaFiscal';
+
 // class Relatorio {
 //   numeroSequencial;
 //   //empresa empresa
@@ -41,6 +43,38 @@ const removeNotasFiscaisCanceladas = (notasFiscais) => {
   return semNFCanc;
 };
 
+// Criar uma função que le os arquivos
+// -- Nessa função tem que cria os objetos das notas e retornar os ojetos
+const leAsNotasFiscais = (notasFiscais) => {
+  const parser = new DOMParser();
+
+  notasFiscais.forEach((notaFiscal) => {
+    const reader = new FileReader();
+    const produtos = [];
+    reader.onload = () => {
+      const xmlString = reader.result;
+      const dom = parser.parseFromString(xmlString, 'application/xml');
+      const nf = new NotaFiscal();
+      /*
+        Se o arquivo não tiver produto mandar para a classe UI
+        uma tag que identifique aquele doc para que a classe
+        mostre na tela a mensagem de inutilizado ou cancelado
+      */
+
+      // Criar Produto
+
+      // Criar Nota Fiscal c/ Produtos
+
+      // const dataEmissao = dom.querySelector('dhEmi');
+      // const qtdLitros = dom.querySelector('qCom');
+      // const valorUnit = dom.querySelector('vUnCom');
+      // const valorTotProd = dom.querySelector('vProd');
+      // const valorTotTrib = dom.querySelector('vTotTrib');
+    };
+    reader.readAsText(notaFiscal);
+  });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   mostraNomeDaEmpresaNaTela();
   mostraCnpjDaEmpresaNaTela();
@@ -50,4 +84,6 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const notasFiscais = Array.from(event.target.files);
   const notasFiscaisDaEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
   const notasFiscaisNaoCanceladas = removeNotasFiscaisCanceladas(notasFiscaisDaEmpresaSelecionada);
+  leAsNotasFiscais(notasFiscaisNaoCanceladas);
+
 });

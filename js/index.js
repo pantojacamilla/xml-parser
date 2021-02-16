@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/extensions
-import Empresa from './empresa.js';
+import Empresa from './Empresa';
 
 const criaUmObjetoEmpresa = (empresaSelecionada) => {
   let empresa = {};
