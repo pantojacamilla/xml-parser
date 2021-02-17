@@ -5,20 +5,42 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
   <title>Relatório</title>
 </head>
 
 <body>
+
+  <input type="file" id="notasFiscais" accept="application/xml" multiple>
 
   <div id="nome-empresa"></div>
   <br>
   <div id="cnpj-empresa"></div>
   <br>
 
-  <input type="file" id="notasFiscais" accept="application/xml" multiple>
+  <table id='relatorio'>
+    <thead>
+      <tr>
+        <th>Nº</th>
+        <th>Nota</th>
+        <th>Data de Emissão</th>
+        <th>Combustível</th>
+        <th>Ato CONTEPE-PMPF</th>
+        <th>Valor Presumido <br> (Ato Contepe Pmpf) / Litro</th>
+        <th>Qtde. de Litros</th>
+        <th>Valor total <br> (Valor presumido sobre a venda x Qtde. Litros)</th>
+        <th>Valor Total <br> (Vendido Ao Consumidor)</th>
+        <th>Diferença Entre <br> (Valor presumido e Valor vendido ao Consumidor</th>
+        <th>Valor a ser restituído na venda (aliq. 25%)</th>
+      </tr>
+    </thead>
+
+    <tbody></tbody>
+  </table>
 
   <script src="/js/relatorio.js" type="module"></script>
   <script src="/js/NotaFiscal.js" type="module"></script>
+  <script src="/js/Ui.js" type="module"></script>
 </body>
 
 </html>

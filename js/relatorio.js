@@ -1,6 +1,7 @@
 /* eslint-disable import/extensions */
 import NotaFiscal from './NotaFiscal.js';
 import Produto from './Produto.js';
+import UI from './Ui.js';
 
 // class Relatorio {
 //   numeroSequencial;
@@ -63,7 +64,7 @@ const retornaOTipoDeNotaFiscal = (rootElement) => {
 const leAsNotasFiscais = (notasFiscais) => {
   const parser = new DOMParser();
 
-  notasFiscais.forEach((notaFiscal) => {
+  notasFiscais.forEach((notaFiscal, index) => {
     const reader = new FileReader();
     // const produtos = [];
     reader.onload = () => {
@@ -71,23 +72,24 @@ const leAsNotasFiscais = (notasFiscais) => {
       const dom = parser.parseFromString(xmlString, 'application/xml');
       const rootElementDoArquivo = dom.documentElement.tagName;
       const tipoDeNotaFiscal = retornaOTipoDeNotaFiscal(rootElementDoArquivo);
+      const tableRelatorio = document.getElementById('relatorio');
 
+      if (tipoDeNotaFiscal === 'Inutilizada') {
+        UI.mostraNFInutilizada(dom, index, tableRelatorio);
+        // return;
+      } else if (tipoDeNotaFiscal === 'Cancelada') {
+        UI.mostraNFCancelada(dom, index, tableRelatorio);
+        // return;
+      } else if (tipoDeNotaFiscal === 'Válida') {
+        // normal
+        // return;
+      }
       // const nf = new NotaFiscal();
       /*
         Se o arquivo não tiver produto mandar para a classe UI
         uma tag que identifique aquele doc para que a classe
         mostre na tela a mensagem de inutilizado ou cancelado
       */
-
-      // Criar Produto
-
-      // Criar Nota Fiscal c/ Produtos
-
-      // const dataEmissao = dom.querySelector('dhEmi');
-      // const qtdLitros = dom.querySelector('qCom');
-      // const valorUnit = dom.querySelector('vUnCom');
-      // const valorTotProd = dom.querySelector('vProd');
-      // const valorTotTrib = dom.querySelector('vTotTrib');
     };
     reader.readAsText(notaFiscal);
   });
