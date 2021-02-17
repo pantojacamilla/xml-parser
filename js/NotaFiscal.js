@@ -1,14 +1,9 @@
 export default class NotaFiscal {
-  dataEmissao;
-  produtos;
-  empresa;
-
   tipoDeNota() {
-    if (this.empresa.nome == 'F S S COMERCIO VAREJISTA DE COMB E LUBRIFICANTES LTDA') {
+    if (this.empresa.nome === 'F S S COMERCIO VAREJISTA DE COMB E LUBRIFICANTES LTDA') {
       return 'Entrada';
-    } else {
-      return 'Saída';
     }
+    return 'Saída';
   }
 }
 

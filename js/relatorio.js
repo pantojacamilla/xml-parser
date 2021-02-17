@@ -1,4 +1,6 @@
-import NotaFiscal from './NotaFiscal';
+/* eslint-disable import/extensions */
+import NotaFiscal from './NotaFiscal.js';
+import Produto from './Produto.js';
 
 // class Relatorio {
 //   numeroSequencial;
@@ -43,6 +45,19 @@ const removeNotasFiscaisCanceladas = (notasFiscais) => {
   return semNFCanc;
 };
 
+const retornaOTipoDeNotaFiscal = (rootElement) => {
+  let tipoDeNotaFiscal;
+
+  if (rootElement === 'retInutNFe') {
+    tipoDeNotaFiscal = 'Inutilizada';
+  } else if (rootElement === 'retEnvEvento') {
+    tipoDeNotaFiscal = 'Cancelada';
+  } else if (rootElement === 'nfeProc') {
+    tipoDeNotaFiscal = 'Válida';
+  }
+  return tipoDeNotaFiscal;
+};
+
 // Criar uma função que le os arquivos
 // -- Nessa função tem que cria os objetos das notas e retornar os ojetos
 const leAsNotasFiscais = (notasFiscais) => {
@@ -50,11 +65,14 @@ const leAsNotasFiscais = (notasFiscais) => {
 
   notasFiscais.forEach((notaFiscal) => {
     const reader = new FileReader();
-    const produtos = [];
+    // const produtos = [];
     reader.onload = () => {
       const xmlString = reader.result;
       const dom = parser.parseFromString(xmlString, 'application/xml');
-      const nf = new NotaFiscal();
+      const rootElementDoArquivo = dom.documentElement.tagName;
+      const tipoDeNotaFiscal = retornaOTipoDeNotaFiscal(rootElementDoArquivo);
+
+      // const nf = new NotaFiscal();
       /*
         Se o arquivo não tiver produto mandar para a classe UI
         uma tag que identifique aquele doc para que a classe
@@ -85,5 +103,4 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const notasFiscaisDaEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
   const notasFiscaisNaoCanceladas = removeNotasFiscaisCanceladas(notasFiscaisDaEmpresaSelecionada);
   leAsNotasFiscais(notasFiscaisNaoCanceladas);
-
 });
