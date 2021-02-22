@@ -64,4 +64,26 @@ export default class UI {
   static mostraNFCValida(xmlString) {
 
   }
+
+  static mostraNFCValidaSemCombustível(dom, index, tableRelatorio) {
+    const row = document.createElement('tr');
+    let td = document.createElement('td');
+
+    // Número sequecial
+    td.innerHTML = index + 1;
+    row.appendChild(td);
+
+    // Nome do arquivo
+    td = document.createElement('td');
+    td.textContent = dom.querySelector('infNFe').getAttribute('Id');
+
+    row.appendChild(td);
+
+    td = document.createElement('td');
+    td.setAttribute('colspan', '9');
+    td.textContent = 'NÃO CONTÉM COMBUSTÍVEL';
+    row.appendChild(td);
+
+    tableRelatorio.children[1].appendChild(row);
+  }
 }

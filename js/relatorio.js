@@ -3,18 +3,17 @@ import NotaFiscal from './NotaFiscal.js';
 import Produto from './Produto.js';
 import UI from './Ui.js';
 
-// class Relatorio {
-//   numeroSequencial;
-//   //empresa empresa
-//   //produduto: Produto
-//   valorTotalPresumido;
-//   diferencaEntreValorPresumidoEValorDeVenda;
-//   icmsASerRestituido;
-//   valorTotalPresumidoNoMes;
-//   valorTotalPraticadoNoMes;
-//   diferencaEntreOTotalPresumidoEOPraticado;
-//   valorDeIcmsASerDistituidoNoMes;
-// }
+class Relatorio {
+  numeroSequencial;
+  notaFiscal;
+  valorTotalPresumido;
+  diferencaEntreValorPresumidoEValorDeVenda;
+  icmsASerRestituido;
+  valorTotalPresumidoNoMes;
+  valorTotalPraticadoNoMes;
+  diferencaEntreOTotalPresumidoEOPraticado;
+  valorDeIcmsASerDistituidoNoMes;
+}
 
 const objetoEmpresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = objetoEmpresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
@@ -36,7 +35,7 @@ const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
   return nfsEmpresaSelecionada;
 };
 
-// Remove as notas canceladas -nfce e -nfe deixando as -can
+// Remove as notas canceladas (-nfce e -nfe) deixando as -can
 const removeNotasFiscaisCanceladas = (notasFiscais) => {
   let nfsCanceladas = notasFiscais.filter((nf) => nf.name.includes('-can'));
   nfsCanceladas = nfsCanceladas.map((nfCancelada) => nfCancelada.name.replace('-can.xml', '-nf'));
@@ -59,20 +58,72 @@ const retornaOTipoDeNotaFiscal = (rootElement) => {
   return tipoDeNotaFiscal;
 };
 
+const validaNomeDoProduto = (produto) => {
+  let resultado;
+  const nomeProduto = produto.querySelector('xProd').textContent;
+
+  if (nomeProduto === 'GASOLINA COMUM') {
+    resultado = true;
+    // console.log(nomeProduto);
+  } else if (nomeProduto === 'DIESEL COMUM') {
+    resultado = true;
+    // console.log(nomeProduto);
+  } else if (nomeProduto === 'GASOLINA ADITIVADA') {
+    resultado = true;
+    // console.log(nomeProduto);
+  } else {
+    resultado = false;
+  }
+  return resultado;
+};
+
+const leNotasFiscaisValidas = (dom) => {
+  const produtos = dom.querySelectorAll('det');
+  const notasFiscais = [];
+  const produtosValidos = [];
+
+  for (let i = 0; i < produtos.length; i += 1) {
+    const resultadoValidacao = validaNomeDoProduto(produtos[i]);
+    if (resultadoValidacao === true) {
+      const nomeProd = produtos[i].querySelector('xProd').textContent;
+      const qtdComercializada = produtos[i].querySelector('qCom').textContent;
+      const valorVenda = produtos[i].querySelector('vUnCom').textContent;
+      const valorTotProd = produtos[i].querySelector('vProd').textContent;
+      produtosValidos.push(new Produto(nomeProd, qtdComercializada, valorVenda, valorTotProd));
+    }
+  }
+
+  if (produtosValidos.length > 0) {
+    const dataEmissao = dom.querySelector('dhEmi').textContent;
+    const chaveDeAcesso = dom.querySelector('infNFe').getAttribute('Id');
+    notasFiscais.push(new NotaFiscal(chaveDeAcesso, dataEmissao, produtosValidos, objetoEmpresa));
+    return notasFiscais;
+  } else {
+    return false;
+  }
+
+  // Se tiver só um produto criar só esse produtos mas somente
+  // se a função de validação do nome retornar positivo
+  // Eu quero retornar para a classe ui
+  // um objet notaFiscal com um monte de produto dentro
+};
+
 // Criar uma função que le os arquivos
 // -- Nessa função tem que cria os objetos das notas e retornar os ojetos
 const leAsNotasFiscais = (notasFiscais) => {
   const parser = new DOMParser();
+  // let notaLidasValidas;
 
   notasFiscais.forEach((notaFiscal, index) => {
     const reader = new FileReader();
-    // const produtos = [];
+
     reader.onload = () => {
       const xmlString = reader.result;
       const dom = parser.parseFromString(xmlString, 'application/xml');
       const rootElementDoArquivo = dom.documentElement.tagName;
+      // Inutilizada, Cancelada e Válida
       const tipoDeNotaFiscal = retornaOTipoDeNotaFiscal(rootElementDoArquivo);
-      const tableRelatorio = document.getElementById('relatorio');
+      const tableRelatorio = document.querySelector('#relatorio');
 
       if (tipoDeNotaFiscal === 'Inutilizada') {
         UI.mostraNFInutilizada(dom, index, tableRelatorio);
@@ -81,15 +132,15 @@ const leAsNotasFiscais = (notasFiscais) => {
         UI.mostraNFCancelada(dom, index, tableRelatorio);
         // return;
       } else if (tipoDeNotaFiscal === 'Válida') {
-        // normal
-        // return;
+        const nomeArquivo = dom.querySelector('infNFe').getAttribute('Id');
+        console.log(nomeArquivo);
+        const resultado = leNotasFiscaisValidas(dom);
+        if (resultado != false) {
+
+        } else {
+          UI.mostraNFCValidaSemCombustível(dom, index, tableRelatorio);
+        }
       }
-      // const nf = new NotaFiscal();
-      /*
-        Se o arquivo não tiver produto mandar para a classe UI
-        uma tag que identifique aquele doc para que a classe
-        mostre na tela a mensagem de inutilizado ou cancelado
-      */
     };
     reader.readAsText(notaFiscal);
   });
