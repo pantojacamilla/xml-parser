@@ -61,10 +61,6 @@ export default class UI {
     tableRelatorio.children[1].appendChild(row);
   }
 
-  static mostraNFCValida(xmlString) {
-
-  }
-
   static mostraNFCValidaSemCombustível(dom, index, tableRelatorio) {
     const row = document.createElement('tr');
     let td = document.createElement('td');
@@ -76,7 +72,6 @@ export default class UI {
     // Nome do arquivo
     td = document.createElement('td');
     td.textContent = dom.querySelector('infNFe').getAttribute('Id');
-
     row.appendChild(td);
 
     td = document.createElement('td');
@@ -85,5 +80,185 @@ export default class UI {
     row.appendChild(td);
 
     tableRelatorio.children[1].appendChild(row);
+  }
+
+  static mostraNFComUmProduto(linhaProduto, dom, tableRelatorio) {
+    const row = document.createElement('tr');
+    let td = document.createElement('td');
+
+    // Número sequecial
+    td = document.createElement('td');
+    td.textContent = linhaProduto.numeroSequencial;
+    row.appendChild(td);
+
+    // Display Nome Da Nota
+    td = document.createElement('td');
+    const nomeNota = linhaProduto.notaFiscal[0].chaveDeAcesso;
+    td.textContent = nomeNota;
+    row.appendChild(td);
+
+    // Display Data de Emissão
+    td = document.createElement('td');
+    const { dataEmissao } = linhaProduto.notaFiscal[0];
+    td.textContent = dataEmissao;
+    row.appendChild(td);
+
+    // Display nome dos produtos
+    td = document.createElement('td');
+    const { nomeProduto } = linhaProduto.notaFiscal[0].produtos[0];
+    td.textContent = nomeProduto;
+    row.appendChild(td);
+
+    // Display Número e Ano ato
+    td = document.createElement('td');
+    const { ato } = linhaProduto;
+    const dataDeInicioDoAtoAtual = new Date(`${ato.dataInicio}T01:00:00-03:00`);
+    td.textContent = `${ato.numeroAto}/${dataDeInicioDoAtoAtual.getFullYear()}`;
+    row.appendChild(td);
+
+    // Display Qtde de Litros
+    td = document.createElement('td');
+    const { qtdComercializadaDoProduto } = linhaProduto.notaFiscal[0].produtos[0];
+    td.textContent = `${qtdComercializadaDoProduto} LT`;
+    row.appendChild(td);
+
+    // Display Valor Presumido
+    td = document.createElement('td');
+    const { valorPresumido } = linhaProduto;
+    td.textContent = `R$ ${valorPresumido.toFixed(4)}`;
+    row.appendChild(td);
+
+    // Display total valor Presumido
+    td = document.createElement('td');
+    const { valorTotalPresumido } = linhaProduto;
+    td.textContent = `R$ ${valorTotalPresumido.toFixed(4)}`;
+    row.appendChild(td);
+
+    // Display Valor vendido ao consumidor
+    td = document.createElement('td');
+    const { valorTotalDoProduto } = linhaProduto.notaFiscal[0].produtos[0];
+    td.textContent = `R$ ${Number(valorTotalDoProduto).toFixed(4)}`;
+    row.appendChild(td);
+
+    // Display a diferenca entre os valores presumidos
+    td = document.createElement('td');
+    const { diferencaEntreValorPresumidoEValorDeVenda } = linhaProduto;
+    td.textContent = `R$ ${diferencaEntreValorPresumidoEValorDeVenda.toFixed(4)}`;
+    row.appendChild(td);
+
+    // Display valor a ser restituido
+    td = document.createElement('td');
+    const { icmsASerRestituido } = linhaProduto;
+    td.textContent = `R$ ${icmsASerRestituido.toFixed(4)}`;
+    row.appendChild(td);
+
+    tableRelatorio.children[1].appendChild(row);
+  }
+
+  static mostraNFComMultiplosProdutos(linhasProdutos, numeroSequencial,
+    qtdProdutosNaNota, dom, tableRelatorio) {
+    let row = document.createElement('tr');
+    let td = document.createElement('td');
+
+    // // Número sequecial
+    // td = document.createElement('td');
+    // td.setAttribute('rowspan', qtdProdutosNaNota);
+    // td.textContent = numeroSequencial;
+    // row.appendChild(td);
+
+    // // Display Nome Da Nota
+    // td = document.createElement('td');
+    // td.setAttribute('rowspan', qtdProdutosNaNota);
+    // const nomeNota = linhasProdutos[0].notaFiscal[0].chaveDeAcesso;
+    // td.textContent = nomeNota;
+    // row.appendChild(td);
+
+    // // Display Data de Emissão
+    // td = document.createElement('td');
+    // td.setAttribute('rowspan', qtdProdutosNaNota);
+    // const { dataEmissao } = linhasProdutos[0].notaFiscal[0];
+    // td.textContent = dataEmissao;
+    // row.appendChild(td);
+
+    for (let i = 0; i < qtdProdutosNaNota; i += 1) {
+      row = document.createElement('tr');
+      td = document.createElement('td');
+
+      // Número sequecial
+      td = document.createElement('td');
+      td.textContent = linhasProdutos[i].numeroSequencial;
+      row.appendChild(td);
+
+      // Display Nome Da Nota
+      td = document.createElement('td');
+      const nomeNota = linhasProdutos[i].notaFiscal[0].chaveDeAcesso;
+      td.textContent = nomeNota;
+      row.appendChild(td);
+
+      // Display Data de Emissão
+      td = document.createElement('td');
+      const { dataEmissao } = linhasProdutos[i].notaFiscal[0];
+      td.textContent = dataEmissao;
+      row.appendChild(td);
+
+      // Display nome dos produtos
+      td = document.createElement('td');
+      const { nomeProduto } = linhasProdutos[i].notaFiscal[0].produtos[i];
+      td.textContent = nomeProduto;
+      row.appendChild(td);
+
+      // Display Número e Ano ato
+      td = document.createElement('td');
+      const { ato } = linhasProdutos[i];
+      const dataDeInicioDoAtoAtual = new Date(`${ato.dataInicio}T01:00:00-03:00`);
+      td.textContent = `${ato.numeroAto}/${dataDeInicioDoAtoAtual.getFullYear()}`;
+      row.appendChild(td);
+
+      // Display Qtde de Litros
+      td = document.createElement('td');
+      const { qtdComercializadaDoProduto } = linhasProdutos[i].notaFiscal[0].produtos[i];
+      td.textContent = `${qtdComercializadaDoProduto} LT`;
+      row.appendChild(td);
+
+      // Display Valor Presumido
+      td = document.createElement('td');
+      const { valorPresumido } = linhasProdutos[i];
+      td.textContent = `R$ ${valorPresumido.toFixed(4)}`;
+      row.appendChild(td);
+
+      // Display total valor Presumido
+      td = document.createElement('td');
+      const { valorTotalPresumido } = linhasProdutos[i];
+      td.textContent = `R$ ${valorTotalPresumido.toFixed(4)}`;
+      row.appendChild(td);
+
+      // Display Valor vendido ao consumidor
+      td = document.createElement('td');
+      const { valorTotalDoProduto } = linhasProdutos[i].notaFiscal[0].produtos[i];
+      td.textContent = `R$ ${Number(valorTotalDoProduto).toFixed(4)}`;
+      row.appendChild(td);
+
+      // Display a diferenca entre os valores presumidos
+      td = document.createElement('td');
+      const { diferencaEntreValorPresumidoEValorDeVenda } = linhasProdutos[i];
+      td.textContent = `R$ ${diferencaEntreValorPresumidoEValorDeVenda.toFixed(4)}`;
+      row.appendChild(td);
+
+      // Display valor a ser restituido
+      td = document.createElement('td');
+      const { icmsASerRestituido } = linhasProdutos[i];
+      td.textContent = `R$ ${icmsASerRestituido.toFixed(4)}`;
+      row.appendChild(td);
+
+      tableRelatorio.children[1].appendChild(row);
+    }
+
+    // Display Número e Ano ato
+    // td = document.createElement('td');
+    // td.setAttribute('rowspan', qtdProdutosNaNota);
+    // const { ato } = linhasProdutos[0];
+    // const dataDeInicioDoAtoAtual = new Date(`${ato.dataInicio}T01:00:00-03:00`);
+    // td.textContent = `${ato.numeroAto}/${dataDeInicioDoAtoAtual.getFullYear()}`;
+    // row.appendChild(td);
   }
 }
