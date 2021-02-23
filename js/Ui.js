@@ -143,13 +143,23 @@ export default class UI {
     // Display a diferenca entre os valores presumidos
     td = document.createElement('td');
     const { diferencaEntreValorPresumidoEValorDeVenda } = linhaProduto;
-    td.textContent = `R$ ${diferencaEntreValorPresumidoEValorDeVenda.toFixed(4)}`;
+    if (diferencaEntreValorPresumidoEValorDeVenda > 0) {
+      td.style.backgroundColor = 'lime';
+    } else {
+      td.style.backgroundColor = 'red';
+    }
+    td.textContent = `R$ ${Math.abs(diferencaEntreValorPresumidoEValorDeVenda).toFixed(4)}`;
     row.appendChild(td);
 
     // Display valor a ser restituido
     td = document.createElement('td');
     const { icmsASerRestituido } = linhaProduto;
-    td.textContent = `R$ ${icmsASerRestituido.toFixed(4)}`;
+    if (icmsASerRestituido > 0) {
+      td.style.backgroundColor = 'lime';
+    } else {
+      td.style.backgroundColor = 'red';
+    }
+    td.textContent = `R$ ${Math.abs(icmsASerRestituido).toFixed(4)}`;
     row.appendChild(td);
 
     tableRelatorio.children[1].appendChild(row);
@@ -241,13 +251,23 @@ export default class UI {
       // Display a diferenca entre os valores presumidos
       td = document.createElement('td');
       const { diferencaEntreValorPresumidoEValorDeVenda } = linhasProdutos[i];
-      td.textContent = `R$ ${diferencaEntreValorPresumidoEValorDeVenda.toFixed(4)}`;
+      if (diferencaEntreValorPresumidoEValorDeVenda > 0) {
+        td.style.backgroundColor = 'lime';
+      } else {
+        td.style.backgroundColor = 'red';
+      }
+      td.textContent = `R$ ${Math.abs(diferencaEntreValorPresumidoEValorDeVenda).toFixed(4)}`;
       row.appendChild(td);
 
       // Display valor a ser restituido
       td = document.createElement('td');
       const { icmsASerRestituido } = linhasProdutos[i];
-      td.textContent = `R$ ${icmsASerRestituido.toFixed(4)}`;
+      if (icmsASerRestituido > 0) {
+        td.style.backgroundColor = 'lime';
+      } else {
+        td.style.backgroundColor = 'red';
+      }
+      td.textContent = `R$ ${Math.abs(icmsASerRestituido).toFixed(4)}`;
       row.appendChild(td);
 
       tableRelatorio.children[1].appendChild(row);
