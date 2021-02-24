@@ -67,26 +67,26 @@ const removeNotasFiscaisCanceladas = (notasFiscais) => {
 
 const nfTemCombustivel = (domNotaFiscal) => {
   const produtosNotaFiscal = Array.from(domNotaFiscal.querySelectorAll('xProd'));
-  const listaVerdadeiroOuFalso = [];
+  const listaProddutosValidos = [];
 
   produtosNotaFiscal.forEach((produto) => {
     const nomeProduto = produto.textContent;
 
     if (nomeProduto === 'GASOLINA COMUM') {
-      listaVerdadeiroOuFalso.push(true);
+      listaProddutosValidos.push(true);
     } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-      listaVerdadeiroOuFalso.push(true);
+      listaProddutosValidos.push(true);
     } else if (nomeProduto === 'DIESEL COMUM') {
-      listaVerdadeiroOuFalso.push(true);
+      listaProddutosValidos.push(true);
     } else if (nomeProduto === 'DIESEL S10') {
-      listaVerdadeiroOuFalso.push(true);
+      listaProddutosValidos.push(true);
     } else {
-      listaVerdadeiroOuFalso.push(false);
+      listaProddutosValidos.push(false);
     }
   });
 
   // Ou seja se tiver pelomenos um combustível nessa Nota Fiscal ela vai ser considerada válida
-  if (listaVerdadeiroOuFalso.contains(true)) {
+  if (listaProddutosValidos.contains(true)) {
     return true;
   }
   return false;
@@ -138,31 +138,30 @@ const classificaAsNotaFiscais = (notasFiscais) => {
   });
   return objetosNotaFiscal;
 };
+const eCombustivelValido = (nomeProduto) => {
+  if (nomeProduto === 'GASOLINA COMUM' || nomeProduto === 'GASOLINA ADITIVADA'
+    || nomeProduto === 'DIESEL COMUM' || nomeProduto === 'DIESEL S10') {
+    return true;
+  }
+  return false;
+};
 
 const retornaListaDeProdutosValidos = (nfClassificada) => {
   const produtosNotaFiscal = Array.from(nfClassificada.dom.querySelectorAll('xProd'));
-  const listaVerdadeiroOuFalso = [];
+  const listaProddutosValidos = [];
 
   produtosNotaFiscal.forEach((produto) => {
     const nomeProduto = produto.textContent;
 
-    if (nomeProduto === 'GASOLINA COMUM') {
-      listaVerdadeiroOuFalso.push(true);
-    } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-      listaVerdadeiroOuFalso.push(true);
-    } else if (nomeProduto === 'DIESEL COMUM') {
-      listaVerdadeiroOuFalso.push(true);
-    } else if (nomeProduto === 'DIESEL S10') {
-      listaVerdadeiroOuFalso.push(true);
-    } else {
-      listaVerdadeiroOuFalso.push(false);
+    if (eCombustivelValido(nomeProduto)) {
+      const qtdVendida = produto.querySelector('qCom').textContent;
+      const valUnidProd = produto.querySelector('vUnCom').textContent;
+      const valTotVendido = produto.querySelector('vProd').textContent;
+      listaProddutosValidos.push(new Produto(nomeProduto, qtdVendida, valUnidProd, valTotVendido));
     }
   });
 
-  if (listaVerdadeiroOuFalso.contains(true)) {
-    return true;
-  }
-  return false;
+  return listaProddutosValidos;
 };
 
 const preencheInfosRestantesDasNF = (nfClassificadas) => {
@@ -180,26 +179,6 @@ const preencheInfosRestantesDasNF = (nfClassificadas) => {
   });
 
   return nfClassificadas;
-  // const produtos = dom.querySelectorAll('det');
-  // const notasFiscais = [];
-  // const produtosValidos = [];
-
-  // for (let i = 0; i < produtos.length; i += 1) {
-  //   const resultadoValidacao = validaNomeDoProduto(produtos[i]);
-  //   if (resultadoValidacao === true) {
-  //     const nomeProd = produtos[i].querySelector('xProd').textContent;
-  //     const qtdComercializada = produtos[i].querySelector('qCom').textContent;
-  //     const valorVenda = produtos[i].querySelector('vUnCom').textContent;
-  //     const valorTotProd = produtos[i].querySelector('vProd').textContent;
-  //     produtosValidos.push(new Produto(nomeProd, qtdComercializada, valorVenda, valorTotProd));
-  //   }
-  // }
-
-  // if (produtosValidos.length > 0) {
-  //   const dataEmissao = dom.querySelector('dhEmi').textContent;
-  //   const chaveDeAcesso = dom.querySelector('infNFe').getAttribute('Id');
-  //  notasFiscais.push(new NotaFiscal(chaveDeAcesso, dataEmissao, produtosValidos, empresa));
-  //   return notasFiscais;
 };
 // return false;
 
