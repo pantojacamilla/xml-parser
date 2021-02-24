@@ -170,26 +170,6 @@ export default class UI {
     let row = document.createElement('tr');
     let td = document.createElement('td');
 
-    // // Número sequecial
-    // td = document.createElement('td');
-    // td.setAttribute('rowspan', qtdProdutosNaNota);
-    // td.textContent = numeroSequencial;
-    // row.appendChild(td);
-
-    // // Display Nome Da Nota
-    // td = document.createElement('td');
-    // td.setAttribute('rowspan', qtdProdutosNaNota);
-    // const nomeNota = linhasProdutos[0].notaFiscal[0].chaveDeAcesso;
-    // td.textContent = nomeNota;
-    // row.appendChild(td);
-
-    // // Display Data de Emissão
-    // td = document.createElement('td');
-    // td.setAttribute('rowspan', qtdProdutosNaNota);
-    // const { dataEmissao } = linhasProdutos[0].notaFiscal[0];
-    // td.textContent = dataEmissao;
-    // row.appendChild(td);
-
     for (let i = 0; i < qtdProdutosNaNota; i += 1) {
       row = document.createElement('tr');
       td = document.createElement('td');
@@ -211,7 +191,7 @@ export default class UI {
       td.textContent = dataEmissao;
       row.appendChild(td);
 
-      // Display nome dos produtos
+      // Display Combustíveis
       td = document.createElement('td');
       const { nomeProduto } = linhasProdutos[i].notaFiscal[0].produtos[i];
       td.textContent = nomeProduto;
@@ -224,16 +204,16 @@ export default class UI {
       td.textContent = `${ato.numeroAto}/${dataDeInicioDoAtoAtual.getFullYear()}`;
       row.appendChild(td);
 
-      // Display Qtde de Litros
-      td = document.createElement('td');
-      const { qtdComercializadaDoProduto } = linhasProdutos[i].notaFiscal[0].produtos[i];
-      td.textContent = `${qtdComercializadaDoProduto} LT`;
-      row.appendChild(td);
-
       // Display Valor Presumido
       td = document.createElement('td');
       const { valorPresumido } = linhasProdutos[i];
       td.textContent = `R$ ${valorPresumido.toFixed(4)}`;
+      row.appendChild(td);
+
+      // Display Qtde de Litros
+      td = document.createElement('td');
+      const { qtdComercializadaDoProduto } = linhasProdutos[i].notaFiscal[0].produtos[i];
+      td.textContent = `${qtdComercializadaDoProduto} LT`;
       row.appendChild(td);
 
       // Display total valor Presumido
