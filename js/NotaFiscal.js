@@ -1,11 +1,12 @@
 export default class NotaFiscal {
   constructor(indexNotaFiscal, statusNotaFiscal, dom) {
     this.indexNotaFiscal = indexNotaFiscal;
-    this.statusNotaFiscal = statusNotaFiscal; // Inutilizada || Cancelada || Não Contém Combustível || Válida 
+    // Inutilizada || Cancelada || Não Contém Combustível || Válida
+    this.statusNotaFiscal = statusNotaFiscal;
     this.dom = dom;
   }
 
-  adicionaEstesValoresNaNotaFiscal(numeroNotaFiscal, chaveDeAcesso, dataEmissao,
+  adicionaEstesValoresNaNotaFiscal(chaveDeAcesso, dataEmissao,
     produtos, empresa) {
     this.chaveDeAcesso = chaveDeAcesso;
     this.dataEmissao = new Date(dataEmissao);

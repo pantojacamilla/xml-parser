@@ -34,17 +34,17 @@ class LinhaRelatorio {
   }
 }
 
-const objetoEmpresa = JSON.parse(window.localStorage.getItem('empresa'));
-const cnpjSoNumeros = objetoEmpresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
+const empresa = JSON.parse(window.localStorage.getItem('empresa'));
+const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
 
 const mostraNomeDaEmpresaNaTela = () => {
-  const { nomeEmpresa } = objetoEmpresa;
+  const { nomeEmpresa } = empresa;
   const divNome = document.querySelector('#nome-empresa');
   divNome.textContent = nomeEmpresa;
 };
 
 const mostraCnpjDaEmpresaNaTela = () => {
-  const { cnpjFormatado } = objetoEmpresa;
+  const { cnpjFormatado } = empresa;
   const divCnpj = document.querySelector('#cnpj-empresa');
   divCnpj.textContent = cnpjFormatado;
 };
@@ -139,36 +139,43 @@ const classificaAsNotaFiscais = (notasFiscais) => {
   return objetosNotaFiscal;
 };
 
-// const nfTemCombustivel = (notaFiscal) => {
-//   const produtosNotaFiscal = [];
-//   produtosNotaFiscal.push(notaFiscal.querySelector('xProd').textContent);
+const retornaListaDeProdutosValidos = (nfClassificada) => {
+  const produtosNotaFiscal = Array.from(nfClassificada.dom.querySelectorAll('xProd'));
+  const listaVerdadeiroOuFalso = [];
 
-//   let listaVerdadeiroOuFalso;
+  produtosNotaFiscal.forEach((produto) => {
+    const nomeProduto = produto.textContent;
 
-//   if (nomeProduto === 'GASOLINA COMUM') {
-//     listaVerdadeiroOuFalso = true;
-//   } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-//     listaVerdadeiroOuFalso = true;
-//   } else if (nomeProduto === 'DIESEL COMUM') {
-//     listaVerdadeiroOuFalso = true;
-//   } else if (nomeProduto === 'DIESEL S10') {
-//     listaVerdadeiroOuFalso = true;
-//   } else {
-//     listaVerdadeiroOuFalso = false;
-//   }
-//   return listaVerdadeiroOuFalso;
-// };
+    if (nomeProduto === 'GASOLINA COMUM') {
+      listaVerdadeiroOuFalso.push(true);
+    } else if (nomeProduto === 'GASOLINA ADITIVADA') {
+      listaVerdadeiroOuFalso.push(true);
+    } else if (nomeProduto === 'DIESEL COMUM') {
+      listaVerdadeiroOuFalso.push(true);
+    } else if (nomeProduto === 'DIESEL S10') {
+      listaVerdadeiroOuFalso.push(true);
+    } else {
+      listaVerdadeiroOuFalso.push(false);
+    }
+  });
 
-// const nfTemCombustivel = (notaFiscal) => {
-
-// };
+  if (listaVerdadeiroOuFalso.contains(true)) {
+    return true;
+  }
+  return false;
+};
 
 const preencheInfosRestantesDasNF = (nfClassificadas) => {
   // Só adicionar mais informações nas notas se elas tiverem a classificação 'Válida'
 
   nfClassificadas.forEach((nfClassificada) => {
-    const statusNotaFiscalAtual = nfClassificada.statstatusNotaFiscalus;
+    const statusNotaFiscalAtual = nfClassificada.statusNotaFiscal;
+
     if (statusNotaFiscalAtual === 'Válida') {
+      const chaveAcesso = nfClassificada.dom.querySelector('infNFe').getAttribute('Id');
+      const dataEmissao = nfClassificada.dom.querySelector('dhEmi').textContent;
+      const produtos = retornaListaDeProdutosValidos(nfClassificada);
+      nfClassificada.adicionaEstesValoresNaNotaFiscal(chaveAcesso, dataEmissao, produtos, empresa);
     }
   });
 
@@ -191,7 +198,7 @@ const preencheInfosRestantesDasNF = (nfClassificadas) => {
   // if (produtosValidos.length > 0) {
   //   const dataEmissao = dom.querySelector('dhEmi').textContent;
   //   const chaveDeAcesso = dom.querySelector('infNFe').getAttribute('Id');
-  //  notasFiscais.push(new NotaFiscal(chaveDeAcesso, dataEmissao, produtosValidos, objetoEmpresa));
+  //  notasFiscais.push(new NotaFiscal(chaveDeAcesso, dataEmissao, produtosValidos, empresa));
   //   return notasFiscais;
 };
 // return false;
