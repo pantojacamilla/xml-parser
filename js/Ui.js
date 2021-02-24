@@ -117,16 +117,16 @@ export default class UI {
     td.textContent = `${ato.numeroAto}/${dataDeInicioDoAtoAtual.getFullYear()}`;
     row.appendChild(td);
 
-    // Display Qtde de Litros
-    td = document.createElement('td');
-    const { qtdComercializadaDoProduto } = linhaProduto.notaFiscal[0].produtos[0];
-    td.textContent = `${qtdComercializadaDoProduto} LT`;
-    row.appendChild(td);
-
     // Display Valor Presumido
     td = document.createElement('td');
     const { valorPresumido } = linhaProduto;
     td.textContent = `R$ ${valorPresumido.toFixed(4)}`;
+    row.appendChild(td);
+
+    // Display Qtde de Litros
+    td = document.createElement('td');
+    const { qtdComercializadaDoProduto } = linhaProduto.notaFiscal[0].produtos[0];
+    td.textContent = `${qtdComercializadaDoProduto} LT`;
     row.appendChild(td);
 
     // Display total valor Presumido

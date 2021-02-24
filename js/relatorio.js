@@ -166,17 +166,17 @@ const preparaLinhaRelatorio = (dom, index, notaFiscal, tableRelatorio) => {
       let valorPresumido;
 
       if (nomeProduto === 'GASOLINA COMUM') {
-        totalPresumido = (qtdComercializadaDoProduto * objAto.produtoImposto.gac);
         valorPresumido = objAto.produtoImposto.gac;
+        totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
       } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-        totalPresumido = (qtdComercializadaDoProduto * objAto.produtoImposto.gap);
         valorPresumido = objAto.produtoImposto.gap;
+        totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
       } else if (nomeProduto === 'DIESEL COMUM') {
-        totalPresumido = (qtdComercializadaDoProduto * objAto.produtoImposto.oleoDisel);
         valorPresumido = objAto.produtoImposto.oleoDisel;
+        totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
       } else if (nomeProduto === 'DIESEL S10') {
-        totalPresumido = (qtdComercializadaDoProduto * objAto.produtoImposto.d10);
         valorPresumido = objAto.produtoImposto.d10;
+        totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
       }
 
       const { valorTotalDoProduto } = listaProdutos[i];
@@ -203,17 +203,17 @@ const preparaLinhaRelatorio = (dom, index, notaFiscal, tableRelatorio) => {
     let valorPresumido;
 
     if (nomeProduto === 'GASOLINA COMUM') {
-      totalPresumido = (qtdComercializadaDoProduto * objAto.produtoImposto.gac);
       valorPresumido = objAto.produtoImposto.gac;
+      totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
     } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-      totalPresumido = (qtdComercializadaDoProduto * objAto.produtoImposto.gap);
       valorPresumido = objAto.produtoImposto.gap;
+      totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
     } else if (nomeProduto === 'DIESEL COMUM') {
-      totalPresumido = (qtdComercializadaDoProduto * objAto.produtoImposto.oleoDisel);
       valorPresumido = objAto.produtoImposto.oleoDisel;
+      totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
     } else if (nomeProduto === 'DIESEL S10') {
-      totalPresumido = (qtdComercializadaDoProduto * objAto.produtoImposto.d10);
       valorPresumido = objAto.produtoImposto.d10;
+      totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
     }
 
     const { valorTotalDoProduto } = listaProdutos[0];
