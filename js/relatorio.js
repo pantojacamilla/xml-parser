@@ -65,17 +65,17 @@ const removeNotasFiscaisCanceladas = (notasFiscais) => {
   return semNFCanc;
 };
 
-const retornaOTipoDeNotaFiscal = (rootElement) => {
-  let tipoDeNotaFiscal;
+const retornaOStatusDaNotaFiscal = (rootElement) => {
+  let statusNotaFiscal;
 
   if (rootElement === 'retInutNFe') {
-    tipoDeNotaFiscal = 'Inutilizada';
+    statusNotaFiscal = 'Inutilizada';
   } else if (rootElement === 'retEnvEvento') {
-    tipoDeNotaFiscal = 'Cancelada';
+    statusNotaFiscal = 'Cancelada';
   } else if (rootElement === 'nfeProc') {
-    tipoDeNotaFiscal = 'Válida';
+    statusNotaFiscal = 'Válida';
   }
-  return tipoDeNotaFiscal;
+  return statusNotaFiscal;
 };
 
 const validaNomeDoProduto = (produto) => {
@@ -239,38 +239,30 @@ const preparaLinhaRelatorio = (dom, index, notaFiscal, tableRelatorio) => {
 // -- Nessa função tem que cria os objetos das notas e retornar os ojetos
 const classificaAsNotaFiscais = (notasFiscais) => {
   const parser = new DOMParser();
+  const objetosNotaFiscal = [];
 
-  notasFiscais.forEach((notaFiscal, index) => {
+  notasFiscais.forEach((notaFiscal) => {
     const reader = new FileReader();
 
     reader.onload = () => {
       const xmlString = reader.result;
       const dom = parser.parseFromString(xmlString, 'application/xml');
       const rootElementDoArquivo = dom.documentElement.tagName;
-      // Inutilizada, Cancelada e Válida
-      const tipoDeNotaFiscal = retornaOTipoDeNotaFiscal(rootElementDoArquivo);
-      const tableRelatorio = document.querySelector('#relatorio');
+      const statusNotaFiscal = retornaOStatusDaNotaFiscal(rootElementDoArquivo);
 
-      if (tipoDeNotaFiscal === 'Inutilizada') {
-        UI.mostraNFInutilizada(dom, index, tableRelatorio);
-        // return;
-      } else if (tipoDeNotaFiscal === 'Cancelada') {
-        UI.mostraNFCancelada(dom, index, tableRelatorio);
-        // return;
-      } else if (tipoDeNotaFiscal === 'Válida') {
-        const notaResultante = leNotasFiscaisValidas(dom);
-        if (notaResultante !== false) {
-          preparaLinhaRelatorio(dom, index, notaResultante, tableRelatorio);
+      // const tableRelatorio = document.querySelector('#relatorio');
 
-          // mostra (dom, index, tableRelatorio, notaResultante)
-          // ver dentro de UI quantos produtos tem e como se arrumar para mostrar os proutos
-        } else {
-          UI.mostraNFCValidaSemCombustível(dom, index, tableRelatorio);
-        }
+      if (statusNotaFiscal === 'Inutilizada') {
+        objetosNotaFiscal.push(new NotaFiscal(statusNotaFiscal, dom));
+      } else if (statusNotaFiscal === 'Cancelada') {
+        objetosNotaFiscal.push(new NotaFiscal(statusNotaFiscal, dom));
+      } else if (statusNotaFiscal === 'Válida') {
+        objetosNotaFiscal.push(new NotaFiscal(statusNotaFiscal, dom));
       }
     };
     reader.readAsText(notaFiscal);
   });
+  return objetosNotaFiscal;
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -282,7 +274,6 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const notasFiscais = Array.from(event.target.files);
   const notasFiscaisEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
   const nfParaClassificacao = removeNotasFiscaisCanceladas(notasFiscaisEmpresaSelecionada);
-  classificaAsNotaFiscais(nfParaClassificacao);
-
+  const nfClassificadas = classificaAsNotaFiscais(nfParaClassificacao);
 
 });
