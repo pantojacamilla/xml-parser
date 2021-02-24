@@ -1,9 +1,9 @@
 export default class Produto {
-  constructor(nomeProduto, qtdComercializadaDoProduto,
-    valorDeVendaDoProduto, valorTotalDoProduto) {
-    this.nomeProduto = nomeProduto; // <xProd>
-    this.qtdComercializadaDoProduto = qtdComercializadaDoProduto; // <qCom>
-    this.valorDeVendaDoProduto = valorDeVendaDoProduto; // <vUnCom>
-    this.valorTotalDoProduto = valorTotalDoProduto; // <vProd>
+  constructor(nomeDoProduto, qtdVendidaDoProduto,
+    valorDaUnidadeDoProduto, valorTotalVendidoDoProduto) {
+    this.nomeDoProduto = nomeDoProduto; // <xProd>
+    this.qtdVendidaDoProduto = qtdVendidaDoProduto; // <qCom>
+    this.valorDaUnidadeDoProduto = valorDaUnidadeDoProduto; // <vUnCom>
+    this.valorTotalVendidoDoProduto = valorTotalVendidoDoProduto; // <vProd>
   }
 }

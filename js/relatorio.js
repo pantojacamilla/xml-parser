@@ -54,13 +54,14 @@ const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
   return nfsEmpresaSelecionada;
 };
 
-// Remove as notas canceladas (-nfce e -nfe) deixando as -can
+// Remove as notas canceladas com final (-nfce e -nfe) deixando apenas as
+// notas fiscais com final(-can)
 const removeNotasFiscaisCanceladas = (notasFiscais) => {
-  let nfsCanceladas = notasFiscais.filter((nf) => nf.name.includes('-can'));
-  nfsCanceladas = nfsCanceladas.map((nfCancelada) => nfCancelada.name.replace('-can.xml', '-nf'));
+  const nfsCanceladas = notasFiscais.filter((nf) => nf.name.includes('-can'));
+  const chavesDeAcesso = nfsCanceladas.map((nfCancelada) => nfCancelada.name.replace('-can.xml', '-nf'));
 
   // semNFCanc (Sem Nota Fiscal Cancelada)
-  const semNFCanc = notasFiscais.filter((nf) => !nfsCanceladas.includes(nf.name.substr(0, 47)));
+  const semNFCanc = notasFiscais.filter((nf) => !chavesDeAcesso.includes(nf.name.substr(0, 47)));
   return semNFCanc;
 };
 
@@ -238,7 +239,6 @@ const preparaLinhaRelatorio = (dom, index, notaFiscal, tableRelatorio) => {
 // -- Nessa função tem que cria os objetos das notas e retornar os ojetos
 const classificaAsNotaFiscais = (notasFiscais) => {
   const parser = new DOMParser();
-  // let notaLidasValidas;
 
   notasFiscais.forEach((notaFiscal, index) => {
     const reader = new FileReader();
@@ -280,7 +280,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const notasFiscais = Array.from(event.target.files);
-  const notasFiscaisDaEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
-  const notasFiscaisNaoCanceladas = removeNotasFiscaisCanceladas(notasFiscaisDaEmpresaSelecionada);
-  classificaAsNotaFiscais(notasFiscaisNaoCanceladas);
+  const notasFiscaisEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
+  const nfParaClassificacao = removeNotasFiscaisCanceladas(notasFiscaisEmpresaSelecionada);
+  classificaAsNotaFiscais(nfParaClassificacao);
+
+
 });

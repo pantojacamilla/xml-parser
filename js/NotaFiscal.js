@@ -6,14 +6,15 @@ export default class NotaFiscal {
     this.empresa = empresa;
   }
 
+  tipoDeNotaFiscal; // Inutilizada || Cancelada || Valida
   // tipo de nota fiscal
 
-  tipoDeNotaFiscal() {
-    if (this.empresa.nome === 'F S S COMERCIO VAREJISTA DE COMB E LUBRIFICANTES LTDA') {
-      return 'Entrada';
-    }
-    return 'Saída';
-  }
+  // tipoDeNotaFiscal() {
+  //   if (this.empresa.nome === 'F S S COMERCIO VAREJISTA DE COMB E LUBRIFICANTES LTDA') {
+  //     return 'Entrada';
+  //   }
+  //   return 'Saída';
+  // }
 }
 
 // dataEmissao, produtos, empresa, tipoDeNota
