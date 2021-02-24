@@ -15,7 +15,11 @@ import listaDeAtos from './atos.js';
 //   diferencaEntreOTotalPresumidoEOPraticado;
 //   valorDeIcmsASerDistituidoNoMes;
 // }
-let val
+
+let somaDosValoresPresumidos;
+let somaValoresVendidosAoConsumidor;
+let somaDasDiferencas;
+let somaDoIcmsRestituido;
 
 class LinhaRelatorio {
   constructor(numeroSequencial, notaFiscal, ato, valorPresumido, valorTotalPresumido,
