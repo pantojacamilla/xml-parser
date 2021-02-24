@@ -65,61 +65,136 @@ const removeNotasFiscaisCanceladas = (notasFiscais) => {
   return semNFCanc;
 };
 
-const retornaOStatusDaNotaFiscal = (rootElement) => {
-  let statusNotaFiscal;
+const nfTemCombustivel = (domNotaFiscal) => {
+  const produtosNotaFiscal = Array.from(domNotaFiscal.querySelectorAll('xProd'));
+  const listaVerdadeiroOuFalso = [];
 
-  if (rootElement === 'retInutNFe') {
-    statusNotaFiscal = 'Inutilizada';
-  } else if (rootElement === 'retEnvEvento') {
-    statusNotaFiscal = 'Cancelada';
-  } else if (rootElement === 'nfeProc') {
-    statusNotaFiscal = 'Válida';
-  }
-  return statusNotaFiscal;
-};
+  produtosNotaFiscal.forEach((produto) => {
+    const nomeProduto = produto.textContent;
 
-const validaNomeDoProduto = (produto) => {
-  let resultado;
-  const nomeProduto = produto.querySelector('xProd').textContent;
-
-  if (nomeProduto === 'GASOLINA COMUM') {
-    resultado = true;
-  } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-    resultado = true;
-  } else if (nomeProduto === 'DIESEL COMUM') {
-    resultado = true;
-  } else if (nomeProduto === 'DIESEL S10') {
-    resultado = true;
-  } else {
-    resultado = false;
-  }
-  return resultado;
-};
-
-const leNotasFiscaisValidas = (dom) => {
-  const produtos = dom.querySelectorAll('det');
-  const notasFiscais = [];
-  const produtosValidos = [];
-
-  for (let i = 0; i < produtos.length; i += 1) {
-    const resultadoValidacao = validaNomeDoProduto(produtos[i]);
-    if (resultadoValidacao === true) {
-      const nomeProd = produtos[i].querySelector('xProd').textContent;
-      const qtdComercializada = produtos[i].querySelector('qCom').textContent;
-      const valorVenda = produtos[i].querySelector('vUnCom').textContent;
-      const valorTotProd = produtos[i].querySelector('vProd').textContent;
-      produtosValidos.push(new Produto(nomeProd, qtdComercializada, valorVenda, valorTotProd));
+    if (nomeProduto === 'GASOLINA COMUM') {
+      listaVerdadeiroOuFalso.push(true);
+    } else if (nomeProduto === 'GASOLINA ADITIVADA') {
+      listaVerdadeiroOuFalso.push(true);
+    } else if (nomeProduto === 'DIESEL COMUM') {
+      listaVerdadeiroOuFalso.push(true);
+    } else if (nomeProduto === 'DIESEL S10') {
+      listaVerdadeiroOuFalso.push(true);
+    } else {
+      listaVerdadeiroOuFalso.push(false);
     }
-  }
+  });
 
-  if (produtosValidos.length > 0) {
-    const dataEmissao = dom.querySelector('dhEmi').textContent;
-    const chaveDeAcesso = dom.querySelector('infNFe').getAttribute('Id');
-    notasFiscais.push(new NotaFiscal(chaveDeAcesso, dataEmissao, produtosValidos, objetoEmpresa));
-    return notasFiscais;
+  // Ou seja se tiver pelomenos um combustível nessa Nota Fiscal ela vai ser considerada válida
+  if (listaVerdadeiroOuFalso.contains(true)) {
+    return true;
   }
   return false;
 };
+
+const retornaAClassificacaoDaNotaFiscal = (domNotaFiscal) => {
+  const rootElementDoArquivo = domNotaFiscal.documentElement.tagName;
+  let classificacaoNF;
+
+  if (rootElementDoArquivo === 'retInutNFe') {
+    classificacaoNF = 'Inutilizada';
+  } else if (rootElementDoArquivo === 'retEnvEvento') {
+    classificacaoNF = 'Cancelada';
+  } else if (rootElementDoArquivo === 'nfeProc') {
+    if (nfTemCombustivel(domNotaFiscal)) {
+      classificacaoNF = 'Válida';
+    } else {
+      classificacaoNF = 'Sem Combustível';
+    }
+  }
+  return classificacaoNF;
+};
+
+// Criar uma função que le os arquivos
+// -- Nessa função tem que cria os objetos das notas e retornar os ojetos
+const classificaAsNotaFiscais = (notasFiscais) => {
+  const parser = new DOMParser();
+  const objetosNotaFiscal = [];
+
+  notasFiscais.forEach((notaFiscal, index) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const xmlString = reader.result;
+      const domNotaFiscal = parser.parseFromString(xmlString, 'application/xml');
+      const classificacaoNF = retornaAClassificacaoDaNotaFiscal(domNotaFiscal);
+
+      if (classificacaoNF === 'Inutilizada') {
+        objetosNotaFiscal.push(new NotaFiscal(index, classificacaoNF, domNotaFiscal));
+      } else if (classificacaoNF === 'Cancelada') {
+        objetosNotaFiscal.push(new NotaFiscal(index, classificacaoNF, domNotaFiscal));
+      } else if (classificacaoNF === 'Sem Combustível') {
+        objetosNotaFiscal.push(new NotaFiscal(index, classificacaoNF, domNotaFiscal));
+      } else if (classificacaoNF === 'Válida') {
+        objetosNotaFiscal.push(new NotaFiscal(index, classificacaoNF, domNotaFiscal));
+      }
+    };
+    reader.readAsText(notaFiscal);
+  });
+  return objetosNotaFiscal;
+};
+
+// const nfTemCombustivel = (notaFiscal) => {
+//   const produtosNotaFiscal = [];
+//   produtosNotaFiscal.push(notaFiscal.querySelector('xProd').textContent);
+
+//   let listaVerdadeiroOuFalso;
+
+//   if (nomeProduto === 'GASOLINA COMUM') {
+//     listaVerdadeiroOuFalso = true;
+//   } else if (nomeProduto === 'GASOLINA ADITIVADA') {
+//     listaVerdadeiroOuFalso = true;
+//   } else if (nomeProduto === 'DIESEL COMUM') {
+//     listaVerdadeiroOuFalso = true;
+//   } else if (nomeProduto === 'DIESEL S10') {
+//     listaVerdadeiroOuFalso = true;
+//   } else {
+//     listaVerdadeiroOuFalso = false;
+//   }
+//   return listaVerdadeiroOuFalso;
+// };
+
+// const nfTemCombustivel = (notaFiscal) => {
+
+// };
+
+const preencheInfosRestantesDasNF = (nfClassificadas) => {
+  // Só adicionar mais informações nas notas se elas tiverem a classificação 'Válida'
+
+  nfClassificadas.forEach((nfClassificada) => {
+    const statusNotaFiscalAtual = nfClassificada.statstatusNotaFiscalus;
+    if (statusNotaFiscalAtual === 'Válida') {
+    }
+  });
+
+  return nfClassificadas;
+  // const produtos = dom.querySelectorAll('det');
+  // const notasFiscais = [];
+  // const produtosValidos = [];
+
+  // for (let i = 0; i < produtos.length; i += 1) {
+  //   const resultadoValidacao = validaNomeDoProduto(produtos[i]);
+  //   if (resultadoValidacao === true) {
+  //     const nomeProd = produtos[i].querySelector('xProd').textContent;
+  //     const qtdComercializada = produtos[i].querySelector('qCom').textContent;
+  //     const valorVenda = produtos[i].querySelector('vUnCom').textContent;
+  //     const valorTotProd = produtos[i].querySelector('vProd').textContent;
+  //     produtosValidos.push(new Produto(nomeProd, qtdComercializada, valorVenda, valorTotProd));
+  //   }
+  // }
+
+  // if (produtosValidos.length > 0) {
+  //   const dataEmissao = dom.querySelector('dhEmi').textContent;
+  //   const chaveDeAcesso = dom.querySelector('infNFe').getAttribute('Id');
+  //  notasFiscais.push(new NotaFiscal(chaveDeAcesso, dataEmissao, produtosValidos, objetoEmpresa));
+  //   return notasFiscais;
+};
+// return false;
 
 const retornaOAto = (dataEmissao) => {
   const dataDeEmissao = new Date(dataEmissao);
@@ -140,7 +215,7 @@ const retornaOAto = (dataEmissao) => {
         if (((dataDeEmissao >= dataDeInicioDoAtoAtual) && (dataDeEmissao <= dataDeFimDoAtoAtual))) {
           const atoObjHelper = listaDeAtos[i][j];
           objAto = atoObjHelper;
-          break;
+          // break;
         }
       }
     }
@@ -229,40 +304,6 @@ const preparaLinhaRelatorio = (dom, index, notaFiscal, tableRelatorio) => {
 
     UI.mostraNFComUmProduto(linhaProduto, dom, tableRelatorio);
   }
-
-
-
-
-};
-
-// Criar uma função que le os arquivos
-// -- Nessa função tem que cria os objetos das notas e retornar os ojetos
-const classificaAsNotaFiscais = (notasFiscais) => {
-  const parser = new DOMParser();
-  const objetosNotaFiscal = [];
-
-  notasFiscais.forEach((notaFiscal) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      const xmlString = reader.result;
-      const dom = parser.parseFromString(xmlString, 'application/xml');
-      const rootElementDoArquivo = dom.documentElement.tagName;
-      const statusNotaFiscal = retornaOStatusDaNotaFiscal(rootElementDoArquivo);
-
-      // const tableRelatorio = document.querySelector('#relatorio');
-
-      if (statusNotaFiscal === 'Inutilizada') {
-        objetosNotaFiscal.push(new NotaFiscal(statusNotaFiscal, dom));
-      } else if (statusNotaFiscal === 'Cancelada') {
-        objetosNotaFiscal.push(new NotaFiscal(statusNotaFiscal, dom));
-      } else if (statusNotaFiscal === 'Válida') {
-        objetosNotaFiscal.push(new NotaFiscal(statusNotaFiscal, dom));
-      }
-    };
-    reader.readAsText(notaFiscal);
-  });
-  return objetosNotaFiscal;
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -275,5 +316,5 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const notasFiscaisEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
   const nfParaClassificacao = removeNotasFiscaisCanceladas(notasFiscaisEmpresaSelecionada);
   const nfClassificadas = classificaAsNotaFiscais(nfParaClassificacao);
-
+  const notasFiscaisCompletas = preencheInfosRestantesDasNF(nfClassificadas);
 });

@@ -1,15 +1,23 @@
 export default class NotaFiscal {
-  constructor(statusNotaFiscal, dom) {
-    this.statusNotaFiscal = statusNotaFiscal; // Inutilizada || Cancelada || Valida
+  constructor(indexNotaFiscal, statusNotaFiscal, dom) {
+    this.indexNotaFiscal = indexNotaFiscal;
+    this.statusNotaFiscal = statusNotaFiscal; // Inutilizada || Cancelada || Não Contém Combustível || Válida 
     this.dom = dom;
   }
 
-  adicionaEstesValoresNaNotaFiscal(chaveDeAcesso, dataEmissao,
+  adicionaEstesValoresNaNotaFiscal(numeroNotaFiscal, chaveDeAcesso, dataEmissao,
     produtos, empresa) {
     this.chaveDeAcesso = chaveDeAcesso;
-    this.dataEmissao = dataEmissao;
+    this.dataEmissao = new Date(dataEmissao);
     this.produtos = produtos;
     this.empresa = empresa;
+  }
+
+  // Somatório do valor apenas dos combustíveis em uma nota fiscal
+  valorTotalDaNota() {
+    // eslint-disable-next-line max-len
+    const total = this.produtos.reduce((valTotal, produto) => produto.valorTotalVendidoDoProduto + valTotal, 0);
+    return total;
   }
 
   tipoDeNotaFiscal() {
