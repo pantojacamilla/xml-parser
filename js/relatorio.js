@@ -161,7 +161,6 @@ const preparaLinhaRelatorio = (dom, index, notaFiscal, tableRelatorio) => {
     console.log(listaDeAtos);
 
     const objAto = retornaOAto(dataEmi);
-    // console.log(objAto);
 
     for (let i = 0; i < listaProdutos.length; i += 1) {
       const { nomeProduto } = listaProdutos[i];
@@ -229,11 +228,15 @@ const preparaLinhaRelatorio = (dom, index, notaFiscal, tableRelatorio) => {
 
     UI.mostraNFComUmProduto(linhaProduto, dom, tableRelatorio);
   }
+
+
+
+
 };
 
 // Criar uma função que le os arquivos
 // -- Nessa função tem que cria os objetos das notas e retornar os ojetos
-const leAsNotasFiscais = (notasFiscais) => {
+const classificaAsNotaFiscais = (notasFiscais) => {
   const parser = new DOMParser();
   // let notaLidasValidas;
 
@@ -279,5 +282,5 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const notasFiscais = Array.from(event.target.files);
   const notasFiscaisDaEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
   const notasFiscaisNaoCanceladas = removeNotasFiscaisCanceladas(notasFiscaisDaEmpresaSelecionada);
-  leAsNotasFiscais(notasFiscaisNaoCanceladas);
+  classificaAsNotaFiscais(notasFiscaisNaoCanceladas);
 });
