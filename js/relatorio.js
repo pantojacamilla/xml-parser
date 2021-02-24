@@ -15,6 +15,7 @@ import listaDeAtos from './atos.js';
 //   diferencaEntreOTotalPresumidoEOPraticado;
 //   valorDeIcmsASerDistituidoNoMes;
 // }
+let val
 
 class LinhaRelatorio {
   constructor(numeroSequencial, notaFiscal, ato, valorPresumido, valorTotalPresumido,

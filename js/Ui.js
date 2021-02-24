@@ -99,8 +99,9 @@ export default class UI {
 
     // Display Data de Emissão
     td = document.createElement('td');
-    const { dataEmissao } = linhaProduto.notaFiscal[0];
-    td.textContent = dataEmissao;
+    let { dataEmissao } = linhaProduto.notaFiscal[0];
+    dataEmissao = new Date(dataEmissao);
+    td.textContent = `${dataEmissao.getDate()}/${dataEmissao.getMonth()}/${dataEmissao.getFullYear()}`;
     row.appendChild(td);
 
     // Display nome dos produtos
@@ -187,8 +188,9 @@ export default class UI {
 
       // Display Data de Emissão
       td = document.createElement('td');
-      const { dataEmissao } = linhasProdutos[i].notaFiscal[0];
-      td.textContent = dataEmissao;
+      let { dataEmissao } = linhasProdutos[i].notaFiscal[0];
+      dataEmissao = new Date(dataEmissao);
+      td.textContent = `${dataEmissao.getDate()}/${dataEmissao.getMonth()}/${dataEmissao.getFullYear()}`;
       row.appendChild(td);
 
       // Display Combustíveis
@@ -252,13 +254,5 @@ export default class UI {
 
       tableRelatorio.children[1].appendChild(row);
     }
-
-    // Display Número e Ano ato
-    // td = document.createElement('td');
-    // td.setAttribute('rowspan', qtdProdutosNaNota);
-    // const { ato } = linhasProdutos[0];
-    // const dataDeInicioDoAtoAtual = new Date(`${ato.dataInicio}T01:00:00-03:00`);
-    // td.textContent = `${ato.numeroAto}/${dataDeInicioDoAtoAtual.getFullYear()}`;
-    // row.appendChild(td);
   }
 }
