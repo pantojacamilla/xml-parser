@@ -4,24 +4,20 @@ import Produto from './Produto.js';
 import UI from './Ui.js';
 import listaDeAtos from './atos.js';
 
-// class Relatorio {
-//   numeroSequencial;
-//   notaFiscal;
-//   valorTotalPresumido;
-//   diferencaEntreValorPresumidoEValorDeVenda;
-//   icmsASerRestituido;
-//   valorTotalPresumidoNoMes;
-//   valorTotalPraticadoNoMes;
-//   diferencaEntreOTotalPresumidoEOPraticado;
-//   valorDeIcmsASerDistituidoNoMes;
-// }
+class Relatorio {
+  linhasTabela;
+  somaDosValoresPresumidos;
+  somaValoresVendidosAoConsumidor;
+  somaDasDiferencas;
+  somaDoIcmsRestituido;
+}
 
 let somaDosValoresPresumidos;
 let somaValoresVendidosAoConsumidor;
 let somaDasDiferencas;
 let somaDoIcmsRestituido;
 
-class LinhaRelatorio {
+class LinhaTabela {
   constructor(numeroSequencial, notaFiscal, ato, valorPresumido, valorTotalPresumido,
     diferencaEntreValorPresumidoEValorDeVenda, icmsASerRestituido) {
     this.numeroSequencial = numeroSequencial;
@@ -138,6 +134,7 @@ const classificaAsNotaFiscais = (notasFiscais) => {
   });
   return objetosNotaFiscal;
 };
+
 const eCombustivelValido = (nomeProduto) => {
   if (nomeProduto === 'GASOLINA COMUM' || nomeProduto === 'GASOLINA ADITIVADA'
     || nomeProduto === 'DIESEL COMUM' || nomeProduto === 'DIESEL S10') {
@@ -180,7 +177,6 @@ const preencheInfosRestantesDasNF = (nfClassificadas) => {
 
   return nfClassificadas;
 };
-// return false;
 
 const retornaOAto = (dataEmissao) => {
   const dataDeEmissao = new Date(dataEmissao);
@@ -209,88 +205,88 @@ const retornaOAto = (dataEmissao) => {
   return objAto;
 };
 
-const preparaLinhaRelatorio = (dom, index, notaFiscal, tableRelatorio) => {
-  const numeroSequencial = index + 1;
-  const listaProdutos = notaFiscal[0].produtos;
-  const dataEmi = notaFiscal[0].dataEmissao;
+// const preparaLinhaTabela = (dom, index, notaFiscal, tableRelatorio) => {
+//   const numeroSequencial = index + 1;
+//   const listaProdutos = notaFiscal[0].produtos;
+//   const dataEmi = notaFiscal[0].dataEmissao;
 
-  if (listaProdutos.length > 1) {
-    const linhasProdutos = [];
+//   if (listaProdutos.length > 1) {
+//     const linhasProdutos = [];
 
-    const nomeArquivo = dom.querySelector('infNFe').getAttribute('Id');
-    console.log(nomeArquivo);
-    console.log(notaFiscal);
-    console.log(listaDeAtos);
+//     const nomeArquivo = dom.querySelector('infNFe').getAttribute('Id');
+//     console.log(nomeArquivo);
+//     console.log(notaFiscal);
+//     console.log(listaDeAtos);
 
-    const objAto = retornaOAto(dataEmi);
+//     const objAto = retornaOAto(dataEmi);
 
-    for (let i = 0; i < listaProdutos.length; i += 1) {
-      const { nomeProduto } = listaProdutos[i];
-      const { qtdComercializadaDoProduto } = listaProdutos[i];
-      let totalPresumido; // TotalPresumido
-      let valorPresumido;
+//     for (let i = 0; i < listaProdutos.length; i += 1) {
+//       const { nomeProduto } = listaProdutos[i];
+//       const { qtdComercializadaDoProduto } = listaProdutos[i];
+//       let totalPresumido; // TotalPresumido
+//       let valorPresumido;
 
-      if (nomeProduto === 'GASOLINA COMUM') {
-        valorPresumido = objAto.produtoImposto.gac;
-        totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-      } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-        valorPresumido = objAto.produtoImposto.gap;
-        totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-      } else if (nomeProduto === 'DIESEL COMUM') {
-        valorPresumido = objAto.produtoImposto.oleoDisel;
-        totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-      } else if (nomeProduto === 'DIESEL S10') {
-        valorPresumido = objAto.produtoImposto.d10;
-        totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-      }
+//       if (nomeProduto === 'GASOLINA COMUM') {
+//         valorPresumido = objAto.produtoImposto.gac;
+//         totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
+//       } else if (nomeProduto === 'GASOLINA ADITIVADA') {
+//         valorPresumido = objAto.produtoImposto.gap;
+//         totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
+//       } else if (nomeProduto === 'DIESEL COMUM') {
+//         valorPresumido = objAto.produtoImposto.oleoDisel;
+//         totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
+//       } else if (nomeProduto === 'DIESEL S10') {
+//         valorPresumido = objAto.produtoImposto.d10;
+//         totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
+//       }
 
-      const { valorTotalDoProduto } = listaProdutos[i];
-      const difValorPresumidoEValorDeVenda = totalPresumido - valorTotalDoProduto;
-      const icmsARestituir = difValorPresumidoEValorDeVenda * 0.25;
+//       const { valorTotalDoProduto } = listaProdutos[i];
+//       const difValorPresumidoEValorDeVenda = totalPresumido - valorTotalDoProduto;
+//       const icmsARestituir = difValorPresumidoEValorDeVenda * 0.25;
 
-      linhasProdutos.push(new LinhaRelatorio(numeroSequencial, notaFiscal,
-        objAto, valorPresumido, totalPresumido, difValorPresumidoEValorDeVenda, icmsARestituir));
-    }
-    const qtdProdutosNaNota = listaProdutos.length;
-    UI.mostraNFComMultiplosProdutos(linhasProdutos, numeroSequencial,
-      qtdProdutosNaNota, dom, tableRelatorio);
-  } else {
-    const nomeArquivo = dom.querySelector('infNFe').getAttribute('Id');
-    console.log(nomeArquivo);
-    console.log(notaFiscal);
-    console.log(listaDeAtos);
+//       linhasProdutos.push(new LinhaTabela(numeroSequencial, notaFiscal,
+//         objAto, valorPresumido, totalPresumido, difValorPresumidoEValorDeVenda, icmsARestituir));
+//     }
+//     const qtdProdutosNaNota = listaProdutos.length;
+//     UI.mostraNFComMultiplosProdutos(linhasProdutos, numeroSequencial,
+//       qtdProdutosNaNota, dom, tableRelatorio);
+//   } else {
+//     const nomeArquivo = dom.querySelector('infNFe').getAttribute('Id');
+//     console.log(nomeArquivo);
+//     console.log(notaFiscal);
+//     console.log(listaDeAtos);
 
-    const objAto = retornaOAto(dataEmi);
+//     const objAto = retornaOAto(dataEmi);
 
-    const { nomeProduto } = listaProdutos[0];
-    const { qtdComercializadaDoProduto } = listaProdutos[0];
-    let totalPresumido; // TotalPresumido
-    let valorPresumido;
+//     const { nomeProduto } = listaProdutos[0];
+//     const { qtdComercializadaDoProduto } = listaProdutos[0];
+//     let totalPresumido; // TotalPresumido
+//     let valorPresumido;
 
-    if (nomeProduto === 'GASOLINA COMUM') {
-      valorPresumido = objAto.produtoImposto.gac;
-      totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-    } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-      valorPresumido = objAto.produtoImposto.gap;
-      totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-    } else if (nomeProduto === 'DIESEL COMUM') {
-      valorPresumido = objAto.produtoImposto.oleoDisel;
-      totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-    } else if (nomeProduto === 'DIESEL S10') {
-      valorPresumido = objAto.produtoImposto.d10;
-      totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-    }
+//     if (nomeProduto === 'GASOLINA COMUM') {
+//       valorPresumido = objAto.produtoImposto.gac;
+//       totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
+//     } else if (nomeProduto === 'GASOLINA ADITIVADA') {
+//       valorPresumido = objAto.produtoImposto.gap;
+//       totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
+//     } else if (nomeProduto === 'DIESEL COMUM') {
+//       valorPresumido = objAto.produtoImposto.oleoDisel;
+//       totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
+//     } else if (nomeProduto === 'DIESEL S10') {
+//       valorPresumido = objAto.produtoImposto.d10;
+//       totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
+//     }
 
-    const { valorTotalDoProduto } = listaProdutos[0];
-    const difValorPresumidoEValorDeVenda = totalPresumido - valorTotalDoProduto;
-    const icmsARestituir = difValorPresumidoEValorDeVenda * 0.25;
+//     const { valorTotalDoProduto } = listaProdutos[0];
+//     const difValorPresumidoEValorDeVenda = totalPresumido - valorTotalDoProduto;
+//     const icmsARestituir = difValorPresumidoEValorDeVenda * 0.25;
 
-    const linhaProduto = (new LinhaRelatorio(numeroSequencial, notaFiscal,
-      objAto, valorPresumido, totalPresumido, difValorPresumidoEValorDeVenda, icmsARestituir));
+//     const linhaProduto = (new LinhaTabela(numeroSequencial, notaFiscal,
+//       objAto, valorPresumido, totalPresumido, difValorPresumidoEValorDeVenda, icmsARestituir));
 
-    UI.mostraNFComUmProduto(linhaProduto, dom, tableRelatorio);
-  }
-};
+//     UI.mostraNFComUmProduto(linhaProduto, dom, tableRelatorio);
+//   }
+// };
 
 document.addEventListener('DOMContentLoaded', () => {
   mostraNomeDaEmpresaNaTela();
@@ -303,4 +299,6 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const nfParaClassificacao = removeNotasFiscaisCanceladas(notasFiscaisEmpresaSelecionada);
   const nfClassificadas = classificaAsNotaFiscais(nfParaClassificacao);
   const notasFiscaisCompletas = preencheInfosRestantesDasNF(nfClassificadas);
+
+  // agora é preciso preparar o relatorio
 });
