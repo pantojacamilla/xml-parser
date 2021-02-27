@@ -1,34 +1,13 @@
 /* eslint-disable import/extensions */
 import NotaFiscal from './NotaFiscal.js';
 import Produto from './Produto.js';
-import UI from './Ui.js';
-import listaDeAtos from './atos.js';
+import listaDeAtos from './listaDeAtos.js';
+import LinhaTabela from './LinhaTabela.js';
+// import Relatorio from './Relatorio.js';
+// import UI from './Ui.js';
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
-class Relatorio {
-  linhasTabela;
-  somaDosValoresPresumidos;
-  somaValoresVendidosAoConsumidor;
-  somaDasDiferencas;
-  somaDoIcmsRestituido;
-}
-class LinhaTabela {
-  constructor(numeroSequencial, nota, dataEmissao, combustiveis, atoAno, valorPresumido, qtdLitros, valorTotalPresumido,
-    valorTotalVendido, difEntreTotPresumidoEVendido, icmsASerRestituido) {
-    this.numeroSequencial = numeroSequencial;
-    this.nota = nota;
-    this.dataEmissao = dataEmissao;
-    this.combustiveis = combustiveis;
-    this.atoAno = atoAno;
-    this.valorPresumido = valorPresumido;
-    this.qtdLitros = qtdLitros;
-    this.valorTotalPresumido = valorTotalPresumido;
-    this.valorTotalVendido = valorTotalVendido;
-    this.difEntreTotPresumidoEVendido = difEntreTotPresumidoEVendido;
-    this.icmsASerRestituido = icmsASerRestituido;
-  }
-}
 
 const mostraNomeDaEmpresaNaTela = () => {
   const { nomeEmpresa } = empresa;
@@ -199,10 +178,8 @@ const retornaOAto = (dataDeEmissao) => {
   outerLoop:
   for (let i = 0; i < listaDeAtos.length; i += 1) {
     for (let j = 0; j < listaDeAtos[i].length; j += 1) {
-
       const dataDeInicioDoAtoAtual = listaDeAtos[i][j].dataInicio;
       const dataDeFimDoAtoAtual = listaDeAtos[i][j].dataFim;
-
       const anoDeInicioDoAtoAtual = dataDeInicioDoAtoAtual.getFullYear();
       const anoEmissao = dataDeEmissao.getFullYear();
 
@@ -302,10 +279,10 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const arquivosParaClassificacao = removeNotasFiscaisCanceladas(arquivosSelecionados);
   const ObjetosNotaFiscal = retornaObjetosDoTipoNotaFiscal(arquivosParaClassificacao);
 
-  let linhasTabela;
   setTimeout(() => {
-    linhasTabela = preparaLinhasTabela(ObjetosNotaFiscal);
-    console.log(linhasTabela);
+    const linhasTabela = preparaLinhasTabela(ObjetosNotaFiscal);
+    // const somaDosValoresPresumidos = linhasTabela.reduce(linhaTabela.);
+    console.log('ioioio');
   }, 1000);
 
 });
