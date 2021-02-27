@@ -4,6 +4,8 @@ import Produto from './Produto.js';
 import UI from './Ui.js';
 import listaDeAtos from './atos.js';
 
+const empresa = JSON.parse(window.localStorage.getItem('empresa'));
+const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
 class Relatorio {
   linhasTabela;
   somaDosValoresPresumidos;
@@ -11,27 +13,22 @@ class Relatorio {
   somaDasDiferencas;
   somaDoIcmsRestituido;
 }
-
-let somaDosValoresPresumidos;
-let somaValoresVendidosAoConsumidor;
-let somaDasDiferencas;
-let somaDoIcmsRestituido;
-
 class LinhaTabela {
-  constructor(numeroSequencial, notaFiscal, ato, valorPresumido, valorTotalPresumido,
-    diferencaEntreValorPresumidoEValorDeVenda, icmsASerRestituido) {
+  constructor(numeroSequencial, nota, dataEmissao, combustiveis, atoAno, valorPresumido, qtdLitros, valorTotalPresumido,
+    valorTotalVendido, difEntreTotPresumidoEVendido, icmsASerRestituido) {
     this.numeroSequencial = numeroSequencial;
-    this.notaFiscal = notaFiscal;
-    this.ato = ato;
+    this.nota = nota;
+    this.dataEmissao = dataEmissao;
+    this.combustiveis = combustiveis;
+    this.atoAno = atoAno;
     this.valorPresumido = valorPresumido;
+    this.qtdLitros = qtdLitros;
     this.valorTotalPresumido = valorTotalPresumido;
-    this.diferencaEntreValorPresumidoEValorDeVenda = diferencaEntreValorPresumidoEValorDeVenda;
+    this.valorTotalVendido = valorTotalVendido;
+    this.difEntreTotPresumidoEVendido = difEntreTotPresumidoEVendido;
     this.icmsASerRestituido = icmsASerRestituido;
   }
 }
-
-const empresa = JSON.parse(window.localStorage.getItem('empresa'));
-const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
 
 const mostraNomeDaEmpresaNaTela = () => {
   const { nomeEmpresa } = empresa;
@@ -63,26 +60,26 @@ const removeNotasFiscaisCanceladas = (notasFiscais) => {
 
 const nfTemCombustivel = (domNotaFiscal) => {
   const produtosNotaFiscal = Array.from(domNotaFiscal.querySelectorAll('xProd'));
-  const listaProddutosValidos = [];
+  const valoresPresumidos = [];
 
   produtosNotaFiscal.forEach((produto) => {
     const nomeProduto = produto.textContent;
 
     if (nomeProduto === 'GASOLINA COMUM') {
-      listaProddutosValidos.push(true);
+      valoresPresumidos.push(true);
     } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-      listaProddutosValidos.push(true);
+      valoresPresumidos.push(true);
     } else if (nomeProduto === 'DIESEL COMUM') {
-      listaProddutosValidos.push(true);
+      valoresPresumidos.push(true);
     } else if (nomeProduto === 'DIESEL S10') {
-      listaProddutosValidos.push(true);
+      valoresPresumidos.push(true);
     } else {
-      listaProddutosValidos.push(false);
+      valoresPresumidos.push(false);
     }
   });
 
   // Ou seja se tiver pelomenos um combustível nessa Nota Fiscal ela vai ser considerada válida
-  if (listaProddutosValidos.contains(true)) {
+  if (valoresPresumidos.includes(true)) {
     return true;
   }
   return false;
@@ -106,32 +103,85 @@ const retornaAClassificacaoDaNotaFiscal = (domNotaFiscal) => {
   return classificacaoNF;
 };
 
+const retornaListaDeProdutosValidos = (dom) => {
+  const produtosNotaFiscal = Array.from(dom.querySelectorAll('prod'));
+  const produtosValidos = [];
+
+  produtosNotaFiscal.forEach((produto) => {
+    const nomeProduto = produto.querySelector('xProd').textContent;
+
+    if (eCombustivelValido(nomeProduto)) {
+      const qtdVendida = produto.querySelector('qCom').textContent;
+      const valUnidProd = produto.querySelector('vUnCom').textContent;
+      const valTotVendido = produto.querySelector('vProd').textContent;
+      produtosValidos.push(new Produto(nomeProduto, qtdVendida, valUnidProd, valTotVendido));
+    }
+  });
+
+  return produtosValidos;
+};
+
+const retornaAChaveDeAcessoDaNotaFiscal = (dom) => {
+  const ano = dom.querySelector('ano').textContent;
+  const cnpj = dom.querySelector('CNPJ').textContent;
+  const modelo = dom.querySelector('mod').textContent;
+  let serie = dom.querySelector('serie').textContent;
+
+  if (serie.length === 1) {
+    serie = `00${serie}`;
+  } else if (serie.length === 2) {
+    serie = `0${serie}`;
+  }
+  const inicial = dom.querySelector('nNFIni').textContent;
+  const final = dom.querySelector('nNFFin').textContent;
+  const nomeDoAquivo = `${ano}${cnpj}${modelo}${serie}${inicial}${final}-inu`;
+
+  return nomeDoAquivo;
+};
+
+const preencheInfosRestantesDasNF = (nfClassificada, dom) => {
+  const chaveAcesso = dom.querySelector('infNFe').getAttribute('Id');
+  const dataEmissao = dom.querySelector('dhEmi').textContent;
+  const produtos = retornaListaDeProdutosValidos(dom);
+  nfClassificada.adicionaEstesValoresNaNotaFiscal(chaveAcesso, dataEmissao, produtos, empresa);
+
+  return nfClassificada;
+};
+
 // Criar uma função que le os arquivos
 // -- Nessa função tem que cria os objetos das notas e retornar os ojetos
-const classificaAsNotaFiscais = (notasFiscais) => {
+const retornaObjetosDoTipoNotaFiscal = (arquivosNotaFiscal) => {
   const parser = new DOMParser();
   const objetosNotaFiscal = [];
 
-  notasFiscais.forEach((notaFiscal, index) => {
+  arquivosNotaFiscal.forEach((arquivo, index) => {
     const reader = new FileReader();
 
     reader.onload = () => {
       const xmlString = reader.result;
       const domNotaFiscal = parser.parseFromString(xmlString, 'application/xml');
       const classificacaoNF = retornaAClassificacaoDaNotaFiscal(domNotaFiscal);
+      let novoObjeto = new NotaFiscal(index, classificacaoNF);
 
-      if (classificacaoNF === 'Inutilizada') {
-        objetosNotaFiscal.push(new NotaFiscal(index, classificacaoNF, domNotaFiscal));
+      if (classificacaoNF === 'Válida') {
+        novoObjeto = preencheInfosRestantesDasNF(novoObjeto, domNotaFiscal);
+      } else if (classificacaoNF === 'Inutilizada') {
+        const chaveDeAcesso = retornaAChaveDeAcessoDaNotaFiscal(domNotaFiscal);
+        novoObjeto._chaveDeAcesso = chaveDeAcesso;
       } else if (classificacaoNF === 'Cancelada') {
-        objetosNotaFiscal.push(new NotaFiscal(index, classificacaoNF, domNotaFiscal));
+        const chaveDeAcesso = domNotaFiscal.querySelector('chNFe').textContent;
+        novoObjeto._chaveDeAcesso = chaveDeAcesso;
       } else if (classificacaoNF === 'Sem Combustível') {
-        objetosNotaFiscal.push(new NotaFiscal(index, classificacaoNF, domNotaFiscal));
-      } else if (classificacaoNF === 'Válida') {
-        objetosNotaFiscal.push(new NotaFiscal(index, classificacaoNF, domNotaFiscal));
+        const chaveDeAcesso = domNotaFiscal.querySelector('infNFe').getAttribute('Id');
+        novoObjeto._chaveDeAcesso = chaveDeAcesso;
       }
+
+      objetosNotaFiscal.push(novoObjeto);
     };
-    reader.readAsText(notaFiscal);
+
+    reader.readAsText(arquivo);
   });
+
   return objetosNotaFiscal;
 };
 
@@ -143,52 +193,15 @@ const eCombustivelValido = (nomeProduto) => {
   return false;
 };
 
-const retornaListaDeProdutosValidos = (nfClassificada) => {
-  const produtosNotaFiscal = Array.from(nfClassificada.dom.querySelectorAll('xProd'));
-  const listaProddutosValidos = [];
-
-  produtosNotaFiscal.forEach((produto) => {
-    const nomeProduto = produto.textContent;
-
-    if (eCombustivelValido(nomeProduto)) {
-      const qtdVendida = produto.querySelector('qCom').textContent;
-      const valUnidProd = produto.querySelector('vUnCom').textContent;
-      const valTotVendido = produto.querySelector('vProd').textContent;
-      listaProddutosValidos.push(new Produto(nomeProduto, qtdVendida, valUnidProd, valTotVendido));
-    }
-  });
-
-  return listaProddutosValidos;
-};
-
-const preencheInfosRestantesDasNF = (nfClassificadas) => {
-  // Só adicionar mais informações nas notas se elas tiverem a classificação 'Válida'
-
-  nfClassificadas.forEach((nfClassificada) => {
-    const statusNotaFiscalAtual = nfClassificada.statusNotaFiscal;
-
-    if (statusNotaFiscalAtual === 'Válida') {
-      const chaveAcesso = nfClassificada.dom.querySelector('infNFe').getAttribute('Id');
-      const dataEmissao = nfClassificada.dom.querySelector('dhEmi').textContent;
-      const produtos = retornaListaDeProdutosValidos(nfClassificada);
-      nfClassificada.adicionaEstesValoresNaNotaFiscal(chaveAcesso, dataEmissao, produtos, empresa);
-    }
-  });
-
-  return nfClassificadas;
-};
-
-const retornaOAto = (dataEmissao) => {
-  const dataDeEmissao = new Date(dataEmissao);
+const retornaOAto = (dataDeEmissao) => {
   let objAto;
 
+  outerLoop:
   for (let i = 0; i < listaDeAtos.length; i += 1) {
     for (let j = 0; j < listaDeAtos[i].length; j += 1) {
-      const dataInicial = listaDeAtos[i][j].dataInicio;
-      const dataFinal = listaDeAtos[i][j].dataFim;
 
-      const dataDeInicioDoAtoAtual = new Date(`${dataInicial}T01:00:00-03:00`);
-      const dataDeFimDoAtoAtual = new Date(`${dataFinal}T23:59:59-03:00`);
+      const dataDeInicioDoAtoAtual = listaDeAtos[i][j].dataInicio;
+      const dataDeFimDoAtoAtual = listaDeAtos[i][j].dataFim;
 
       const anoDeInicioDoAtoAtual = dataDeInicioDoAtoAtual.getFullYear();
       const anoEmissao = dataDeEmissao.getFullYear();
@@ -197,7 +210,7 @@ const retornaOAto = (dataEmissao) => {
         if (((dataDeEmissao >= dataDeInicioDoAtoAtual) && (dataDeEmissao <= dataDeFimDoAtoAtual))) {
           const atoObjHelper = listaDeAtos[i][j];
           objAto = atoObjHelper;
-          // break;
+          break outerLoop;
         }
       }
     }
@@ -205,88 +218,78 @@ const retornaOAto = (dataEmissao) => {
   return objAto;
 };
 
-// const preparaLinhaTabela = (dom, index, notaFiscal, tableRelatorio) => {
-//   const numeroSequencial = index + 1;
-//   const listaProdutos = notaFiscal[0].produtos;
-//   const dataEmi = notaFiscal[0].dataEmissao;
+const retornaOsValoresPresumidos = (produtos, ato) => {
+  const valoresPresumidos = [];
 
-//   if (listaProdutos.length > 1) {
-//     const linhasProdutos = [];
+  produtos.forEach((produto) => {
+    if (produto.nomeDoProduto === 'GASOLINA COMUM') {
+      valoresPresumidos.push(ato.produtoImposto.gac);
+    } else if (produto.nomeDoProduto === 'GASOLINA ADITIVADA') {
+      valoresPresumidos.push(ato.produtoImposto.gap);
+    } else if (produto.nomeDoProduto === 'DIESEL COMUM') {
+      valoresPresumidos.push(ato.produtoImposto.oleoDisel);
+    } else if (produto.nomeDoProduto === 'DIESEL S10') {
+      valoresPresumidos.push(ato.produtoImposto.d10);
+    }
+  });
+  return valoresPresumidos;
+};
 
-//     const nomeArquivo = dom.querySelector('infNFe').getAttribute('Id');
-//     console.log(nomeArquivo);
-//     console.log(notaFiscal);
-//     console.log(listaDeAtos);
+const calculaDifEntreTotalPresumidoEVendido = (valorTotalPresumido, valorTotalVendido) => {
+  const qtdDeCalculos = valorTotalPresumido.length;
+  const diferenca = [];
+  for (let i = 0; i < qtdDeCalculos; i++) {
+    let dif = parseFloat(valorTotalPresumido[i] - valorTotalVendido[i]);
+    diferenca.push(dif);
+  }
+  return diferenca;
+};
 
-//     const objAto = retornaOAto(dataEmi);
+const calculaARestituicao = (difValorPresumidoEVendido) => {
+  const valoresAseremRestituidos = [];
 
-//     for (let i = 0; i < listaProdutos.length; i += 1) {
-//       const { nomeProduto } = listaProdutos[i];
-//       const { qtdComercializadaDoProduto } = listaProdutos[i];
-//       let totalPresumido; // TotalPresumido
-//       let valorPresumido;
+  difValorPresumidoEVendido.forEach((dif) => {
+    dif = parseFloat(dif);
+    let restiuicao = (dif * 0.25);
+    valoresAseremRestituidos.push(restiuicao);
+  });
 
-//       if (nomeProduto === 'GASOLINA COMUM') {
-//         valorPresumido = objAto.produtoImposto.gac;
-//         totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-//       } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-//         valorPresumido = objAto.produtoImposto.gap;
-//         totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-//       } else if (nomeProduto === 'DIESEL COMUM') {
-//         valorPresumido = objAto.produtoImposto.oleoDisel;
-//         totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-//       } else if (nomeProduto === 'DIESEL S10') {
-//         valorPresumido = objAto.produtoImposto.d10;
-//         totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-//       }
+  return valoresAseremRestituidos;
+}
 
-//       const { valorTotalDoProduto } = listaProdutos[i];
-//       const difValorPresumidoEValorDeVenda = totalPresumido - valorTotalDoProduto;
-//       const icmsARestituir = difValorPresumidoEValorDeVenda * 0.25;
+const preparaLinhasTabela = (notasFiscaisCompletas) => {
+  const linhasTabela = [];
 
-//       linhasProdutos.push(new LinhaTabela(numeroSequencial, notaFiscal,
-//         objAto, valorPresumido, totalPresumido, difValorPresumidoEValorDeVenda, icmsARestituir));
-//     }
-//     const qtdProdutosNaNota = listaProdutos.length;
-//     UI.mostraNFComMultiplosProdutos(linhasProdutos, numeroSequencial,
-//       qtdProdutosNaNota, dom, tableRelatorio);
-//   } else {
-//     const nomeArquivo = dom.querySelector('infNFe').getAttribute('Id');
-//     console.log(nomeArquivo);
-//     console.log(notaFiscal);
-//     console.log(listaDeAtos);
+  notasFiscaisCompletas.forEach((nf) => {
 
-//     const objAto = retornaOAto(dataEmi);
+    if (nf.statusNotaFiscal === 'Válida') {
 
-//     const { nomeProduto } = listaProdutos[0];
-//     const { qtdComercializadaDoProduto } = listaProdutos[0];
-//     let totalPresumido; // TotalPresumido
-//     let valorPresumido;
+      const numeroSequencial = (nf.indexNotaFiscal + 1);
+      const nota = nf._chaveDeAcesso;
+      const dataDeEmissao = nf._dataEmissao;
+      const combustiveis = nf._produtos.map((produto) => produto.nomeDoProduto);
 
-//     if (nomeProduto === 'GASOLINA COMUM') {
-//       valorPresumido = objAto.produtoImposto.gac;
-//       totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-//     } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-//       valorPresumido = objAto.produtoImposto.gap;
-//       totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-//     } else if (nomeProduto === 'DIESEL COMUM') {
-//       valorPresumido = objAto.produtoImposto.oleoDisel;
-//       totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-//     } else if (nomeProduto === 'DIESEL S10') {
-//       valorPresumido = objAto.produtoImposto.d10;
-//       totalPresumido = (qtdComercializadaDoProduto * valorPresumido);
-//     }
+      const objetoAto = retornaOAto(dataDeEmissao);
+      const atoAno = `${objetoAto.numeroAto}/${objetoAto.dataInicio.getFullYear()}`;
 
-//     const { valorTotalDoProduto } = listaProdutos[0];
-//     const difValorPresumidoEValorDeVenda = totalPresumido - valorTotalDoProduto;
-//     const icmsARestituir = difValorPresumidoEValorDeVenda * 0.25;
+      const valoresPresumidos = retornaOsValoresPresumidos(nf._produtos, objetoAto);
+      const litros = nf._produtos.map((produto) => produto.qtdVendidaDoProduto);
+      const valorTotalPresumido = nf._produtos.map((produto, i) => parseFloat(produto.qtdVendidaDoProduto * valoresPresumidos[i]));
+      const valorTotalVendido = nf._produtos.map((produto) => produto.valorTotalVendidoDoProduto);
+      const difValorPresumidoEVendido = calculaDifEntreTotalPresumidoEVendido(valorTotalPresumido, valorTotalVendido);
+      const valorAserRestituido = calculaARestituicao(difValorPresumidoEVendido);
 
-//     const linhaProduto = (new LinhaTabela(numeroSequencial, notaFiscal,
-//       objAto, valorPresumido, totalPresumido, difValorPresumidoEValorDeVenda, icmsARestituir));
+      linhasTabela.push(new LinhaTabela(numeroSequencial, nota, dataDeEmissao, combustiveis,
+        atoAno, valoresPresumidos, litros, valorTotalPresumido, valorTotalVendido, difValorPresumidoEVendido,
+        valorAserRestituido));
 
-//     UI.mostraNFComUmProduto(linhaProduto, dom, tableRelatorio);
-//   }
-// };
+    } else {
+      linhasTabela.push(nf);
+    }
+  });
+
+  return linhasTabela;
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   mostraNomeDaEmpresaNaTela();
@@ -294,11 +297,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.querySelector('#notasFiscais').addEventListener('change', (event) => {
-  const notasFiscais = Array.from(event.target.files);
-  const notasFiscaisEmpresaSelecionada = removeNotasFiscaisDeOutrasEmpresas(notasFiscais);
-  const nfParaClassificacao = removeNotasFiscaisCanceladas(notasFiscaisEmpresaSelecionada);
-  const nfClassificadas = classificaAsNotaFiscais(nfParaClassificacao);
-  const notasFiscaisCompletas = preencheInfosRestantesDasNF(nfClassificadas);
+  const arquivos = Array.from(event.target.files);
+  const arquivosSelecionados = removeNotasFiscaisDeOutrasEmpresas(arquivos);
+  const arquivosParaClassificacao = removeNotasFiscaisCanceladas(arquivosSelecionados);
+  const ObjetosNotaFiscal = retornaObjetosDoTipoNotaFiscal(arquivosParaClassificacao);
 
-  // agora é preciso preparar o relatorio
+  let linhasTabela;
+  setTimeout(() => {
+    linhasTabela = preparaLinhasTabela(ObjetosNotaFiscal);
+    console.log(linhasTabela);
+  }, 1000);
+
 });
