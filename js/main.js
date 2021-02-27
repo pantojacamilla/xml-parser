@@ -4,7 +4,7 @@ import Produto from './Produto.js';
 import listaDeAtos from './listaDeAtos.js';
 import LinhaTabela from './LinhaTabela.js';
 import Relatorio from './Relatorio.js';
-import UI from './Ui.js';
+import UI from './UI.js';
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
@@ -321,7 +321,8 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   setTimeout(() => {
     const linhasTabela = preparaLinhasTabela(ObjetosNotaFiscal);
     const relatorio = retornaRelatorio(linhasTabela);
-
+    UI.mostraRelatorio(relatorio);
+    console.log(linhasTabela);
   }, 1000);
 
 });
