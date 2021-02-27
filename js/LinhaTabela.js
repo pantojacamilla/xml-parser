@@ -1,7 +1,7 @@
 export default class LinhaTabela {
   constructor(numeroSequencial, nota, dataEmissao, combustiveis, atoAno, valorPresumido,
     qtdLitros, valorTotalPresumido,
-    valorTotalVendido, difEntreTotPresumidoEVendido, icmsASerRestituido) {
+    valorTotalVendido, difEntreTotPresumidoEVendido, icmsASerRestituido, statusNotaFiscal) {
     this.numeroSequencial = numeroSequencial;
     this.nota = nota;
     this.dataEmissao = dataEmissao;
@@ -13,5 +13,6 @@ export default class LinhaTabela {
     this.valorTotalVendido = valorTotalVendido;
     this.difEntreTotPresumidoEVendido = difEntreTotPresumidoEVendido;
     this.icmsASerRestituido = icmsASerRestituido;
+    this.statusNotaFiscal = statusNotaFiscal;
   }
 }

@@ -3,8 +3,8 @@ import NotaFiscal from './NotaFiscal.js';
 import Produto from './Produto.js';
 import listaDeAtos from './listaDeAtos.js';
 import LinhaTabela from './LinhaTabela.js';
-// import Relatorio from './Relatorio.js';
-// import UI from './Ui.js';
+import Relatorio from './Relatorio.js';
+import UI from './Ui.js';
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ _`{|}~]/g, '');
@@ -240,15 +240,12 @@ const preparaLinhasTabela = (notasFiscaisCompletas) => {
   notasFiscaisCompletas.forEach((nf) => {
 
     if (nf.statusNotaFiscal === 'Válida') {
-
       const numeroSequencial = (nf.indexNotaFiscal + 1);
       const nota = nf._chaveDeAcesso;
       const dataDeEmissao = nf._dataEmissao;
       const combustiveis = nf._produtos.map((produto) => produto.nomeDoProduto);
-
       const objetoAto = retornaOAto(dataDeEmissao);
       const atoAno = `${objetoAto.numeroAto}/${objetoAto.dataInicio.getFullYear()}`;
-
       const valoresPresumidos = retornaOsValoresPresumidos(nf._produtos, objetoAto);
       const litros = nf._produtos.map((produto) => produto.qtdVendidaDoProduto);
       const valorTotalPresumido = nf._produtos.map((produto, i) => parseFloat(produto.qtdVendidaDoProduto * valoresPresumidos[i]));
@@ -258,7 +255,7 @@ const preparaLinhasTabela = (notasFiscaisCompletas) => {
 
       linhasTabela.push(new LinhaTabela(numeroSequencial, nota, dataDeEmissao, combustiveis,
         atoAno, valoresPresumidos, litros, valorTotalPresumido, valorTotalVendido, difValorPresumidoEVendido,
-        valorAserRestituido));
+        valorAserRestituido, 'Válida'));
 
     } else {
       linhasTabela.push(nf);
@@ -266,6 +263,48 @@ const preparaLinhasTabela = (notasFiscaisCompletas) => {
   });
 
   return linhasTabela;
+};
+// this.somaDosValoresPresumidos = somaDosValoresPresumidos;
+// this.somaValoresVendidosAoConsumidor = somaValoresVendidosAoConsumidor;
+// this.somaDasDiferencas = somaDasDiferencas;
+// this.somaDoIcmsRestituido = somaDoIcmsRestituido;
+
+const retornaRelatorio = (linhasTabela) => {
+  let valorPresumido = 0;
+  let vandidoAoConsumidor = 0;
+  let somaDiferenca = 0;
+  let somaIcm = 0;
+
+  linhasTabela.forEach((linhaTabela) => {
+
+    if (linhaTabela.statusNotaFiscal === 'Válida') {
+      let valoresPresumidos = linhaTabela.valorTotalPresumido;
+      let somaValPresumido = valoresPresumidos.reduce((valorAtual, linhaTabela) => {
+        return linhaTabela + valorAtual;
+      }, 0);
+      valorPresumido = valorPresumido + somaValPresumido;
+
+      let valoresVendidos = linhaTabela.valorTotalVendido;
+      let somaValoresVendidos = valoresVendidos.reduce((valorAtual, linhaTabela) => {
+        return linhaTabela + valorAtual;
+      }, 0);
+      vandidoAoConsumidor = vandidoAoConsumidor + somaValoresVendidos;
+
+      let diferencas = linhaTabela.difEntreTotPresumidoEVendido;
+      let somaDiferencas = diferencas.reduce((valorAtual, linhaTabela) => {
+        return linhaTabela + valorAtual;
+      }, 0);
+      somaDiferenca = somaDiferenca + somaDiferencas;
+
+      let icms = linhaTabela.icmsASerRestituido;
+      let somaIcms = icms.reduce((valorAtual, linhaTabela) => {
+        return linhaTabela + valorAtual;
+      }, 0);
+      somaIcm = somaIcm + somaIcms;
+    }
+  });
+
+  return new Relatorio(linhasTabela, valorPresumido, vandidoAoConsumidor, somaDiferenca, somaIcm);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -281,8 +320,8 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
 
   setTimeout(() => {
     const linhasTabela = preparaLinhasTabela(ObjetosNotaFiscal);
-    // const somaDosValoresPresumidos = linhasTabela.reduce(linhaTabela.);
-    console.log('ioioio');
+    const relatorio = retornaRelatorio(linhasTabela);
+
   }, 1000);
 
 });
