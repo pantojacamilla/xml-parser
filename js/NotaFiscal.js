@@ -51,23 +51,10 @@ export default class NotaFiscal {
     this._empresa = empresa;
   }
 
-  // Somatório do valor apenas dos combustíveis em uma nota fiscal
-  valorTotalDaNota() {
-    // eslint-disable-next-line max-len
-    const total = this.produtos.reduce((valTotal, produto) => produto.valorTotalVendidoDoProduto + valTotal, 0);
-    return total;
-  }
-
-  tipoDeNotaFiscal() {
+  static tipoDeNotaFiscal() {
     if (this.empresa.nome === 'F S S COMERCIO VAREJISTA DE COMB E LUBRIFICANTES LTDA') {
       return 'Entrada';
     }
     return 'Saída';
   }
 }
-
-// dataEmissao, produtos, empresa, tipoDeNota
-// < emi >
-// produto:Produto
-// empresa:Empresa
-// tipoDeNota; //(entrada ou saída)

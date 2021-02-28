@@ -4,10 +4,8 @@ export default class Produto {
     this.nomeDoProduto = nomeDoProduto; // <xProd>
     this.qtdVendidaDoProduto = retornaOValorTruncado(qtdVendidaDoProduto); // <qCom>
     this.valorDaUnidadeDoProduto = retornaOValorTruncado(valorDaUnidadeDoProduto); // <vUnCom>
-    this.valorTotalVendidoDoProduto = retornaOValorTruncado(valorTotalVendidoDoProduto);
-    // <vProd>
+    this.valorTotalVendidoDoProduto = retornaOValorTruncado(valorTotalVendidoDoProduto); // <vProd>
   }
-
 
   retornaOValorTruncado(valor) {
     const pontoCaractere = '.';
