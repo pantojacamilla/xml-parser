@@ -247,16 +247,17 @@ const preparaLinhasTabela = (notasFiscaisCompletas) => {
       const objetoAto = retornaOAto(dataDeEmissao);
       const atoAno = `${objetoAto.numeroAto}/${objetoAto.dataInicio.getFullYear()}`;
       const valoresPresumidos = retornaOsValoresPresumidos(nf._produtos, objetoAto);
-      const litros = nf._produtos.map((produto) => produto.qtdVendidaDoProduto);
+      const valorPraticado = nf._produtos.map((produto) => produto.valorDaUnidadeDoProduto);
+      const difPresumidoEPraticado = nf._produtos.map((produto, i) => parseFloat(valoresPresumidos[i] - valorPraticado[i]));
+      const litros = nf._produtos.map((produto) => produto.valorDaUnidadeDoProduto);
       const valorTotalPresumido = nf._produtos.map((produto, i) => parseFloat(produto.qtdVendidaDoProduto * valoresPresumidos[i]));
       const valorTotalVendido = nf._produtos.map((produto) => produto.valorTotalVendidoDoProduto);
       const difValorPresumidoEVendido = calculaDifEntreTotalPresumidoEVendido(valorTotalPresumido, valorTotalVendido);
       const valorAserRestituido = calculaARestituicao(difValorPresumidoEVendido);
 
       linhasTabela.push(new LinhaTabela(numeroSequencial, nota, dataDeEmissao, combustiveis,
-        atoAno, valoresPresumidos, litros, valorTotalPresumido, valorTotalVendido, difValorPresumidoEVendido,
-        valorAserRestituido, 'Válida'));
-
+        atoAno, valoresPresumidos, valorPraticado, difPresumidoEPraticado, litros,
+        valorTotalPresumido, valorTotalVendido, difValorPresumidoEVendido, valorAserRestituido, 'Válida'));
     } else {
       linhasTabela.push(nf);
     }

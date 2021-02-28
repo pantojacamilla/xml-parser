@@ -1,16 +1,12 @@
 export default class UI {
 
   static mostraRelatorio(relatorio) {
-    let tabelaRelatorio = document.querySelector('tbody');
-    let row = document.createElement('tr');
-    let td = document.createElement('td');
     const linhasRelatorio = relatorio.linhasTabela;
 
     linhasRelatorio.forEach((linhaRelatorio) => {
 
       if (linhaRelatorio.statusNotaFiscal === 'Inutilizada') {
         UI.mostraNotaInutilizada(linhaRelatorio);
-
       } else if (linhaRelatorio.statusNotaFiscal === 'Cancelada') {
         UI.mostraNotaCancelada(linhaRelatorio);
       } else if (linhaRelatorio.statusNotaFiscal === 'Sem Combustível') {
@@ -19,6 +15,22 @@ export default class UI {
         UI.mostraProdutos(linhaRelatorio);
       }
     });
+
+    UI.mostraSomatorias(relatorio);
+  };
+
+  static mostraSomatorias = (relatorio) => {
+    let somaPresumidos = document.querySelector('#somaPresumidos');
+    somaPresumidos.textContent = `Soma dos valores presumidos: ${relatorio.somaDosValoresPresumidos}`;
+
+    let somaVendidos = document.querySelector('#somaVendidos');
+    somaVendidos.textContent = `Soma dos valores praticados: ${relatorio.somaValoresVendidosAoConsumidor}`;
+
+    let somaDiferencas = document.querySelector('#somaDiferencas');
+    somaDiferencas.textContent = `Soma das diferenças entre os valores Presumidos e praticados: ${relatorio.somaDasDiferencas}`;
+
+    let somaIcms = document.querySelector('#somaIcms');
+    somaIcms.textContent = `Soma dos ICMS: ${relatorio.somaDoIcmsRestituido}`;
   };
 
   static mostraNotaInutilizada = (linhaRelatorio) => {
@@ -36,7 +48,7 @@ export default class UI {
 
     // Mensagem
     td = document.createElement('td');
-    td.setAttribute('colspan', '9');
+    td.setAttribute('colspan', '11');
     td.textContent = 'NOTA FISCAL INUTILIZADA';
     row.appendChild(td);
 
@@ -63,7 +75,7 @@ export default class UI {
 
     // Mensagem
     td = document.createElement('td');
-    td.setAttribute('colspan', '9');
+    td.setAttribute('colspan', '11');
     td.textContent = 'NOTA FISCAL CANCELADA';
     row.appendChild(td);
 
@@ -90,7 +102,7 @@ export default class UI {
 
     // Mensagem
     td = document.createElement('td');
-    td.setAttribute('colspan', '9');
+    td.setAttribute('colspan', '11');
     td.textContent = 'NÃO CONTÉM COMBUSTÍVEL';
     row.appendChild(td);
 
@@ -103,9 +115,8 @@ export default class UI {
   }
 
   static mostraProdutos = (linhaRelatorio) => {
-    let td = document.createElement('td');
-
     const qtdProdutosNaNotaFical = linhaRelatorio.combustiveis.length;
+
     if (qtdProdutosNaNotaFical > 1) {
       UI.mostraMultiplosProdutos(linhaRelatorio);
     } else {
@@ -162,6 +173,22 @@ export default class UI {
       td.textContent = linhaRelatorio.valorPresumido[i];
       row.appendChild(td);
 
+      // Valor Praticado
+      td = document.createElement('td');
+      td.textContent = linhaRelatorio.valorDeVenda[i];
+      row.appendChild(td);
+
+      // Diferença entre (Presumido - Praticado)
+      td = document.createElement('td');
+      const difPeP = linhaRelatorio.difPresumidoEVenda[i];
+      td.textContent = difPeP;
+      if (difPeP > 0) {
+        td.setAttribute('class', 'positivo');
+      } else {
+        td.setAttribute('class', 'negativo');
+      }
+      row.appendChild(td);
+
       // Quantidade de litros
       td = document.createElement('td');
       td.textContent = linhaRelatorio.qtdLitros[i];
@@ -177,14 +204,26 @@ export default class UI {
       td.textContent = linhaRelatorio.valorTotalVendido[i];
       row.appendChild(td);
 
-      // Diferença entre presumido e vendido
+      // Diferença entre TOTAL presumido e TOTAL vendido
       td = document.createElement('td');
-      td.textContent = linhaRelatorio.difEntreTotPresumidoEVendido[i];
+      const diferenca = linhaRelatorio.difEntreTotPresumidoEVendido[i];
+      td.textContent = diferenca;
+      if (diferenca > 0) {
+        td.setAttribute('class', 'positivo');
+      } else {
+        td.setAttribute('class', 'negativo');
+      }
       row.appendChild(td);
 
       // Icms a ser restituído
       td = document.createElement('td');
-      td.textContent = linhaRelatorio.icmsASerRestituido[i];
+      const icms = linhaRelatorio.icmsASerRestituido[i]
+      td.textContent = icms;
+      if (icms > 0) {
+        td.setAttribute('class', 'positivo');
+      } else {
+        td.setAttribute('class', 'negativo');
+      }
       row.appendChild(td);
 
       if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
@@ -229,6 +268,22 @@ export default class UI {
     td.textContent = linhaRelatorio.valorPresumido[0];
     row.appendChild(td);
 
+    // Valor Praticado
+    td = document.createElement('td');
+    td.textContent = linhaRelatorio.valorDeVenda[0];
+    row.appendChild(td);
+
+    // Diferença entre (Presumido - Praticado)
+    td = document.createElement('td');
+    const difPeP = linhaRelatorio.difPresumidoEVenda[0];
+    td.textContent = difPeP;
+    if (difPeP > 0) {
+      td.setAttribute('class', 'positivo');
+    } else {
+      td.setAttribute('class', 'negativo');
+    }
+    row.appendChild(td);
+
     // Quantidade de litros
     td = document.createElement('td');
     td.textContent = linhaRelatorio.qtdLitros[0];
@@ -244,14 +299,26 @@ export default class UI {
     td.textContent = linhaRelatorio.valorTotalVendido[0];
     row.appendChild(td);
 
-    // Diferença entre presumido e vendido
+    // Diferença entre TOTAL presumido e TOTAL vendido
     td = document.createElement('td');
-    td.textContent = linhaRelatorio.difEntreTotPresumidoEVendido[0];
+    const diferenca = linhaRelatorio.difEntreTotPresumidoEVendido[0]
+    td.textContent = diferenca;
+    if (diferenca > 0) {
+      td.setAttribute('class', 'positivo');
+    } else {
+      td.setAttribute('class', 'negativo');
+    }
     row.appendChild(td);
 
     // Icms a ser restituído
     td = document.createElement('td');
-    td.textContent = linhaRelatorio.icmsASerRestituido[0];
+    const icms = linhaRelatorio.icmsASerRestituido[0];
+    td.textContent = icms;
+    if (icms > 0) {
+      td.setAttribute('class', 'positivo');
+    } else {
+      td.setAttribute('class', 'negativo');
+    }
     row.appendChild(td);
 
     if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
