@@ -1,22 +1,4 @@
 export default class UI {
-  static mostraRelatorio(relatorio) {
-    const linhasRelatorio = relatorio.linhasTabela;
-
-    linhasRelatorio.forEach((linhaRelatorio) => {
-      if (linhaRelatorio.statusNotaFiscal === 'Inutilizada') {
-        UI.mostraNotaInutilizada(linhaRelatorio);
-      } else if (linhaRelatorio.statusNotaFiscal === 'Cancelada') {
-        UI.mostraNotaCancelada(linhaRelatorio);
-      } else if (linhaRelatorio.statusNotaFiscal === 'Sem Combustível') {
-        UI.mostraNotaSemCombustivel(linhaRelatorio);
-      } else {
-        UI.mostraProdutos(linhaRelatorio);
-      }
-    });
-
-    UI.mostraSomatorias(relatorio);
-  }
-
   static mostraSomatorias(relatorio) {
     const somaPresumidos = document.querySelector('#somaPresumidos');
     somaPresumidos.textContent = `Soma dos valores presumidos: ${relatorio.somaDosValoresPresumidos}`;
@@ -116,7 +98,7 @@ export default class UI {
     const qtdProdutosNaNotaFical = linhaRelatorio.combustiveis.length;
 
     if (qtdProdutosNaNotaFical > 1) {
-      // UI.mostraMultiplosProdutos(linhaRelatorio);
+      UI.mostraMultiplosProdutos(linhaRelatorio);
     } else {
       UI.mostraLinhaComUmProduto(linhaRelatorio);
     }
@@ -133,6 +115,11 @@ export default class UI {
         td.setAttribute('class', 'negativo');
       }
     }
+
+    if (Number.isInteger(validacao) === true) {
+      td.setAttribute('rowspan', (validacao + 1));
+    }
+
     const row = linha;
     row.appendChild(td);
   }
@@ -177,19 +164,19 @@ export default class UI {
     this.criaLinhaTabela(qtdLitros, linha);
 
     // Valor total Presumido
-    const { valorTotalPresumido } = linhaRelatorio;
+    const valorTotalPresumido = linhaRelatorio.valorTotalPresumido[0];
     this.criaLinhaTabela(valorTotalPresumido, linha);
 
     // Valor total vendido
-    const { valorTotalVendido } = linhaRelatorio;
+    const valorTotalVendido = linhaRelatorio.valorTotalVendido[0];
     this.criaLinhaTabela(valorTotalVendido, linha);
 
     // Diferença entre TOTAL presumido e TOTAL vendido
-    const { difEntreTotPresumidoEVendido } = linhaRelatorio;
+    const difEntreTotPresumidoEVendido = linhaRelatorio.difEntreTotPresumidoEVendido[0];
     this.criaLinhaTabela(difEntreTotPresumidoEVendido, linha, true);
 
     // Icms a ser restituído
-    const { icmsASerRestituido } = linhaRelatorio;
+    const icmsASerRestituido = linhaRelatorio.icmsASerRestituido[0];
     this.criaLinhaTabela(icmsASerRestituido, linha, true);
 
     if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
@@ -201,113 +188,76 @@ export default class UI {
   }
 
   static mostraMultiplosProdutos(linhaRelatorio) {
-    let row = document.createElement('tr');
-    let td = document.createElement('td');
-
+    let linha = document.createElement('tr');
     const qtdProdutos = linhaRelatorio.combustiveis.length;
 
     // Número sequencial
-    td = document.createElement('td');
-    td.setAttribute('rowspan', (qtdProdutos + 1));
-    td.textContent = linhaRelatorio.numeroSequencial;
-    row.appendChild(td);
+    const { numeroSequencial } = linhaRelatorio;
+    this.criaLinhaTabela(numeroSequencial, linha, qtdProdutos);
 
     // Nome do arquivo
-    td = document.createElement('td');
-    td.setAttribute('rowspan', (qtdProdutos + 1));
-    td.textContent = linhaRelatorio.nota;
-    row.appendChild(td);
+    const { nota } = linhaRelatorio;
+    this.criaLinhaTabela(nota, linha, qtdProdutos);
 
     // Data de emissão
-    td = document.createElement('td');
-    td.setAttribute('rowspan', (qtdProdutos + 1));
-    td.textContent = UI.dateParse(linhaRelatorio.dataEmissao);
-    row.appendChild(td);
+    const dataEmissao = this.formataData(linhaRelatorio.dataEmissao);
+    this.criaLinhaTabela(dataEmissao, linha, qtdProdutos);
 
     if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
-      row.setAttribute('class', 'grey');
+      linha.setAttribute('class', 'grey');
     }
 
     const tabelaRelatorio = document.querySelector('tbody');
-    tabelaRelatorio.appendChild(row);
+    tabelaRelatorio.appendChild(linha);
 
     for (let i = 0; i < qtdProdutos; i += 1) {
-      row = document.createElement('tr');
+      linha = document.createElement('tr');
 
-      // Combustiveis
-      td = document.createElement('td');
-      td.textContent = linhaRelatorio.combustiveis[i];
-      row.appendChild(td);
+      // Combustível
+      const combustiveis = linhaRelatorio.combustiveis[i];
+      this.criaLinhaTabela(combustiveis, linha);
 
       // Ato/Ano
-      td = document.createElement('td');
-      td.textContent = linhaRelatorio.atoAno;
-      row.appendChild(td);
+      const { atoAno } = linhaRelatorio;
+      this.criaLinhaTabela(atoAno, linha);
 
       // Valor Presumido
-      td = document.createElement('td');
-      td.textContent = linhaRelatorio.valorPresumido[i];
-      row.appendChild(td);
+      const valorPresumido = linhaRelatorio.valorPresumido[i];
+      this.criaLinhaTabela(valorPresumido, linha);
 
       // Valor Praticado
-      td = document.createElement('td');
-      td.textContent = linhaRelatorio.valorDeVenda[i];
-      row.appendChild(td);
+      const valorDeVenda = linhaRelatorio.valorDeVenda[i];
+      this.criaLinhaTabela(valorDeVenda, linha);
 
       // Diferença entre (Presumido - Praticado)
-      td = document.createElement('td');
-      const difPeP = linhaRelatorio.difPresumidoEVenda[i];
-      td.textContent = difPeP;
-      if (difPeP > 0) {
-        td.setAttribute('class', 'positivo');
-      } else {
-        td.setAttribute('class', 'negativo');
-      }
-      row.appendChild(td);
+      const difPresumidoEVenda = linhaRelatorio.difPresumidoEVenda[i];
+      this.criaLinhaTabela(difPresumidoEVenda, linha, true);
 
       // Quantidade de litros
-      td = document.createElement('td');
-      td.textContent = linhaRelatorio.qtdLitros[i];
-      row.appendChild(td);
+      const qtdLitros = linhaRelatorio.qtdLitros[i];
+      this.criaLinhaTabela(qtdLitros, linha);
 
       // Valor total Presumido
-      td = document.createElement('td');
-      td.textContent = linhaRelatorio.valorTotalPresumido[i];
-      row.appendChild(td);
+      const valorTotalPresumido = linhaRelatorio.valorTotalPresumido[i];
+      this.criaLinhaTabela(valorTotalPresumido, linha);
 
       // Valor total vendido
-      td = document.createElement('td');
-      td.textContent = linhaRelatorio.valorTotalVendido[i];
-      row.appendChild(td);
+      const valorTotalVendido = linhaRelatorio.valorTotalVendido[i];
+      this.criaLinhaTabela(valorTotalVendido, linha);
 
       // Diferença entre TOTAL presumido e TOTAL vendido
-      td = document.createElement('td');
-      const diferenca = linhaRelatorio.difEntreTotPresumidoEVendido[i];
-      td.textContent = diferenca;
-      if (diferenca > 0) {
-        td.setAttribute('class', 'positivo');
-      } else {
-        td.setAttribute('class', 'negativo');
-      }
-      row.appendChild(td);
+      const difEntreTotPresumidoEVendido = linhaRelatorio.difEntreTotPresumidoEVendido[i];
+      this.criaLinhaTabela(difEntreTotPresumidoEVendido, linha, true);
 
       // Icms a ser restituído
-      td = document.createElement('td');
-      const icms = linhaRelatorio.icmsASerRestituido[i];
-      td.textContent = icms;
-      if (icms > 0) {
-        td.setAttribute('class', 'positivo');
-      } else {
-        td.setAttribute('class', 'negativo');
-      }
-      row.appendChild(td);
+      const icmsASerRestituido = linhaRelatorio.icmsASerRestituido[i];
+      this.criaLinhaTabela(icmsASerRestituido, linha, true);
 
       if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
-        row.setAttribute('class', 'grey');
+        linha.setAttribute('class', 'grey');
       }
 
-      // const tabelaRelatorio = document.querySelector('tbody');
-      tabelaRelatorio.appendChild(row);
+      tabelaRelatorio.appendChild(linha);
     }
   }
 
@@ -327,5 +277,33 @@ export default class UI {
     const dataFormatada = `${dia}/${mes}/${ano}`;
 
     return dataFormatada;
+  }
+
+  static mostraRelatorio(relatorio) {
+    const linhasRelatorio = relatorio.linhasTabela;
+
+    linhasRelatorio.forEach((linhaRelatorio) => {
+      if (linhaRelatorio.statusNotaFiscal === 'Inutilizada') {
+        UI.mostraNotaInutilizada(linhaRelatorio);
+      } else if (linhaRelatorio.statusNotaFiscal === 'Cancelada') {
+        UI.mostraNotaCancelada(linhaRelatorio);
+      } else if (linhaRelatorio.statusNotaFiscal === 'Sem Combustível') {
+        UI.mostraNotaSemCombustivel(linhaRelatorio);
+      } else {
+        UI.mostraProdutos(linhaRelatorio);
+      }
+    });
+
+    UI.mostraSomatorias(relatorio);
+  }
+
+  static retornaValorTruncado(valor) {
+    const val = valor.toString();
+    const pontoCaractere = '.';
+    const indexDoPonto = val.indexOf(pontoCaractere);
+    const qtdNumerosUtilizados = (indexDoPonto + 5);
+    const valorTruncado = val.substr(0, qtdNumerosUtilizados);
+
+    return parseFloat(valorTruncado);
   }
 }

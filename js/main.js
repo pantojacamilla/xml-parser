@@ -222,7 +222,7 @@ const calculaDifEntreTotalPresumidoEVendido = (valorTotalPresumido, valorTotalVe
   const qtdDeCalculos = valorTotalPresumido.length;
   const diferenca = [];
   for (let i = 0; i < qtdDeCalculos; i += 1) {
-    const dif = parseFloat(valorTotalPresumido[i] - valorTotalVendido[i]);
+    const dif = UI.retornaValorTruncado(valorTotalPresumido[i] - valorTotalVendido[i]);
     diferenca.push(dif);
   }
   return diferenca;
@@ -234,7 +234,7 @@ const calculaARestituicao = (difValorPresumidoEVendido) => {
   difValorPresumidoEVendido.forEach((dif) => {
     let diferenca = dif;
     diferenca = parseFloat(dif);
-    const restiuicao = (diferenca * 0.25);
+    const restiuicao = UI.retornaValorTruncado(diferenca * 0.25);
     valoresAseremRestituidos.push(restiuicao);
   });
 
@@ -254,10 +254,13 @@ const preparaLinhasTabela = (notasFiscaisCompletas) => {
       const atoAno = `${objetoAto.numeroAto}/${objetoAto.dataInicio.getFullYear()}`;
       const valoresPresumidos = retornaOsValoresPresumidos(nf.__produtos, objetoAto);
       const valorPraticado = nf.__produtos.map((produto) => produto.valorDaUnidadeDoProduto);
-      const difPresumidoEPraticado = nf.__produtos.map((produto, i) => parseFloat(valoresPresumidos[i] - valorPraticado[i]));
+      const difPresumidoEPraticado = nf.__produtos.map((produto, i) =>
+        UI.retornaValorTruncado((valoresPresumidos[i] - valorPraticado[i])));
       const litros = nf.__produtos.map((produto) => produto.qtdVendidaDoProduto);
-      const valorTotalPresumido = nf.__produtos.map((produto, i) => parseFloat(produto.qtdVendidaDoProduto * valoresPresumidos[i]));
-      const valorTotalVendido = nf.__produtos.map((produto) => produto.valorTotalVendidoDoProduto);
+      const valorTotalPresumido = nf.__produtos.map((produto, i) =>
+        UI.retornaValorTruncado(produto.qtdVendidaDoProduto * valoresPresumidos[i]));
+      const valorTotalVendido = nf.__produtos.map((produto) =>
+        UI.retornaValorTruncado(produto.valorTotalVendidoDoProduto));
       const difValorPresumidoEVendido = calculaDifEntreTotalPresumidoEVendido(valorTotalPresumido, valorTotalVendido);
       const valorAserRestituido = calculaARestituicao(difValorPresumidoEVendido);
 
@@ -281,22 +284,27 @@ const retornaRelatorio = (linhasTabela) => {
   linhasTabela.forEach((linhaTabela) => {
     if (linhaTabela.statusNotaFiscal === 'Válida') {
       const valoresPresumidos = linhaTabela.valorTotalPresumido;
-      const somaValPresumido = valoresPresumidos.reduce((valorAtual,
-        linhaTabela) => linhaTabela + valorAtual, 0);
-      valorPresumido += somaValPresumido;
+
+      // eslint-disable-next-line no-shadow
+      const somaValPre = valoresPresumidos.reduce((valorAtual, linhaTabela) =>
+        (linhaTabela + valorAtual), 0);
+      valorPresumido += somaValPre;
 
       const valoresVendidos = linhaTabela.valorTotalVendido;
-      const somaValoresVendidos = valoresVendidos.reduce((valorAtual,
-        linhaTabela) => linhaTabela + valorAtual, 0);
-      vandidoAoConsumidor += somaValoresVendidos;
+      // eslint-disable-next-line no-shadow
+      const somaValVendi = valoresVendidos.reduce((valorAtual, linhaTabela) =>
+        (linhaTabela + valorAtual), 0);
+      vandidoAoConsumidor += somaValVendi;
 
       const diferencas = linhaTabela.difEntreTotPresumidoEVendido;
+      // eslint-disable-next-line no-shadow
       const somaDiferencas = diferencas.reduce((valorAtual, linhaTabela) =>
-        linhaTabela + valorAtual, 0);
+        (linhaTabela + valorAtual), 0);
       somaDiferenca += somaDiferencas;
 
       const icms = linhaTabela.icmsASerRestituido;
-      const somaIcms = icms.reduce((valorAtual, linhaTabela) => linhaTabela + valorAtual, 0);
+      // eslint-disable-next-line no-shadow
+      const somaIcms = icms.reduce((valorAtual, linhaTabela) => (linhaTabela + valorAtual), 0);
       somaIcm += somaIcms;
     }
   });

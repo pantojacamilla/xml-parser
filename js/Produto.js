@@ -4,7 +4,8 @@ export default class Produto {
     valorDaUnidadeDoProduto, valorTotalVendidoDoProduto) {
     this.nomeDoProduto = nomeDoProduto; // <xProd>
     this.qtdVendidaDoProduto = this.retornaOValorTruncado(qtdVendidaDoProduto); // <qCom>
-    this.valorDaUnidadeDoProduto = this.retornaOValorTruncado(valorDaUnidadeDoProduto); // <vUnCom>
+    this.valorDaUnidadeDoProduto = this.retornaOValorTruncado(valorDaUnidadeDoProduto);
+    // <vUnCom>
     this.valorTotalVendidoDoProduto = this.retornaOValorTruncado(valorTotalVendidoDoProduto);
     // <vProd>
   }
