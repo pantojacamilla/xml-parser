@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable eol-last */
 import Ato from './Ato.js';
 import ProdutoImposto from './ProdutoImposto.js';

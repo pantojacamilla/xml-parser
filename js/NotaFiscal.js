@@ -1,9 +1,9 @@
 export default class NotaFiscal {
 
-  _chaveDeAcesso;
-  _dataEmissao;
-  _produtos;
-  _empresa;
+  __chaveDeAcesso;
+  __dataEmissao;
+  __produtos;
+  __empresa;
 
   constructor(indexNotaFiscal, statusNotaFiscal) {
     this.indexNotaFiscal = indexNotaFiscal;
@@ -12,27 +12,27 @@ export default class NotaFiscal {
   }
 
   get chaveDeAcesso() {
-    return this._chaveDeAcesso;
+    return this.__chaveDeAcesso;
   }
 
   set chaveDeAcesso(chaveAcesso) {
-    this._chaveDeAcesso = chaveAcesso;
+    this.__chaveDeAcesso = chaveAcesso;
   }
 
   get dataEmissao() {
-    return this._dataEmissao;
+    return this.__dataEmissao;
   }
 
   set dataEmissao(dataEmissao) {
-    this._dataEmissao = dataEmissao;
+    this.__dataEmissao = dataEmissao;
   }
 
   get produtos() {
-    return this._produtos;
+    return this.__produtos;
   }
 
   set produtos(produtos) {
-    this._produtos = produtos;
+    this.__produtos = produtos;
   }
 
   get empresa() {
@@ -40,15 +40,15 @@ export default class NotaFiscal {
   }
 
   set empresa(empresa) {
-    this._empresa = empresa;
+    this.__empresa = empresa;
   }
 
   adicionaEstesValoresNaNotaFiscal(chaveDeAcesso, dataEmissao,
     produtos, empresa) {
-    this._chaveDeAcesso = chaveDeAcesso;
-    this._dataEmissao = new Date(dataEmissao);
-    this._produtos = produtos;
-    this._empresa = empresa;
+    this.__chaveDeAcesso = chaveDeAcesso;
+    this.__dataEmissao = new Date(new Date(dataEmissao).toDateString());
+    this.__produtos = produtos;
+    this.__empresa = empresa;
   }
 
   static tipoDeNotaFiscal() {
