@@ -1,16 +1,16 @@
 export default class UI {
   static mostraSomatorias(relatorio) {
     const somaPresumidos = document.querySelector('#somaPresumidos');
-    somaPresumidos.textContent = `Soma dos valores presumidos: ${relatorio.somaDosValoresPresumidos}`;
+    somaPresumidos.textContent = `Soma dos valores presumidos: R$${relatorio.somaDosValoresPresumidos}`;
 
     const somaVendidos = document.querySelector('#somaVendidos');
-    somaVendidos.textContent = `Soma dos valores praticados: ${relatorio.somaValoresVendidosAoConsumidor}`;
+    somaVendidos.textContent = `Soma dos valores praticados: R$${relatorio.somaValoresVendidosAoConsumidor}`;
 
     const somaDiferencas = document.querySelector('#somaDiferencas');
-    somaDiferencas.textContent = `Soma das diferenças entre os valores Presumidos e praticados: ${relatorio.somaDasDiferencas}`;
+    somaDiferencas.textContent = `Soma das diferenças entre os valores Presumidos e praticados: R$${relatorio.somaDasDiferencas}`;
 
     const somaIcms = document.querySelector('#somaIcms');
-    somaIcms.textContent = `Soma dos ICMS: ${relatorio.somaDoIcmsRestituido}`;
+    somaIcms.textContent = `Soma dos ICMS: R$${relatorio.somaDoIcmsRestituido}`;
   }
 
   static mostraNotaInutilizada(linhaRelatorio) {
@@ -295,6 +295,7 @@ export default class UI {
     });
 
     UI.mostraSomatorias(relatorio);
+    alert('RELATÓRIO GERADO COM SUCESSO');
   }
 
   static retornaValorTruncado(valor) {

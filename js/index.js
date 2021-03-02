@@ -22,5 +22,5 @@ document.querySelector('#selecao-empresa').addEventListener('submit', (e) => {
   const obejtoEmpresa = criaUmObjetoEmpresa(empresaSelecionada);
   adicionaEmpresaAoLocalStorage(obejtoEmpresa);
   // window.open('relatorio.html');
-  window.location.replace('relatorio.html');
+  window.location.replace('./relatorio.html');
 });

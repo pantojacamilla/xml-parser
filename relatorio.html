@@ -5,22 +5,29 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="./css/style.css">
   <title>Relatório</title>
 </head>
 
 <body>
 
-  <input type="file" id="notasFiscais" accept="application/xml" multiple>
-  <br>
-  <input type="reset" id="btnResete" value="Limpar Página" onClick="window.location.reload()">
-  <br>
+  <div id="controles">
+    <button class="large blue button" onclick="window.location.replace('index.html');">TROCAR EMPRES</button>
+    <button class="large green button" id="geraRelatorioPdf">SALVAR EM PDF</button>
+    <button class="large red button" onClick="window.location.reload(true)">LIMPAR PÁGINA</button>
+    <input type="file" id="notasFiscais" accept="application/xml" multiple>
+    <br><br>
+  </div>
 
-  <div id="nome-empresa"></div>
-  <br>
-  <div id="cnpj-empresa"></div>
-  <br>
 
+  <div class="container flex">
+    EMPRESA: &nbsp; <div id="nome-empresa"></div>
+  </div>
+  <div class="container flex">
+    CNPJ: &nbsp; <div id="cnpj-empresa"></div>
+  </div>
+
+  <br>
   <div id="somaPresumidos"></div>
   <div id="somaVendidos"></div>
   <div id="somaDiferencas"></div>

@@ -317,6 +317,17 @@ document.addEventListener('DOMContentLoaded', () => {
   mostraCnpjDaEmpresaNaTela();
 });
 
+document.querySelector('#geraRelatorioPdf').addEventListener('click', () => {
+  const controles = document.querySelector('#controles');
+  controles.style.display = 'none';
+  window.print();
+});
+
+window.addEventListener('afterprint', () => {
+  const controles = document.querySelector('#controles');
+  controles.style.display = '';
+});
+
 document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const arquivos = Array.from(event.target.files);
   const arquivosSelecionados = removeNotasFiscaisDeOutrasEmpresas(arquivos);
