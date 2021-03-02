@@ -295,7 +295,6 @@ export default class UI {
     });
 
     UI.mostraSomatorias(relatorio);
-    alert('RELATÓRIO GERADO COM SUCESSO');
   }
 
   static retornaValorTruncado(valor) {

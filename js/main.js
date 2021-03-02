@@ -177,6 +177,7 @@ const retornaObjetosDoTipoNotaFiscal = (arquivosNotaFiscal) => {
 };
 
 const retornaOAto = (dataDeEmissao) => {
+  console.log(dataDeEmissao);
   let objAto;
 
   outerLoop:
@@ -198,6 +199,7 @@ const retornaOAto = (dataDeEmissao) => {
       // }
     }
   }
+  console.log(objAto);
   return objAto;
 };
 
@@ -251,7 +253,7 @@ const preparaLinhasTabela = (notasFiscaisCompletas) => {
       const dataDeEmissao = nf.__dataEmissao;
       const combustiveis = nf.__produtos.map((produto) => produto.nomeDoProduto);
       const objetoAto = retornaOAto(dataDeEmissao);
-      const atoAno = `${objetoAto.numeroAto}/${objetoAto.dataInicio.getFullYear()}`;
+      const atoAno = `${objetoAto.numeroAto}/${objetoAto.ano}`;
       const valoresPresumidos = retornaOsValoresPresumidos(nf.__produtos, objetoAto);
       const valorPraticado = nf.__produtos.map((produto) => produto.valorDaUnidadeDoProduto);
       const difPresumidoEPraticado = nf.__produtos.map((produto, i) =>
