@@ -7,9 +7,9 @@ const listaDeAtos = [];
 let produtoImposto;
 const atos2016 = [];
 const atos2017 = [];
-const atos2018 = [];
-const atos2019 = [];
-const atos2020 = [];
+// const atos2018 = [];
+// const atos2019 = [];
+// const atos2020 = [];
 
 // 2016
 produtoImposto = new ProdutoImposto(4.0670, 4.0670, 3.4430, 3.3490);

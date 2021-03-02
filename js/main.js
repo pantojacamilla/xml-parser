@@ -177,7 +177,6 @@ const retornaObjetosDoTipoNotaFiscal = (arquivosNotaFiscal) => {
 };
 
 const retornaOAto = (dataDeEmissao) => {
-  console.log(dataDeEmissao);
   let objAto;
 
   outerLoop:
@@ -199,7 +198,6 @@ const retornaOAto = (dataDeEmissao) => {
       // }
     }
   }
-  console.log(objAto);
   return objAto;
 };
 
