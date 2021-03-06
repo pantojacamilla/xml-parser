@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable no-labels */
@@ -9,9 +10,10 @@ import listaDeAtos from './listaDeAtos.js';
 import LinhaTabela from './LinhaTabela.js';
 import Relatorio from './Relatorio.js';
 import UI from './UI.js';
+import truncaValor from './truncaValor.js';
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
-const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ __`{|}~]/g, '');
+const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
 
 const mostraNomeDaEmpresaNaTela = () => {
   const { nomeEmpresa } = empresa;
@@ -158,13 +160,13 @@ const retornaObjetosDoTipoNotaFiscal = (arquivosNotaFiscal) => {
         novoObjeto = preencheInfosRestantesDasNF(novoObjeto, domNotaFiscal);
       } else if (classificacaoNF === 'Inutilizada') {
         const chaveDeAcesso = retornaAChaveDeAcessoDaNotaFiscal(domNotaFiscal);
-        novoObjeto.__chaveDeAcesso = chaveDeAcesso;
+        novoObjeto.chaveDeAcesso = chaveDeAcesso;
       } else if (classificacaoNF === 'Cancelada') {
         const chaveDeAcesso = domNotaFiscal.querySelector('chNFe').textContent;
-        novoObjeto.__chaveDeAcesso = chaveDeAcesso;
+        novoObjeto.chaveDeAcesso = chaveDeAcesso;
       } else if (classificacaoNF === 'Sem Combustível') {
         const chaveDeAcesso = domNotaFiscal.querySelector('infNFe').getAttribute('Id');
-        novoObjeto.__chaveDeAcesso = chaveDeAcesso;
+        novoObjeto.chaveDeAcesso = chaveDeAcesso;
       }
 
       objetosNotaFiscal.push(novoObjeto);
@@ -222,19 +224,19 @@ const calculaDifEntreTotalPresumidoEVendido = (valorTotalPresumido, valorTotalVe
   const qtdDeCalculos = valorTotalPresumido.length;
   const diferenca = [];
   for (let i = 0; i < qtdDeCalculos; i += 1) {
-    const dif = UI.retornaValorTruncado(valorTotalPresumido[i] - valorTotalVendido[i]);
+    const dif = truncaValor(valorTotalPresumido[i] - valorTotalVendido[i]);
     diferenca.push(dif);
   }
   return diferenca;
 };
 
-const calculaARestituicao = (difValorPresumidoEVendido) => {
+const calculaRestituicao = (difValorPresumidoEVendido) => {
   const valoresAseremRestituidos = [];
 
   difValorPresumidoEVendido.forEach((dif) => {
     let diferenca = dif;
     diferenca = parseFloat(dif);
-    const restiuicao = UI.retornaValorTruncado(diferenca * 0.25);
+    const restiuicao = truncaValor(diferenca * 0.25);
     valoresAseremRestituidos.push(restiuicao);
   });
 
@@ -247,22 +249,19 @@ const preparaLinhasTabela = (notasFiscaisCompletas) => {
   notasFiscaisCompletas.forEach((nf) => {
     if (nf.statusNotaFiscal === 'Válida') {
       const numeroSequencial = (nf.indexNotaFiscal + 1);
-      const nota = nf.__chaveDeAcesso;
-      const dataDeEmissao = nf.__dataEmissao;
-      const combustiveis = nf.__produtos.map((produto) => produto.nomeDoProduto);
+      const nota = nf.chaveDeAcesso;
+      const dataDeEmissao = nf.dataEmissao;
+      const combustiveis = nf.produtos.map((produto) => produto.nomeDoProduto);
       const objetoAto = retornaOAto(dataDeEmissao);
       const atoAno = `${objetoAto.numeroAto}/${objetoAto.ano}`;
-      const valoresPresumidos = retornaOsValoresPresumidos(nf.__produtos, objetoAto);
-      const valorPraticado = nf.__produtos.map((produto) => produto.valorDaUnidadeDoProduto);
-      const difPresumidoEPraticado = nf.__produtos.map((produto, i) =>
-        UI.retornaValorTruncado((valoresPresumidos[i] - valorPraticado[i])));
-      const litros = nf.__produtos.map((produto) => produto.qtdVendidaDoProduto);
-      const valorTotalPresumido = nf.__produtos.map((produto, i) =>
-        UI.retornaValorTruncado(produto.qtdVendidaDoProduto * valoresPresumidos[i]));
-      const valorTotalVendido = nf.__produtos.map((produto) =>
-        UI.retornaValorTruncado(produto.valorTotalVendidoDoProduto));
+      const valoresPresumidos = retornaOsValoresPresumidos(nf.produtos, objetoAto);
+      const valorPraticado = nf.produtos.map((produto) => produto.valorDaUnidadeDoProduto);
+      const difPresumidoEPraticado = nf.produtos.map((produto, i) => truncaValor((valoresPresumidos[i] - valorPraticado[i])));
+      const litros = nf.produtos.map((produto) => produto.qtdVendidaDoProduto);
+      const valorTotalPresumido = nf.produtos.map((produto, i) => truncaValor(produto.qtdVendidaDoProduto * valoresPresumidos[i]));
+      const valorTotalVendido = nf.produtos.map((produto) => truncaValor(produto.valorTotalVendidoDoProduto));
       const difValorPresumidoEVendido = calculaDifEntreTotalPresumidoEVendido(valorTotalPresumido, valorTotalVendido);
-      const valorAserRestituido = calculaARestituicao(difValorPresumidoEVendido);
+      const valorAserRestituido = calculaRestituicao(difValorPresumidoEVendido);
 
       linhasTabela.push(new LinhaTabela(numeroSequencial, nota, dataDeEmissao, combustiveis,
         atoAno, valoresPresumidos, valorPraticado, difPresumidoEPraticado, litros,
@@ -286,20 +285,17 @@ const retornaRelatorio = (linhasTabela) => {
       const valoresPresumidos = linhaTabela.valorTotalPresumido;
 
       // eslint-disable-next-line no-shadow
-      const somaValPre = valoresPresumidos.reduce((valorAtual, linhaTabela) =>
-        (linhaTabela + valorAtual), 0);
+      const somaValPre = valoresPresumidos.reduce((valorAtual, linhaTabela) => (linhaTabela + valorAtual), 0);
       valorPresumido += somaValPre;
 
       const valoresVendidos = linhaTabela.valorTotalVendido;
       // eslint-disable-next-line no-shadow
-      const somaValVendi = valoresVendidos.reduce((valorAtual, linhaTabela) =>
-        (linhaTabela + valorAtual), 0);
+      const somaValVendi = valoresVendidos.reduce((valorAtual, linhaTabela) => (linhaTabela + valorAtual), 0);
       vandidoAoConsumidor += somaValVendi;
 
       const diferencas = linhaTabela.difEntreTotPresumidoEVendido;
       // eslint-disable-next-line no-shadow
-      const somaDiferencas = diferencas.reduce((valorAtual, linhaTabela) =>
-        (linhaTabela + valorAtual), 0);
+      const somaDiferencas = diferencas.reduce((valorAtual, linhaTabela) => (linhaTabela + valorAtual), 0);
       somaDiferenca += somaDiferencas;
 
       const icms = linhaTabela.icmsASerRestituido;
@@ -333,6 +329,7 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const arquivosSelecionados = removeNotasFiscaisDeOutrasEmpresas(arquivos);
   const arquivosParaClassificacao = removeNotasFiscaisCanceladas(arquivosSelecionados);
   const ObjetosNotaFiscal = retornaObjetosDoTipoNotaFiscal(arquivosParaClassificacao);
+
   setTimeout(() => {
     const linhasTabela = preparaLinhasTabela(ObjetosNotaFiscal);
     const relatorio = retornaRelatorio(linhasTabela);

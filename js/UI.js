@@ -23,7 +23,7 @@ export default class UI {
 
     // Nome do arquivo
     td = document.createElement('td');
-    td.textContent = linhaRelatorio.__chaveDeAcesso;
+    td.textContent = linhaRelatorio.truncaValorchaveDeAcesso;
     row.appendChild(td);
 
     // Mensagem
@@ -50,7 +50,7 @@ export default class UI {
 
     // Nome do arquivo
     td = document.createElement('td');
-    td.textContent = linhaRelatorio.__chaveDeAcesso;
+    td.textContent = linhaRelatorio.truncaValorchaveDeAcesso;
     row.appendChild(td);
 
     // Mensagem
@@ -77,7 +77,7 @@ export default class UI {
 
     // Nome do arquivo
     td = document.createElement('td');
-    td.textContent = linhaRelatorio.__chaveDeAcesso;
+    td.textContent = linhaRelatorio.truncaValorchaveDeAcesso;
     row.appendChild(td);
 
     // Mensagem
@@ -295,15 +295,5 @@ export default class UI {
     });
 
     UI.mostraSomatorias(relatorio);
-  }
-
-  static retornaValorTruncado(valor) {
-    const val = valor.toString();
-    const pontoCaractere = '.';
-    const indexDoPonto = val.indexOf(pontoCaractere);
-    const qtdNumerosUtilizados = (indexDoPonto + 5);
-    const valorTruncado = val.substr(0, qtdNumerosUtilizados);
-
-    return parseFloat(valorTruncado);
   }
 }
