@@ -17,4 +17,16 @@ export default class LinhaTabela {
     this.icmsASerRestituido = icmsASerRestituido; // []
     this.statusNotaFiscal = statusNotaFiscal;
   }
+
+  /** 
+    calculaDiferencaEntreValorPresumidoEValorDeVenda() {
+    }
+  */
+
+  // calculaDifEntreTotalPresumidoETotalVendido
+
+
+
+
+
 }
