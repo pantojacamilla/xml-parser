@@ -43,51 +43,6 @@ const removeNotasFiscaisCanceladas = (notasFiscais) => {
   return semNFCanc;
 };
 
-const nfTemCombustivel = (domNotaFiscal) => {
-  const produtosNotaFiscal = Array.from(domNotaFiscal.querySelectorAll('xProd'));
-  const valoresPresumidos = [];
-
-  produtosNotaFiscal.forEach((produto) => {
-    const nomeProduto = produto.textContent;
-
-    if (nomeProduto === 'GASOLINA COMUM') {
-      valoresPresumidos.push(true);
-    } else if (nomeProduto === 'GASOLINA ADITIVADA') {
-      valoresPresumidos.push(true);
-    } else if (nomeProduto === 'DIESEL COMUM') {
-      valoresPresumidos.push(true);
-    } else if (nomeProduto === 'DIESEL S10') {
-      valoresPresumidos.push(true);
-    } else {
-      valoresPresumidos.push(false);
-    }
-  });
-
-  // Ou seja se tiver pelomenos um combustível nessa Nota Fiscal ela vai ser considerada válida
-  if (valoresPresumidos.includes(true)) {
-    return true;
-  }
-  return false;
-};
-
-const retornaAClassificacaoDaNotaFiscal = (domNotaFiscal) => {
-  const rootElementDoArquivo = domNotaFiscal.documentElement.tagName;
-  let classificacaoNF;
-
-  if (rootElementDoArquivo === 'retInutNFe') {
-    classificacaoNF = 'Inutilizada';
-  } else if (rootElementDoArquivo === 'retEnvEvento') {
-    classificacaoNF = 'Cancelada';
-  } else if (rootElementDoArquivo === 'nfeProc') {
-    if (nfTemCombustivel(domNotaFiscal)) {
-      classificacaoNF = 'Válida';
-    } else {
-      classificacaoNF = 'Sem Combustível';
-    }
-  }
-  return classificacaoNF;
-};
-
 const eCombustivelValido = (nomeProduto) => {
   if (nomeProduto === 'GASOLINA COMUM' || nomeProduto === 'GASOLINA ADITIVADA'
     || nomeProduto === 'DIESEL COMUM' || nomeProduto === 'DIESEL S10') {
@@ -96,8 +51,8 @@ const eCombustivelValido = (nomeProduto) => {
   return false;
 };
 
-const retornaListaDeProdutosValidos = (dom) => {
-  const produtosNotaFiscal = Array.from(dom.querySelectorAll('prod'));
+const retornaProdutosValidos = (domNotaFiscal) => {
+  const produtosNotaFiscal = Array.from(domNotaFiscal.querySelectorAll('prod'));
   const produtosValidos = [];
 
   produtosNotaFiscal.forEach((produto) => {
@@ -114,7 +69,7 @@ const retornaListaDeProdutosValidos = (dom) => {
   return produtosValidos;
 };
 
-const retornaAChaveDeAcessoDaNotaFiscal = (dom) => {
+const retornaChaveDeAcessoDaNFInutilizada = (dom) => {
   const ano = dom.querySelector('ano').textContent;
   const cnpj = dom.querySelector('CNPJ').textContent;
   const modelo = dom.querySelector('mod').textContent;
@@ -132,13 +87,38 @@ const retornaAChaveDeAcessoDaNotaFiscal = (dom) => {
   return nomeDoAquivo;
 };
 
-const preencheInfosRestantesDasNF = (nfClassificada, dom) => {
-  const chaveAcesso = dom.querySelector('infNFe').getAttribute('Id');
-  const dataEmissao = dom.querySelector('dhEmi').textContent;
-  const produtos = retornaListaDeProdutosValidos(dom);
-  nfClassificada.adicionaEstesValoresNaNotaFiscal(chaveAcesso, dataEmissao, produtos, empresa);
+const retornaUmObjetoNotaFiscalClassificado = (domNotaFiscal, index) => {
+  const rootElementDoArquivo = domNotaFiscal.documentElement.tagName;
+  let chaveAcesso;
+  let classificacaoNF;
+  let notaFiscal;
 
-  return nfClassificada;
+  if (rootElementDoArquivo === 'retInutNFe') {
+    chaveAcesso = retornaChaveDeAcessoDaNFInutilizada(domNotaFiscal);
+    classificacaoNF = 'Inutilizada';
+    notaFiscal = new NotaFiscal(index, chaveAcesso, classificacaoNF);
+  } else if (rootElementDoArquivo === 'retEnvEvento') {
+    chaveAcesso = domNotaFiscal.querySelector('chNFe').textContent;
+    classificacaoNF = 'Cancelada';
+    notaFiscal = new NotaFiscal(index, chaveAcesso, classificacaoNF);
+  } else if (rootElementDoArquivo === 'nfeProc') {
+    const produtosValidos = retornaProdutosValidos(domNotaFiscal);
+    const qtdProdutosValidos = produtosValidos.length;
+
+    if (qtdProdutosValidos > 0) {
+      classificacaoNF = 'Válida';
+      chaveAcesso = domNotaFiscal.querySelector('infNFe').getAttribute('Id');
+      const dataEmissao = domNotaFiscal.querySelector('dhEmi').textContent;
+      notaFiscal = new NotaFiscal(index, chaveAcesso, classificacaoNF);
+      notaFiscal.preencheNotaFiscalValida(dataEmissao, produtosValidos, empresa);
+    } else {
+      classificacaoNF = 'Sem Combustível';
+      chaveAcesso = domNotaFiscal.querySelector('infNFe').getAttribute('Id');
+      notaFiscal = new NotaFiscal(index, chaveAcesso, classificacaoNF);
+    }
+  }
+
+  return notaFiscal;
 };
 
 // Criar uma função que le os arquivos
@@ -153,23 +133,8 @@ const retornaObjetosDoTipoNotaFiscal = (arquivosNotaFiscal) => {
     reader.onload = () => {
       const xmlString = reader.result;
       const domNotaFiscal = parser.parseFromString(xmlString, 'application/xml');
-      const classificacaoNF = retornaAClassificacaoDaNotaFiscal(domNotaFiscal);
-      let novoObjeto = new NotaFiscal(index, classificacaoNF);
-
-      if (classificacaoNF === 'Válida') {
-        novoObjeto = preencheInfosRestantesDasNF(novoObjeto, domNotaFiscal);
-      } else if (classificacaoNF === 'Inutilizada') {
-        const chaveDeAcesso = retornaAChaveDeAcessoDaNotaFiscal(domNotaFiscal);
-        novoObjeto.chaveDeAcesso = chaveDeAcesso;
-      } else if (classificacaoNF === 'Cancelada') {
-        const chaveDeAcesso = domNotaFiscal.querySelector('chNFe').textContent;
-        novoObjeto.chaveDeAcesso = chaveDeAcesso;
-      } else if (classificacaoNF === 'Sem Combustível') {
-        const chaveDeAcesso = domNotaFiscal.querySelector('infNFe').getAttribute('Id');
-        novoObjeto.chaveDeAcesso = chaveDeAcesso;
-      }
-
-      objetosNotaFiscal.push(novoObjeto);
+      const notaFiscal = retornaUmObjetoNotaFiscalClassificado(domNotaFiscal, index);
+      objetosNotaFiscal.push(notaFiscal);
     };
 
     reader.readAsText(arquivo);

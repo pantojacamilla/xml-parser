@@ -1,25 +1,13 @@
 export default class NotaFiscal {
-
-  chaveDeAcesso;
   dataEmissao;
   produtos;
   empresa;
 
-  constructor(indexNotaFiscal, statusNotaFiscal) {
+  constructor(indexNotaFiscal, chaveDeAcesso, statusNotaFiscal) {
     this.indexNotaFiscal = indexNotaFiscal;
+    this.chaveDeAcesso = chaveDeAcesso;
     // Inutilizada || Cancelada || Não Contém Combustível || Válida
     this.statusNotaFiscal = statusNotaFiscal;
-  }
-
-  get chaveDeAcesso() {
-    return this.chaveDeAcesso;
-  }
-
-  /**
-   * @param {any} chaveAcesso
-   */
-  set chaveDeAcesso(chaveAcesso) {
-    this.chaveDeAcesso = chaveAcesso;
   }
 
   get dataEmissao() {
@@ -55,9 +43,7 @@ export default class NotaFiscal {
     this.empresa = empresa;
   }
 
-  adicionaEstesValoresNaNotaFiscal(chaveDeAcesso, dataEmissao,
-    produtos, empresa) {
-    this.chaveDeAcesso = chaveDeAcesso;
+  preencheNotaFiscalValida(dataEmissao, produtos, empresa) {
     this.dataEmissao = new Date(new Date(dataEmissao).toDateString());
     this.produtos = produtos;
     this.empresa = empresa;
