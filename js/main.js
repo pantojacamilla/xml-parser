@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable no-labels */
@@ -11,6 +10,7 @@ import LinhaTabela from './LinhaTabela.js';
 import Relatorio from './Relatorio.js';
 import UI from './UI.js';
 import truncaValor from './truncaValor.js';
+import Calculo from './Calculo.js';
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
@@ -168,70 +168,75 @@ const retornaOAto = (dataDeEmissao) => {
   return objAto;
 };
 
-const retornaOsValoresPresumidos = (produtos, ato) => {
-  const valoresPresumidos = [];
-
+const retornaValoresPresumidos = (produtos, ato) => {
   produtos.forEach((produto) => {
+    const p = produto;
     if (produto.nomeDoProduto === 'GASOLINA COMUM') {
-      valoresPresumidos.push(ato.produtoImposto.gac);
+      p.valorPresumido = ato.produtoImposto.gac;
     } else if (produto.nomeDoProduto === 'GASOLINA ADITIVADA') {
-      valoresPresumidos.push(ato.produtoImposto.gap);
+      p.valorPresumido = ato.produtoImposto.gap;
     } else if (produto.nomeDoProduto === 'DIESEL COMUM') {
-      valoresPresumidos.push(ato.produtoImposto.oleoDisel);
+      p.valorPresumido = ato.produtoImposto.oleoDisel;
     } else if (produto.nomeDoProduto === 'DIESEL S10') {
-      valoresPresumidos.push(ato.produtoImposto.d10);
+      p.valorPresumido = ato.produtoImposto.d10;
     }
   });
+
+  const valoresPresumidos = produtos.map((produto) => produto.valorPresumido);
   return valoresPresumidos;
 };
 
-const calculaDifEntreTotalPresumidoEVendido = (valorTotalPresumido, valorTotalVendido) => {
-  const qtdDeCalculos = valorTotalPresumido.length;
-  const diferenca = [];
-  for (let i = 0; i < qtdDeCalculos; i += 1) {
-    const dif = truncaValor(valorTotalPresumido[i] - valorTotalVendido[i]);
-    diferenca.push(dif);
-  }
-  return diferenca;
+// Helper Functions
+const retornaNumeroSequencial = (nf) => nf.indexNotaFiscal + 1;
+const retornaNomeNotaFiscal = (nf) => nf.chaveDeAcesso;
+const retornaDataDeEmissao = (nf) => nf.dataEmissao;
+const retornaAtoEAno = (ato) => `${ato.numeroAto}/${ato.ano}`;
+
+const retornaNomeCombustiveis = (produtos) => {
+  const nomesCombustiveis = produtos.map((produto) => produto.nomeDoProduto);
+  return nomesCombustiveis;
 };
 
-const calculaRestituicao = (difValorPresumidoEVendido) => {
-  const valoresAseremRestituidos = [];
-
-  difValorPresumidoEVendido.forEach((dif) => {
-    let diferenca = dif;
-    diferenca = parseFloat(dif);
-    const restiuicao = truncaValor(diferenca * 0.25);
-    valoresAseremRestituidos.push(restiuicao);
-  });
-
-  return valoresAseremRestituidos;
+const retornaValoresPraticados = (produtos) => {
+  const valoresPraticados = produtos.map((produto) => produto.valorPraticado);
+  return valoresPraticados;
 };
 
-const preparaLinhasTabela = (notasFiscaisCompletas) => {
+const retornaQtdLitros = (produtos) => {
+  const qtdLitros = produtos.map((produto) => produto.qtdVendida);
+  return qtdLitros;
+};
+
+const retornaValoresVendidos = (produtos) => {
+  const valorTotalVendido = produtos.map((produto) => truncaValor(produto.valorTotalVendido));
+  return valorTotalVendido;
+};
+
+const preparaLinhasTabela = (notasFiscais) => {
   const linhasTabela = [];
 
-  notasFiscaisCompletas.forEach((nf) => {
+  notasFiscais.forEach((nf) => {
     if (nf.statusNotaFiscal === 'Válida') {
-      const numeroSequencial = (nf.indexNotaFiscal + 1);
-      const nota = nf.chaveDeAcesso;
-      const dataDeEmissao = nf.dataEmissao;
-      const combustiveis = nf.produtos.map((produto) => produto.nomeDoProduto);
-      const objetoAto = retornaOAto(dataDeEmissao);
-      const atoAno = `${objetoAto.numeroAto}/${objetoAto.ano}`;
-      const valoresPresumidos = retornaOsValoresPresumidos(nf.produtos, objetoAto);
-      const valorPraticado = nf.produtos.map((produto) => produto.valorDaUnidadeDoProduto);
-      const difPresumidoEPraticado = nf.produtos.map((produto, i) => truncaValor((valoresPresumidos[i] - valorPraticado[i])));
-      const litros = nf.produtos.map((produto) => produto.qtdVendidaDoProduto);
-      const valorTotalPresumido = nf.produtos.map((produto, i) => truncaValor(produto.qtdVendidaDoProduto * valoresPresumidos[i]));
-      const valorTotalVendido = nf.produtos.map((produto) => truncaValor(produto.valorTotalVendidoDoProduto));
-      const difValorPresumidoEVendido = calculaDifEntreTotalPresumidoEVendido(valorTotalPresumido, valorTotalVendido);
-      const valorAserRestituido = calculaRestituicao(difValorPresumidoEVendido);
+      const { produtos } = nf;
 
-      linhasTabela.push(new LinhaTabela(numeroSequencial, nota, dataDeEmissao, combustiveis,
+      const numeroSequencial = retornaNumeroSequencial(nf);
+      const nota = retornaNomeNotaFiscal(nf);
+      const dataEmissao = retornaDataDeEmissao(nf);
+      const combustiveis = retornaNomeCombustiveis(produtos);
+      const ato = retornaOAto(dataEmissao);
+      const atoAno = retornaAtoEAno(ato);
+      const valoresPresumidos = retornaValoresPresumidos(produtos, ato);
+      const valorPraticado = retornaValoresPraticados(produtos);
+      const difPresumidoEPraticado = Calculo.calculaDiferencaEntrePresumidoEPraticado(produtos);
+      const litros = retornaQtdLitros(produtos);
+      const valorTotalPresumido = Calculo.calculaValorTotalPresumido(produtos);
+      const valorTotalVendido = retornaValoresVendidos(produtos);
+      const difTotPresuETotVendido = Calculo.calculaDifEntreTotalPresumidoETotalPraticado(produtos);
+      const valorRestituicao = Calculo.calculaIcmsRestituicao(difTotPresuETotVendido);
+
+      linhasTabela.push(new LinhaTabela(numeroSequencial, nota, dataEmissao, combustiveis,
         atoAno, valoresPresumidos, valorPraticado, difPresumidoEPraticado, litros,
-        valorTotalPresumido, valorTotalVendido, difValorPresumidoEVendido, valorAserRestituido, 'Válida'));
-    } else {
+        valorTotalPresumido, valorTotalVendido, valorRestituicao, 'Válida'));
       linhasTabela.push(nf);
     }
   });
@@ -293,10 +298,10 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const arquivos = Array.from(event.target.files);
   const arquivosSelecionados = removeNotasFiscaisDeOutrasEmpresas(arquivos);
   const arquivosParaClassificacao = removeNotasFiscaisCanceladas(arquivosSelecionados);
-  const ObjetosNotaFiscal = retornaObjetosDoTipoNotaFiscal(arquivosParaClassificacao);
+  const objetosNotaFiscal = retornaObjetosDoTipoNotaFiscal(arquivosParaClassificacao);
 
   setTimeout(() => {
-    const linhasTabela = preparaLinhasTabela(ObjetosNotaFiscal);
+    const linhasTabela = preparaLinhasTabela(objetosNotaFiscal);
     const relatorio = retornaRelatorio(linhasTabela);
     UI.mostraRelatorio(relatorio);
   }, 1000);

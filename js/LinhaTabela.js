@@ -1,7 +1,7 @@
 export default class LinhaTabela {
   constructor(numeroSequencial, nota, dataEmissao, combustiveis, atoAno, valorPresumido,
-    valorDeVenda, difPresumidoEVenda, qtdLitros, valorTotalPresumido, valorTotalVendido,
-    difEntreTotPresumidoEVendido, icmsASerRestituido, statusNotaFiscal) {
+    valorDeVenda, difPresumidoEVenda, qtdLitros, valorTotalPresumido, valorTotalPraticado,
+    difEntreTotPresumidoEVendido, icmsRestituicao, statusNotaFiscal) {
     this.numeroSequencial = numeroSequencial;
     this.nota = nota;
     this.dataEmissao = dataEmissao;
@@ -12,21 +12,9 @@ export default class LinhaTabela {
     this.difPresumidoEVenda = difPresumidoEVenda; // []
     this.qtdLitros = qtdLitros; // []
     this.valorTotalPresumido = valorTotalPresumido; // []
-    this.valorTotalVendido = valorTotalVendido; // []
+    this.valorTotalPraticado = valorTotalPraticado; // []
     this.difEntreTotPresumidoEVendido = difEntreTotPresumidoEVendido; // []
-    this.icmsASerRestituido = icmsASerRestituido; // []
+    this.icmsRestituicao = icmsRestituicao; // []
     this.statusNotaFiscal = statusNotaFiscal;
   }
-
-  /** 
-    calculaDiferencaEntreValorPresumidoEValorDeVenda() {
-    }
-  */
-
-  // calculaDifEntreTotalPresumidoETotalVendido
-
-
-
-
-
 }

@@ -3,11 +3,36 @@
 import truncaValor from './truncaValor.js';
 
 export default class Produto {
-  constructor(nomeDoProduto, qtdVendidaDoProduto,
-    valorDaUnidadeDoProduto, valorTotalVendidoDoProduto) {
+  valorPresumido;
+  valorTotalPresumido;
+
+  constructor(nomeDoProduto, qtdVendida,
+    valorPraticado, valorTotalVendido) {
     this.nomeDoProduto = nomeDoProduto; // <xProd>
-    this.qtdVendidaDoProduto = truncaValor(qtdVendidaDoProduto); // <qCom>
-    this.valorDaUnidadeDoProduto = truncaValor(valorDaUnidadeDoProduto); // <vUnCom>
-    this.valorTotalVendidoDoProduto = truncaValor(valorTotalVendidoDoProduto); // <vProd>
+    this.qtdVendida = truncaValor(qtdVendida); // <qCom>
+    this.valorPraticado = truncaValor(valorPraticado); // <vUnCom>
+    this.valorTotalVendido = truncaValor(valorTotalVendido); // <vProd>
+  }
+
+  get valorPresumido() {
+    return this.valorPresumido;
+  }
+
+  /**
+   * @param {any} valorPresumidovalorPresumido
+   */
+  set valorPresumido(valorPresumido) {
+    this.valorPresumido = valorPresumido;
+  }
+
+  get valorTotalPresumido() {
+    return this.valorTotalPresumido;
+  }
+
+  /**
+   * @param {any} valorTotalPresumido
+   */
+  set valorTotalPresumido(valorTotalPresumido) {
+    this.valorTotalPresumido = valorTotalPresumido;
   }
 }
