@@ -159,12 +159,12 @@ export default class UI {
     this.criaLinhaTabela(valorPresumido, linha);
 
     // Valor Praticado
-    const valorDeVenda = linhaRelatorio.valorDeVenda[0];
-    this.criaLinhaTabela(valorDeVenda, linha);
+    const valorPraticado = linhaRelatorio.valorPraticado[0];
+    this.criaLinhaTabela(valorPraticado, linha);
 
     // Diferença entre (Presumido - Praticado)
-    const difPresumidoEVenda = linhaRelatorio.difPresumidoEVenda[0];
-    this.criaLinhaTabela(difPresumidoEVenda, linha, true);
+    const difPresumidoEPraticado = linhaRelatorio.difPresumidoEPraticado[0];
+    this.criaLinhaTabela(difPresumidoEPraticado, linha, true);
 
     // Quantidade de litros
     const qtdLitros = linhaRelatorio.qtdLitros[0];
@@ -175,16 +175,16 @@ export default class UI {
     this.criaLinhaTabela(valorTotalPresumido, linha);
 
     // Valor total vendido
-    const valorTotalVendido = linhaRelatorio.valorTotalVendido[0];
-    this.criaLinhaTabela(valorTotalVendido, linha);
+    const valorTotalPraticado = linhaRelatorio.valorTotalPraticado[0];
+    this.criaLinhaTabela(valorTotalPraticado, linha);
 
     // Diferença entre TOTAL presumido e TOTAL vendido
-    const difEntreTotPresumidoEVendido = linhaRelatorio.difEntreTotPresumidoEVendido[0];
-    this.criaLinhaTabela(difEntreTotPresumidoEVendido, linha, true);
+    const difEntreTotPresumidoEPraticado = linhaRelatorio.difEntreTotPresumidoEPraticado[0];
+    this.criaLinhaTabela(difEntreTotPresumidoEPraticado, linha, true);
 
     // Icms a ser restituído
-    const icmsASerRestituido = linhaRelatorio.icmsASerRestituido[0];
-    this.criaLinhaTabela(icmsASerRestituido, linha, true);
+    const icmsRestituicao = linhaRelatorio.icmsRestituicao[0];
+    this.criaLinhaTabela(icmsRestituicao, linha, true);
 
     if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
       linha.setAttribute('class', 'grey');
@@ -233,12 +233,12 @@ export default class UI {
       this.criaLinhaTabela(valorPresumido, linha);
 
       // Valor Praticado
-      const valorDeVenda = linhaRelatorio.valorDeVenda[i];
-      this.criaLinhaTabela(valorDeVenda, linha);
+      const valorPraticado = linhaRelatorio.valorPraticado[i];
+      this.criaLinhaTabela(valorPraticado, linha);
 
       // Diferença entre (Presumido - Praticado)
-      const difPresumidoEVenda = linhaRelatorio.difPresumidoEVenda[i];
-      this.criaLinhaTabela(difPresumidoEVenda, linha, true);
+      const difPresumidoEPraticado = linhaRelatorio.difPresumidoEPraticado[i];
+      this.criaLinhaTabela(difPresumidoEPraticado, linha, true);
 
       // Quantidade de litros
       const qtdLitros = linhaRelatorio.qtdLitros[i];
@@ -249,16 +249,16 @@ export default class UI {
       this.criaLinhaTabela(valorTotalPresumido, linha);
 
       // Valor total vendido
-      const valorTotalVendido = linhaRelatorio.valorTotalVendido[i];
-      this.criaLinhaTabela(valorTotalVendido, linha);
+      const valorTotalPraticado = linhaRelatorio.valorTotalPraticado[i];
+      this.criaLinhaTabela(valorTotalPraticado, linha);
 
       // Diferença entre TOTAL presumido e TOTAL vendido
-      const difEntreTotPresumidoEVendido = linhaRelatorio.difEntreTotPresumidoEVendido[i];
-      this.criaLinhaTabela(difEntreTotPresumidoEVendido, linha, true);
+      const difEntreTotPresumidoEPraticado = linhaRelatorio.difEntreTotPresumidoEPraticado[i];
+      this.criaLinhaTabela(difEntreTotPresumidoEPraticado, linha, true);
 
       // Icms a ser restituído
-      const icmsASerRestituido = linhaRelatorio.icmsASerRestituido[i];
-      this.criaLinhaTabela(icmsASerRestituido, linha, true);
+      const icmsRestituicao = linhaRelatorio.icmsRestituicao[i];
+      this.criaLinhaTabela(icmsRestituicao, linha, true);
 
       if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
         linha.setAttribute('class', 'grey');

@@ -284,5 +284,5 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
     const somatorias = Calculo.retornaAsSomatoria(linhasTabela);
     const relatorio = retornaRelatorio(linhasTabela, somatorias);
     UI.mostraRelatorio(relatorio);
-  }, 1000);
+  }, 2000);
 });

@@ -65,7 +65,7 @@ export default class Calculo {
         const somaValPrati = valoresPraticados.reduce((soma, valorAtual) => soma + valorAtual, 0);
         valorPraticado += somaValPrati;
 
-        const diferencas = linha.difEntreTotPresumidoEVendido;
+        const diferencas = linha.difEntreTotPresumidoEPraticado;
         const somaDiferencas = diferencas.reduce((soma, valorAtual) => soma + valorAtual, 0);
         somaDiferenca += somaDiferencas;
 
