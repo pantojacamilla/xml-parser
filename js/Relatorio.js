@@ -1,10 +1,10 @@
 export default class Relatorio {
-  constructor(linhasTabela, somaDosValoresPresumidos, somaValoresVendidosAoConsumidor,
-    somaDasDiferencas, somaDoIcmsRestituido) {
+  constructor(linhasTabela, somaValoresPresumidos, somaValoresPraticados, somaDiferencas,
+    somaIcmsRestituido) {
     this.linhasTabela = linhasTabela;
-    this.somaDosValoresPresumidos = somaDosValoresPresumidos;
-    this.somaValoresVendidosAoConsumidor = somaValoresVendidosAoConsumidor;
-    this.somaDasDiferencas = somaDasDiferencas;
-    this.somaDoIcmsRestituido = somaDoIcmsRestituido;
+    this.somaValoresPresumidos = somaValoresPresumidos;
+    this.somaValoresPraticados = somaValoresPraticados;
+    this.somaDiferencas = somaDiferencas;
+    this.somaIcmsRestituido = somaIcmsRestituido;
   }
 }

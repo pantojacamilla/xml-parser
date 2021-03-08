@@ -1,16 +1,23 @@
+/* eslint-disable import/extensions */
+import truncaValor from './truncaValor.js';
+
 export default class UI {
   static mostraSomatorias(relatorio) {
+    const somaValoresPresumidos = truncaValor(relatorio.somaValoresPresumidos);
     const somaPresumidos = document.querySelector('#somaPresumidos');
-    somaPresumidos.textContent = `Soma dos valores presumidos: R$${relatorio.somaDosValoresPresumidos}`;
+    somaPresumidos.textContent = `Soma dos valores presumidos: R$${somaValoresPresumidos}`;
 
-    const somaVendidos = document.querySelector('#somaVendidos');
-    somaVendidos.textContent = `Soma dos valores praticados: R$${relatorio.somaValoresVendidosAoConsumidor}`;
+    const somaValoresPraticados = truncaValor(relatorio.somaValoresPraticados);
+    const somaPraticado = document.querySelector('#somaPraticado');
+    somaPraticado.textContent = `Soma dos valores praticados: R$${somaValoresPraticados}`;
 
+    const somaDasDiferencas = truncaValor(relatorio.somaDiferencas);
     const somaDiferencas = document.querySelector('#somaDiferencas');
-    somaDiferencas.textContent = `Soma das diferenças entre os valores Presumidos e praticados: R$${relatorio.somaDasDiferencas}`;
+    somaDiferencas.textContent = `Soma das diferenças entre os valores Presumidos e praticados: R$${somaDasDiferencas}`;
 
+    const somaDosIcms = truncaValor(relatorio.somaIcmsRestituido);
     const somaIcms = document.querySelector('#somaIcms');
-    somaIcms.textContent = `Soma dos ICMS: R$${relatorio.somaDoIcmsRestituido}`;
+    somaIcms.textContent = `Soma dos ICMS: R$${somaDosIcms}`;
   }
 
   static mostraNotaInutilizada(linhaRelatorio) {
@@ -23,7 +30,7 @@ export default class UI {
 
     // Nome do arquivo
     td = document.createElement('td');
-    td.textContent = linhaRelatorio.truncaValorchaveDeAcesso;
+    td.textContent = linhaRelatorio.chaveDeAcesso;
     row.appendChild(td);
 
     // Mensagem
@@ -50,7 +57,7 @@ export default class UI {
 
     // Nome do arquivo
     td = document.createElement('td');
-    td.textContent = linhaRelatorio.truncaValorchaveDeAcesso;
+    td.textContent = linhaRelatorio.chaveDeAcesso;
     row.appendChild(td);
 
     // Mensagem

@@ -37,19 +37,6 @@ export default class Calculo {
     return diferencaTotalPresumidoETotalPraticado;
   }
 
-  // const calculaRestituicao = (difValorPresumidoEVendido) => {
-  //   const valoresAseremRestituidos = [];
-
-  //   difValorPresumidoEVendido.forEach((dif) => {
-  //     let diferenca = dif;
-  //     diferenca = parseFloat(dif);
-  //     const restiuicao = truncaValor(diferenca * 0.25);
-  //     valoresAseremRestituidos.push(restiuicao);
-  //   });
-
-  //   return valoresAseremRestituidos;
-  // };
-
   static calculaIcmsRestituicao(diferencaTotalPresumidoETotalPraticado) {
     const valoresAseremRestituidos = [];
 
@@ -59,5 +46,37 @@ export default class Calculo {
     });
 
     return valoresAseremRestituidos;
+  }
+
+  static retornaAsSomatoria(linhasTabela) {
+    const lt = linhasTabela;
+    let valorPresumido = 0;
+    let valorPraticado = 0;
+    let somaDiferenca = 0;
+    let somaIcm = 0;
+
+    lt.forEach((linha) => {
+      if (linha.statusNotaFiscal === 'Válida') {
+        const valoresPresumidos = linha.valorTotalPresumido;
+        const somaPresumidos = valoresPresumidos.reduce((soma, valorAtual) => soma + valorAtual, 0);
+        valorPresumido += somaPresumidos;
+
+        const valoresPraticados = linha.valorTotalPraticado;
+        const somaValPrati = valoresPraticados.reduce((soma, valorAtual) => soma + valorAtual, 0);
+        valorPraticado += somaValPrati;
+
+        const diferencas = linha.difEntreTotPresumidoEVendido;
+        const somaDiferencas = diferencas.reduce((soma, valorAtual) => soma + valorAtual, 0);
+        somaDiferenca += somaDiferencas;
+
+        const icms = linha.icmsRestituicao;
+        const somaIcms = icms.reduce((soma, valorAtual) => soma + valorAtual, 0);
+        somaIcm += somaIcms;
+      }
+    });
+
+    const somatorias = [];
+    somatorias.push(valorPresumido, valorPraticado, somaDiferenca, somaIcm);
+    return somatorias;
   }
 }

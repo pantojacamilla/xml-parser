@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable no-labels */
@@ -230,13 +231,16 @@ const preparaLinhasTabela = (notasFiscais) => {
       const difPresumidoEPraticado = Calculo.calculaDiferencaEntrePresumidoEPraticado(produtos);
       const litros = retornaQtdLitros(produtos);
       const valorTotalPresumido = Calculo.calculaValorTotalPresumido(produtos);
-      const valorTotalVendido = retornaValoresVendidos(produtos);
+      const valorTotalPraticado = retornaValoresVendidos(produtos);
       const difTotPresuETotVendido = Calculo.calculaDifEntreTotalPresumidoETotalPraticado(produtos);
       const valorRestituicao = Calculo.calculaIcmsRestituicao(difTotPresuETotVendido);
+      const statusNotaFiscal = 'Válida';
 
       linhasTabela.push(new LinhaTabela(numeroSequencial, nota, dataEmissao, combustiveis,
         atoAno, valoresPresumidos, valorPraticado, difPresumidoEPraticado, litros,
-        valorTotalPresumido, valorTotalVendido, valorRestituicao, 'Válida'));
+        valorTotalPresumido, valorTotalPraticado, difTotPresuETotVendido, valorRestituicao,
+        statusNotaFiscal));
+    } else {
       linhasTabela.push(nf);
     }
   });
@@ -244,38 +248,13 @@ const preparaLinhasTabela = (notasFiscais) => {
   return linhasTabela;
 };
 
-const retornaRelatorio = (linhasTabela) => {
-  let valorPresumido = 0;
-  let vandidoAoConsumidor = 0;
-  let somaDiferenca = 0;
-  let somaIcm = 0;
+const retornaRelatorio = (linhasTabela, somatorias) => {
+  const valorPresumido = somatorias[0];
+  const valorPraticado = somatorias[1];
+  const somaDiferenca = somatorias[2];
+  const somaIcm = somatorias[3];
 
-  linhasTabela.forEach((linhaTabela) => {
-    if (linhaTabela.statusNotaFiscal === 'Válida') {
-      const valoresPresumidos = linhaTabela.valorTotalPresumido;
-
-      // eslint-disable-next-line no-shadow
-      const somaValPre = valoresPresumidos.reduce((valorAtual, linhaTabela) => (linhaTabela + valorAtual), 0);
-      valorPresumido += somaValPre;
-
-      const valoresVendidos = linhaTabela.valorTotalVendido;
-      // eslint-disable-next-line no-shadow
-      const somaValVendi = valoresVendidos.reduce((valorAtual, linhaTabela) => (linhaTabela + valorAtual), 0);
-      vandidoAoConsumidor += somaValVendi;
-
-      const diferencas = linhaTabela.difEntreTotPresumidoEVendido;
-      // eslint-disable-next-line no-shadow
-      const somaDiferencas = diferencas.reduce((valorAtual, linhaTabela) => (linhaTabela + valorAtual), 0);
-      somaDiferenca += somaDiferencas;
-
-      const icms = linhaTabela.icmsASerRestituido;
-      // eslint-disable-next-line no-shadow
-      const somaIcms = icms.reduce((valorAtual, linhaTabela) => (linhaTabela + valorAtual), 0);
-      somaIcm += somaIcms;
-    }
-  });
-
-  return new Relatorio(linhasTabela, valorPresumido, vandidoAoConsumidor, somaDiferenca, somaIcm);
+  return new Relatorio(linhasTabela, valorPresumido, valorPraticado, somaDiferenca, somaIcm);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -302,7 +281,8 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
 
   setTimeout(() => {
     const linhasTabela = preparaLinhasTabela(objetosNotaFiscal);
-    const relatorio = retornaRelatorio(linhasTabela);
+    const somatorias = Calculo.retornaAsSomatoria(linhasTabela);
+    const relatorio = retornaRelatorio(linhasTabela, somatorias);
     UI.mostraRelatorio(relatorio);
   }, 1000);
 });
