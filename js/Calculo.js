@@ -30,7 +30,7 @@ export default class Calculo {
     const diferencaTotalPresumidoETotalPraticado = [];
 
     produtos.forEach((produto) => {
-      const diferenca = truncaValor((produto.valorPresumido * produto.valorPraticado));
+      const diferenca = truncaValor((produto.valorTotalPresumido - produto.valorTotalPraticado));
       diferencaTotalPresumidoETotalPraticado.push(diferenca);
     });
 

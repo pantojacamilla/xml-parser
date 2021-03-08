@@ -208,9 +208,9 @@ const retornaQtdLitros = (produtos) => {
   return qtdLitros;
 };
 
-const retornaValoresVendidos = (produtos) => {
-  const valorTotalVendido = produtos.map((produto) => truncaValor(produto.valorTotalVendido));
-  return valorTotalVendido;
+const retornaValoresTotaisPraticados = (produtos) => {
+  const valorTotalPraticado = produtos.map((produto) => truncaValor(produto.valorTotalPraticado));
+  return valorTotalPraticado;
 };
 
 const preparaLinhasTabela = (notasFiscais) => {
@@ -231,7 +231,7 @@ const preparaLinhasTabela = (notasFiscais) => {
       const difPresumidoEPraticado = Calculo.calculaDiferencaEntrePresumidoEPraticado(produtos);
       const litros = retornaQtdLitros(produtos);
       const valorTotalPresumido = Calculo.calculaValorTotalPresumido(produtos);
-      const valorTotalPraticado = retornaValoresVendidos(produtos);
+      const valorTotalPraticado = retornaValoresTotaisPraticados(produtos);
       const difTotPresuETotVendido = Calculo.calculaDifEntreTotalPresumidoETotalPraticado(produtos);
       const valorRestituicao = Calculo.calculaIcmsRestituicao(difTotPresuETotVendido);
       const statusNotaFiscal = 'Válida';

@@ -7,11 +7,11 @@ export default class Produto {
   valorTotalPresumido;
 
   constructor(nomeDoProduto, qtdVendida,
-    valorPraticado, valorTotalVendido) {
+    valorPraticado, valorTotalPraticado) {
     this.nomeDoProduto = nomeDoProduto; // <xProd>
     this.qtdVendida = truncaValor(qtdVendida); // <qCom>
     this.valorPraticado = truncaValor(valorPraticado); // <vUnCom>
-    this.valorTotalVendido = truncaValor(valorTotalVendido); // <vProd>
+    this.valorTotalPraticado = truncaValor(valorTotalPraticado); // <vProd>
   }
 
   get valorPresumido() {
