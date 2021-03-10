@@ -20,19 +20,60 @@
     <br><br>
   </div>
 
+  <div id="cabecalho">
 
-  <div class="container flex">
-    EMPRESA: &nbsp; <div id="nome-empresa"></div>
-  </div>
-  <div class="container flex">
-    CNPJ: &nbsp; <div id="cnpj-empresa"></div>
-  </div>
+    <table id="tabela-cabecalho">
 
-  <br>
-  <div id="somaPresumidos"></div>
-  <div id="somaPraticado"></div>
-  <div id="somaDiferencas"></div>
-  <div id="somaIcms"></div>
+      <thead>
+        <tr id="ralatorio-fiscal">
+          <td colspan="8">RELATÓRIO FISCAL</td>
+        </tr>
+        <tr id="resumo-competencia">
+          <td colspan="7">RESUMO</td>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>
+            <div id="nome-empresa"></div>
+          </td>
+          <td rowspan="2">DEMONSTRATIVO</td>
+          <td>TIPO DE NOTA</td>
+          <td>BASE DE CALCULO RECOLHIDO NA COMPETENCIA <br>
+            (BASEADO NO ATO PMPF CONFAZ x XML ENTRADA)/L no exercicio</td>
+          <td>MONTANTE EFETIVAMENTE PRATICADO AO CONSUMIDOR FINAL <br>
+            (BASEADO NOS XMLS DE SAIDA ANEXOS) No exercicio</td>
+          <td>DIFERENÇA APURADA NA SAÍDA <br>
+            (PREÇO EFETIVAMENTE PRATICADO NO ESTABELECIMENTO) No exercicio</td>
+          <td>VALOR DE ICMS DEVIDO NA RESTITUIÇÃO <br>
+            (No exercício)</td>
+        </tr>
+
+        <tr>
+          <td>
+            CNPJ: <div id="cnpj-empresa"></div>
+          </td>
+          <td>
+            <div id="tipo-nota"></div>
+          </td>
+          <td>
+            <div class="somas" id="somaPresumidos"></div>
+          </td>
+          <td>
+            <div class="somas" id="somaPraticado"></div>
+          </td>
+          <td>
+            <div class="somas" id="somaDiferencas"></div>
+          </td>
+          <td>
+            <div class="somas" id="somaIcms"></div>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
 
   <table id='relatorio'>
     <thead>
@@ -53,7 +94,7 @@
       </tr>
     </thead>
 
-    <tbody></tbody>
+    <tbody id="tabela-relatorio"></tbody>
   </table>
 
   <script src="/js/main.js" type="module"></script>

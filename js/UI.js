@@ -5,19 +5,19 @@ export default class UI {
   static mostraSomatorias(relatorio) {
     const somaValoresPresumidos = truncaValor(relatorio.somaValoresPresumidos);
     const somaPresumidos = document.querySelector('#somaPresumidos');
-    somaPresumidos.textContent = `Soma dos valores presumidos: R$${somaValoresPresumidos}`;
+    somaPresumidos.textContent = `R$${somaValoresPresumidos}`;
 
     const somaValoresPraticados = truncaValor(relatorio.somaValoresPraticados);
     const somaPraticado = document.querySelector('#somaPraticado');
-    somaPraticado.textContent = `Soma dos valores praticados: R$${somaValoresPraticados}`;
+    somaPraticado.textContent = `R$${somaValoresPraticados}`;
 
     const somaDasDiferencas = truncaValor(relatorio.somaDiferencas);
     const somaDiferencas = document.querySelector('#somaDiferencas');
-    somaDiferencas.textContent = `Soma das diferenças entre os valores Presumidos e praticados: R$${somaDasDiferencas}`;
+    somaDiferencas.textContent = `R$${somaDasDiferencas}`;
 
     const somaDosIcms = truncaValor(relatorio.somaIcmsRestituido);
     const somaIcms = document.querySelector('#somaIcms');
-    somaIcms.textContent = `Soma dos ICMS: R$${somaDosIcms}`;
+    somaIcms.textContent = `R$${somaDosIcms}`;
   }
 
   static mostraNotaInutilizada(linhaRelatorio) {
@@ -43,7 +43,7 @@ export default class UI {
       row.setAttribute('class', 'grey');
     }
 
-    const tabelaRelatorio = document.querySelector('tbody');
+    const tabelaRelatorio = document.querySelector('#tabela-relatorio');
     tabelaRelatorio.appendChild(row);
   }
 
@@ -70,7 +70,7 @@ export default class UI {
       row.setAttribute('class', 'grey');
     }
 
-    const tabelaRelatorio = document.querySelector('tbody');
+    const tabelaRelatorio = document.querySelector('#tabela-relatorio');
     tabelaRelatorio.appendChild(row);
   }
 
@@ -97,7 +97,7 @@ export default class UI {
       row.setAttribute('class', 'grey');
     }
 
-    const tabelaRelatorio = document.querySelector('tbody');
+    const tabelaRelatorio = document.querySelector('#tabela-relatorio');
     tabelaRelatorio.appendChild(row);
   }
 
@@ -190,7 +190,7 @@ export default class UI {
       linha.setAttribute('class', 'grey');
     }
 
-    const tabelaRelatorio = document.querySelector('tbody');
+    const tabelaRelatorio = document.querySelector('#tabela-relatorio');
     tabelaRelatorio.appendChild(linha);
   }
 
@@ -214,7 +214,7 @@ export default class UI {
       linha.setAttribute('class', 'grey');
     }
 
-    const tabelaRelatorio = document.querySelector('tbody');
+    const tabelaRelatorio = document.querySelector('#tabela-relatorio');
     tabelaRelatorio.appendChild(linha);
 
     for (let i = 0; i < qtdProdutos; i += 1) {

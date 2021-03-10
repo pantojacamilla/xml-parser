@@ -28,6 +28,18 @@ const mostraCnpjDaEmpresaNaTela = () => {
   divCnpj.textContent = cnpjFormatado;
 };
 
+const mostraTipoDeNotaNaTela = () => {
+  let resposta;
+  const { nomeEmpresa } = empresa;
+  if (nomeEmpresa === 'F S S COMERCIO VAREJISTA DE COMB E LUBRIFICANTES LTDA') {
+    resposta = 'SAÍDA';
+  } else {
+    resposta = 'ENTRADA';
+  }
+  const divTipoDeNota = document.querySelector('#tipo-nota');
+  divTipoDeNota.textContent = resposta;
+};
+
 const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
   const nfsEmpresaSelecionada = notasFiscais.filter((nf) => nf.name.includes(cnpjSoNumeros));
   return nfsEmpresaSelecionada;
@@ -260,6 +272,7 @@ const retornaRelatorio = (linhasTabela, somatorias) => {
 document.addEventListener('DOMContentLoaded', () => {
   mostraNomeDaEmpresaNaTela();
   mostraCnpjDaEmpresaNaTela();
+  mostraTipoDeNotaNaTela();
 });
 
 document.querySelector('#geraRelatorioPdf').addEventListener('click', () => {

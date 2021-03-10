@@ -242,13 +242,36 @@ border-radius: 0 3px 3px 0;
 box-shadow: 0 0 1px rgba(0, 0, 0, .2) inset, 5px 0 5px -3px rgba(0, 0, 0, .2) inset;
 }
 
-/*  RELATORIO */
 
+/* CABEÇALHO */
 
-.flex {
-  display: flex;
-  flex-wrap: wrap;
+#tabela-cabecalho {
+  text-align: center;
+  font-size: 13px;
+  border-collapse: collapse;
+  margin-left:auto;
+  margin-right:auto;
+  width:100%;
+  font-weight: bold;
 }
+
+
+#resumo-competencia {
+  color: white;
+  background-color: black;
+ }
+ 
+
+ #cabecalho td,#cabecalho th {
+  border: 1px solid #999;
+}
+
+.somas{
+  font-size: 16px;
+}
+
+
+/*  RELATORIO */
 
 #notasFiscais {
   padding: 12px 30px;
@@ -264,8 +287,14 @@ box-shadow: 0 0 1px rgba(0, 0, 0, .2) inset, 5px 0 5px -3px rgba(0, 0, 0, .2) in
 
 #relatorio td, #relatorio th {
   border: 1px solid #ddd;
-  padding: 5px;
+  /* padding: 5px; */
   text-align: center;
+}
+#relatorio th {
+  padding-top: 12px;
+  padding-bottom: 12px; 
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
 }
 
 .grey {
@@ -280,11 +309,6 @@ box-shadow: 0 0 1px rgba(0, 0, 0, .2) inset, 5px 0 5px -3px rgba(0, 0, 0, .2) in
   background-color: red;
 }
 
-tr:hover {background-color: rgb(21, 212, 47);}
+#relatorio tr:hover {background-color: rgb(21, 212, 47);}
 
-#relatorio th {
-  padding-top: 12px;
-  padding-bottom: 12px; 
-  background-color: rgb(0, 0, 0);
-  color: rgb(255, 255, 255);
-}
+
