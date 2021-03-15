@@ -15,6 +15,10 @@ const truncaValor = (valor) => {
   const valorTruncado = val.substr(0, qtdNumerosUtilizados);
   const resultado = Number(valorTruncado);
 
+  console.log('Inicial:', valor);
+  console.log('String Truncada:', valorTruncado);
+  console.log('Numero:', resultado);
+
   return resultado;
 };
 

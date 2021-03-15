@@ -1,3 +1,4 @@
+import retornaData from './retornaData.js';
 export default class NotaFiscal {
   dataEmissao;
   produtos;
@@ -44,7 +45,7 @@ export default class NotaFiscal {
   }
 
   preencheNotaFiscalValida(dataEmissao, produtos, empresa) {
-    this.dataEmissao = new Date(new Date(dataEmissao).toDateString());
+    this.dataEmissao = retornaData(dataEmissao);
     this.produtos = produtos;
     this.empresa = empresa;
   }
