@@ -12,6 +12,16 @@ import Relatorio from './Relatorio.js';
 import UI from './UI.js';
 import truncaValor from './truncaValor.js';
 import Calculo from './Calculo.js';
+import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
+
+Dinero.defaultCurrency = 'BRL';
+Dinero.globalLocale = 'pt-br';
+Dinero.defaultPrecision = 4;
+Dinero.globalFormat = '$0,0.0000';
+
+const valor = Dinero({ amount: 1230000 });
+console.log(valor.getAmount());
+console.log(valor.toFormat());
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
