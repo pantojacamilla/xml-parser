@@ -1,4 +1,6 @@
+/* eslint-disable import/extensions */
 import retornaData from './retornaData.js';
+
 export default class NotaFiscal {
   dataEmissao;
   produtos;

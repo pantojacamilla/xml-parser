@@ -3,5 +3,4 @@ export default class Empresa {
     this.nomeEmpresa = nomeEmpresa;
     this.cnpjFormatado = cnpjFormatado;
   }
-
 }
