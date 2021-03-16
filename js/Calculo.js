@@ -6,7 +6,8 @@ export default class Calculo {
     const diferencaEntreValores = [];
 
     produtos.forEach((produto) => {
-      const dif = retornaDinero((produto.valorPresumido - produto.valorPraticado));
+      // usar a função de subtracao e que retorna objetos Dinero
+      const dif = (produto.valorPresumido - produto.valorPraticado);
       diferencaEntreValores.push(dif);
     });
 
@@ -17,6 +18,7 @@ export default class Calculo {
     const totalPresumido = [];
 
     produtos.forEach((produto) => {
+      // usar a função de multiplicacao e que retorna objetos Dinero
       const total = retornaDinero((produto.qtdVendida * produto.valorPresumido));
       // eslint-disable-next-line no-param-reassign
       produto.valorTotalPresumido = total;

@@ -1,13 +1,15 @@
 /* eslint-disable import/extensions */
+import retornaDinero from './retornaDinero.js';
+import retornaValorFormatado from './retornaValorFormatado.js';
 export default class Produto {
   valorPresumido;
   valorTotalPresumido;
 
   constructor(nomeDoProduto, qtdVendida, valorPraticado, valorTotalPraticado) {
     this.nomeDoProduto = nomeDoProduto; // <xProd>
-    this.qtdVendida = qtdVendida; // <qCom>
-    this.valorPraticado = valorPraticado; // <vUnCom> //Dinero
-    this.valorTotalPraticado = valorTotalPraticado; // <vProd> //Dinero
+    this.qtdVendida = retornaValorFormatado(qtdVendida); // <qCom>
+    this.valorPraticado = retornaDinero(valorPraticado); // <vUnCom> //Dinero
+    this.valorTotalPraticado = retornaDinero(valorTotalPraticado); // <vProd> //Dinero
   }
 
   get valorPresumido() {
@@ -15,7 +17,7 @@ export default class Produto {
   }
 
   /**
-   * @param {any} valorPresumidovalorPresumido
+   * @param {any} valorPresumido
    */
   set valorPresumido(valorPresumido) {
     this.valorPresumido = valorPresumido;
@@ -29,6 +31,6 @@ export default class Produto {
    * @param {any} valorTotalPresumido
    */
   set valorTotalPresumido(valorTotalPresumido) {
-    this.valorTotalPresumido = valorTotalPresumido;
+    this.valorTotalPresumido = retornaDinero(valorTotalPresumido);
   }
 }

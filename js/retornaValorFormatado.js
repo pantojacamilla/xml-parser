@@ -1,11 +1,4 @@
-/* eslint-disable import/extensions */
-import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
-
-const retornaDinero = (valor) => {
-  Dinero.defaultCurrency = 'BRL';
-  Dinero.globalLocale = 'pt-br';
-  Dinero.defaultPrecision = 4;
-
+const retornaValorFormatado = (valor) => {
   let resultado;
   const valorEmString = valor.toString();
 
@@ -35,14 +28,14 @@ const retornaDinero = (valor) => {
       amount = valorNumerico;
     }
 
-    resultado = Dinero({ amount });
+    resultado = amount;
   } else {
     const valorNumerico = Number(valorEmString);
     const amount = (valorNumerico * (10 ** 4));
-    resultado = Dinero({ amount });
+    resultado = amount;
   }
 
   return resultado;
 };
 
-export default retornaDinero;
+export default retornaValorFormatado;

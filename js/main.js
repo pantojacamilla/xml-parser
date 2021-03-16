@@ -12,12 +12,11 @@ import Relatorio from './Relatorio.js';
 import UI from './UI.js';
 import retornaDinero from './retornaDinero.js';
 import Calculo from './Calculo.js';
-// import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
 
-const num1 = retornaDinero(123.123);
-console.log(num1);
-console.log(num1.getAmount());
-console.log(num1.toFormat());
+// const num1 = retornaDinero(123);
+// console.log(num1);
+// console.log(num1.getAmount());
+// console.log(num1.toFormat());
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
@@ -294,8 +293,9 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
 
   setTimeout(() => {
     const linhasTabela = preparaLinhasTabela(objetosNotaFiscal);
-    const somatorias = Calculo.retornaAsSomatoria(linhasTabela);
-    const relatorio = retornaRelatorio(linhasTabela, somatorias);
-    UI.mostraRelatorio(relatorio);
+    console.log(linhasTabela);
+    // const somatorias = Calculo.retornaAsSomatoria(linhasTabela);
+    // const relatorio = retornaRelatorio(linhasTabela, somatorias);
+    // UI.mostraRelatorio(relatorio);
   }, 2000);
 });
