@@ -11,18 +11,12 @@ import LinhaTabela from './LinhaTabela.js';
 import Relatorio from './Relatorio.js';
 import UI from './UI.js';
 import truncaValor from './truncaValor.js';
-import retornaData from './retornaData.js';
 import Calculo from './Calculo.js';
 // import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
 
-// Dinero.defaultCurrency = 'BRL';
-// Dinero.globalLocale = 'pt-br';
-// Dinero.defaultPrecision = 4;
-// Dinero.globalFormat = '$0,0.0000';
-
-// const valor = Dinero({ amount: 1230000 });
-// console.log(valor.getAmount());
-// console.log(valor.toFormat());
+const num1 = truncaValor('123');
+console.log(num1.getAmount());
+console.log(num1.toFormat());
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
@@ -247,10 +241,6 @@ const preparaLinhasTabela = (notasFiscais) => {
       const dataEmissao = retornaDataDeEmissao(nf);
       const combustiveis = retornaNomeCombustiveis(produtos);
       const ato = retornaOAto(dataEmissao);
-      console.log(`Ato número: ${ato.numeroAto}`);
-      console.log(`Data de emissão: ${dataEmissao}`);
-      console.log(`Data ato inicio: ${ato.dataInicio}`);
-      console.log(`Data ato fim: ${ato.dataFim}`);
       const atoAno = retornaAtoEAno(ato);
       const valoresPresumidos = retornaValoresPresumidos(produtos, ato);
       const valorPraticado = retornaValoresPraticados(produtos);
