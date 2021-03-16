@@ -1,5 +1,5 @@
 /* eslint-disable import/extensions */
-import truncaValor from './truncaValor.js';
+import truncaValor from './retornaDinero.js';
 
 export default class UI {
   static mostraSomatorias(relatorio) {

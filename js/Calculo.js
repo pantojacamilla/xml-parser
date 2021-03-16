@@ -1,12 +1,12 @@
 /* eslint-disable import/extensions */
-import truncaValor from './truncaValor.js';
+import retornaDinero from './retornaDinero.js';
 
 export default class Calculo {
   static calculaDiferencaEntrePresumidoEPraticado(produtos) {
     const diferencaEntreValores = [];
 
     produtos.forEach((produto) => {
-      const dif = truncaValor((produto.valorPresumido - produto.valorPraticado));
+      const dif = retornaDinero((produto.valorPresumido - produto.valorPraticado));
       diferencaEntreValores.push(dif);
     });
 
@@ -17,7 +17,7 @@ export default class Calculo {
     const totalPresumido = [];
 
     produtos.forEach((produto) => {
-      const total = truncaValor((produto.qtdVendida * produto.valorPresumido));
+      const total = retornaDinero((produto.qtdVendida * produto.valorPresumido));
       // eslint-disable-next-line no-param-reassign
       produto.valorTotalPresumido = total;
       totalPresumido.push(total);
@@ -30,7 +30,7 @@ export default class Calculo {
     const diferencaTotalPresumidoETotalPraticado = [];
 
     produtos.forEach((produto) => {
-      const diferenca = truncaValor((produto.valorTotalPresumido - produto.valorTotalPraticado));
+      const diferenca = retornaDinero((produto.valorTotalPresumido - produto.valorTotalPraticado));
       diferencaTotalPresumidoETotalPraticado.push(diferenca);
     });
 
@@ -41,7 +41,7 @@ export default class Calculo {
     const valoresAseremRestituidos = [];
 
     diferencaTotalPresumidoETotalPraticado.forEach((dif) => {
-      const restiuicao = truncaValor(dif * 0.25);
+      const restiuicao = retornaDinero(dif * 0.25);
       valoresAseremRestituidos.push(restiuicao);
     });
 

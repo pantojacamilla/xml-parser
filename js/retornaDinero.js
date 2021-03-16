@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
-import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
+import Dinero from 'dinero.js/build/esm/dinero';
 
-const truncaValor = (valor) => {
+const retornaDinero = (valor) => {
   Dinero.defaultCurrency = 'BRL';
   Dinero.globalLocale = 'pt-br';
   Dinero.defaultPrecision = 4;
@@ -10,9 +10,9 @@ const truncaValor = (valor) => {
   const valorEmString = valor.toString();
 
   if (valorEmString.includes('.')) {
-    // Trunca o valor
-    const pontoCaractere = '.';
-    const indexDoPonto = valorEmString.indexOf(pontoCaractere);
+    // "Trunca" a string após a 4ª casa decimas
+    const caracterePonto = '.';
+    const indexDoPonto = valorEmString.indexOf(caracterePonto);
     const qtdDeDigitosNecessaria = (indexDoPonto + 5);
     const stringTruncada = valorEmString.substr(0, qtdDeDigitosNecessaria);
 
@@ -25,29 +25,24 @@ const truncaValor = (valor) => {
     const valorNumerico = Number(stringSemPontuacao);
 
     let amount;
-    let format;
     if (qtdCasasDecimais === 1) {
       amount = valorNumerico * (10 ** 3);
-      format = '$0,0.00';
     } else if (qtdCasasDecimais === 2) {
       amount = valorNumerico * (10 ** 2);
-      format = '$0,0.00';
     } else if (qtdCasasDecimais === 3) {
       amount = valorNumerico * 10;
-      format = '$0,0.0000';
     } else if (qtdCasasDecimais === 4) {
       amount = valorNumerico;
-      format = '$0,0.0000';
     }
 
-    resultado = Dinero({ amount, format });
+    resultado = Dinero({ amount });
   } else {
     const valorNumerico = Number(valorEmString);
-    const valorFinal = (valorNumerico * (10 ** 4));
-    resultado = Dinero({ amount: valorFinal, format: '$0,0.00' });
+    const amount = (valorNumerico * (10 ** 4));
+    resultado = Dinero({ amount });
   }
 
   return resultado;
 };
 
-export default truncaValor;
+export default retornaDinero;

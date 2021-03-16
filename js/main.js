@@ -10,11 +10,12 @@ import listaDeAtos from './listaDeAtos.js';
 import LinhaTabela from './LinhaTabela.js';
 import Relatorio from './Relatorio.js';
 import UI from './UI.js';
-import truncaValor from './truncaValor.js';
+import retornaDinero from './retornaDinero.js';
 import Calculo from './Calculo.js';
 // import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
 
-const num1 = truncaValor('123');
+const num1 = retornaDinero(123.123);
+console.log(num1);
 console.log(num1.getAmount());
 console.log(num1.toFormat());
 
@@ -169,18 +170,13 @@ const retornaOAto = (dataDeEmissao) => {
     for (let j = 0; j < listaDeAtos[i].length; j += 1) {
       const dataDeInicioDoAtoAtual = listaDeAtos[i][j].dataInicio;
       const dataDeFimDoAtoAtual = listaDeAtos[i][j].dataFim;
-      // const anoDeInicioDoAtoAtual = dataDeInicioDoAtoAtual.getFullYear();
-      // const anoEmissao = dataDeEmissao.getFullYear();
 
-      // if (anoDeInicioDoAtoAtual === anoEmissao) {
       if (((dataDeEmissao.valueOf() >= dataDeInicioDoAtoAtual.valueOf())
         && (dataDeEmissao.valueOf() <= dataDeFimDoAtoAtual.valueOf()))) {
         const atoObjHelper = listaDeAtos[i][j];
         objAto = atoObjHelper;
-        // eslint-disable-next-line no-labels
         break outerLoop;
       }
-      // }
     }
   }
   return objAto;
@@ -226,7 +222,7 @@ const retornaQtdLitros = (produtos) => {
 };
 
 const retornaValoresTotaisPraticados = (produtos) => {
-  const valorTotalPraticado = produtos.map((produto) => truncaValor(produto.valorTotalPraticado));
+  const valorTotalPraticado = produtos.map((produto) => retornaDinero(produto.valorTotalPraticado));
   return valorTotalPraticado;
 };
 

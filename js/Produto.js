@@ -1,17 +1,13 @@
 /* eslint-disable import/extensions */
-/* eslint-disable class-methods-use-this */
-import truncaValor from './truncaValor.js';
-
 export default class Produto {
   valorPresumido;
   valorTotalPresumido;
 
-  constructor(nomeDoProduto, qtdVendida,
-    valorPraticado, valorTotalPraticado) {
+  constructor(nomeDoProduto, qtdVendida, valorPraticado, valorTotalPraticado) {
     this.nomeDoProduto = nomeDoProduto; // <xProd>
-    this.qtdVendida = truncaValor(qtdVendida); // <qCom>
-    this.valorPraticado = truncaValor(valorPraticado); // <vUnCom>
-    this.valorTotalPraticado = truncaValor(valorTotalPraticado); // <vProd>
+    this.qtdVendida = qtdVendida; // <qCom>
+    this.valorPraticado = valorPraticado; // <vUnCom> //Dinero
+    this.valorTotalPraticado = valorTotalPraticado; // <vProd> //Dinero
   }
 
   get valorPresumido() {
