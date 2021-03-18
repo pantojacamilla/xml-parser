@@ -1,23 +1,24 @@
-/* eslint-disable import/extensions */
-import truncaValor from './retornaDinero.js';
+// /* eslint-disable import/extensions */
+// import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
+// import truncaValor from './retornaDinero.js';
 
 export default class UI {
   static mostraSomatorias(relatorio) {
-    const somaValoresPresumidos = truncaValor(relatorio.somaValoresPresumidos);
+    const { somaValoresPresumidos } = relatorio;
     const somaPresumidos = document.querySelector('#somaPresumidos');
-    somaPresumidos.textContent = `R$${somaValoresPresumidos}`;
+    somaPresumidos.textContent = somaValoresPresumidos.toFormat('$0,0.0000');
 
-    const somaValoresPraticados = truncaValor(relatorio.somaValoresPraticados);
+    const { somaValoresPraticados } = relatorio;
     const somaPraticado = document.querySelector('#somaPraticado');
-    somaPraticado.textContent = `R$${somaValoresPraticados}`;
+    somaPraticado.textContent = somaValoresPraticados.toFormat('$0,0.0000');
 
-    const somaDasDiferencas = truncaValor(relatorio.somaDiferencas);
+    const somaDasDiferencas = relatorio.somaDiferencas;
     const somaDiferencas = document.querySelector('#somaDiferencas');
-    somaDiferencas.textContent = `R$${somaDasDiferencas}`;
+    somaDiferencas.textContent = somaDasDiferencas.toFormat('$0,0.0000');
 
-    const somaDosIcms = truncaValor(relatorio.somaIcmsRestituido);
+    const somaDosIcms = relatorio.somaIcmsRestituido;
     const somaIcms = document.querySelector('#somaIcms');
-    somaIcms.textContent = `R$${somaDosIcms}`;
+    somaIcms.textContent = somaDosIcms.toFormat('$0,0.0000');
   }
 
   static mostraNotaInutilizada(linhaRelatorio) {
@@ -111,20 +112,26 @@ export default class UI {
     }
   }
 
-  static criaLinhaTabela(dado, linha, validacao) {
+  static criaLinhaTabela(dado, linha, opcao1, opcao2) {
     const data = dado;
     const td = document.createElement('td');
-    td.textContent = data;
-    if (validacao === true) {
-      if (data > 0) {
+
+    if (opcao2 === 'dinero') {
+      td.textContent = data.toFormat('$0,0.0000');
+    } else {
+      td.textContent = data;
+    }
+
+    if (opcao1 === true) {
+      if (data.isPositive()) {
         td.setAttribute('class', 'positivo');
       } else {
         td.setAttribute('class', 'negativo');
       }
     }
 
-    if (Number.isInteger(validacao) === true) {
-      td.setAttribute('rowspan', (validacao + 1));
+    if (Number.isInteger(opcao1) === true) {
+      td.setAttribute('rowspan', (opcao1 + 1));
     }
 
     const row = linha;
@@ -156,15 +163,15 @@ export default class UI {
 
     // Valor Presumido
     const valorPresumido = linhaRelatorio.valorPresumido[0];
-    this.criaLinhaTabela(valorPresumido, linha);
+    this.criaLinhaTabela(valorPresumido, linha, '', 'dinero');
 
     // Valor Praticado
     const valorPraticado = linhaRelatorio.valorPraticado[0];
-    this.criaLinhaTabela(valorPraticado, linha);
+    this.criaLinhaTabela(valorPraticado, linha, '', 'dinero');
 
     // Diferença entre (Presumido - Praticado)
     const difPresumidoEPraticado = linhaRelatorio.difPresumidoEPraticado[0];
-    this.criaLinhaTabela(difPresumidoEPraticado, linha, true);
+    this.criaLinhaTabela(difPresumidoEPraticado, linha, true, 'dinero');
 
     // Quantidade de litros
     const qtdLitros = linhaRelatorio.qtdLitros[0];
@@ -172,19 +179,19 @@ export default class UI {
 
     // Valor total Presumido
     const valorTotalPresumido = linhaRelatorio.valorTotalPresumido[0];
-    this.criaLinhaTabela(valorTotalPresumido, linha);
+    this.criaLinhaTabela(valorTotalPresumido, linha, '', 'dinero');
 
     // Valor total vendido
     const valorTotalPraticado = linhaRelatorio.valorTotalPraticado[0];
-    this.criaLinhaTabela(valorTotalPraticado, linha);
+    this.criaLinhaTabela(valorTotalPraticado, linha, '', 'dinero');
 
     // Diferença entre TOTAL presumido e TOTAL vendido
     const difEntreTotPresumidoEPraticado = linhaRelatorio.difEntreTotPresumidoEPraticado[0];
-    this.criaLinhaTabela(difEntreTotPresumidoEPraticado, linha, true);
+    this.criaLinhaTabela(difEntreTotPresumidoEPraticado, linha, true, 'dinero');
 
     // Icms a ser restituído
     const icmsRestituicao = linhaRelatorio.icmsRestituicao[0];
-    this.criaLinhaTabela(icmsRestituicao, linha, true);
+    this.criaLinhaTabela(icmsRestituicao, linha, true, 'dinero');
 
     if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
       linha.setAttribute('class', 'grey');
@@ -230,15 +237,15 @@ export default class UI {
 
       // Valor Presumido
       const valorPresumido = linhaRelatorio.valorPresumido[i];
-      this.criaLinhaTabela(valorPresumido, linha);
+      this.criaLinhaTabela(valorPresumido, linha, '', 'dinero');
 
       // Valor Praticado
       const valorPraticado = linhaRelatorio.valorPraticado[i];
-      this.criaLinhaTabela(valorPraticado, linha);
+      this.criaLinhaTabela(valorPraticado, linha, '', 'dinero');
 
       // Diferença entre (Presumido - Praticado)
       const difPresumidoEPraticado = linhaRelatorio.difPresumidoEPraticado[i];
-      this.criaLinhaTabela(difPresumidoEPraticado, linha, true);
+      this.criaLinhaTabela(difPresumidoEPraticado, linha, true, 'dinero');
 
       // Quantidade de litros
       const qtdLitros = linhaRelatorio.qtdLitros[i];
@@ -246,19 +253,19 @@ export default class UI {
 
       // Valor total Presumido
       const valorTotalPresumido = linhaRelatorio.valorTotalPresumido[i];
-      this.criaLinhaTabela(valorTotalPresumido, linha);
+      this.criaLinhaTabela(valorTotalPresumido, linha, '', 'dinero');
 
       // Valor total vendido
       const valorTotalPraticado = linhaRelatorio.valorTotalPraticado[i];
-      this.criaLinhaTabela(valorTotalPraticado, linha);
+      this.criaLinhaTabela(valorTotalPraticado, linha, '', 'dinero');
 
       // Diferença entre TOTAL presumido e TOTAL vendido
       const difEntreTotPresumidoEPraticado = linhaRelatorio.difEntreTotPresumidoEPraticado[i];
-      this.criaLinhaTabela(difEntreTotPresumidoEPraticado, linha, true);
+      this.criaLinhaTabela(difEntreTotPresumidoEPraticado, linha, true, 'dinero');
 
       // Icms a ser restituído
       const icmsRestituicao = linhaRelatorio.icmsRestituicao[i];
-      this.criaLinhaTabela(icmsRestituicao, linha, true);
+      this.criaLinhaTabela(icmsRestituicao, linha, true, 'dinero');
 
       if ((linhaRelatorio.numeroSequencial) % 2 === 1) {
         linha.setAttribute('class', 'grey');

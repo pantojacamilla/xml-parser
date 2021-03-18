@@ -307,13 +307,8 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   setTimeout(() => {
     const linhasTabela = preparaLinhasTabela(objetosNotaFiscal);
     const somatorias = Calculo.retornaAsSomatorias(linhasTabela);
-    console.log(somatorias);
-    console.log(somatorias[0].getAmount());
-    console.log(somatorias[0].toFormat('$0,0.0000'));
-    console.log(somatorias[1].getAmount());
-    console.log(somatorias[2].getAmount());
-    console.log(somatorias[3].getAmount());
-    // const relatorio = retornaRelatorio(linhasTabela, somatorias);
-    // UI.mostraRelatorio(relatorio);
+    const relatorio = retornaRelatorio(linhasTabela, somatorias);
+    // console.log(relatorio);
+    UI.mostraRelatorio(relatorio);
   }, 5000);
 });
