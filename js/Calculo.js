@@ -1,13 +1,15 @@
 /* eslint-disable import/extensions */
-import retornaDinero from './retornaDinero.js';
+import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
 
+Dinero.defaultCurrency = 'BRL';
+Dinero.globalLocale = 'pt-br';
+Dinero.defaultPrecision = 4;
 export default class Calculo {
   static calculaDiferencaEntrePresumidoEPraticado(produtos) {
     const diferencaEntreValores = [];
 
     produtos.forEach((produto) => {
-      // usar a função de subtracao e que retorna objetos Dinero
-      const dif = (produto.valorPresumido - produto.valorPraticado);
+      const dif = produto.valorPresumido.subtract(produto.valorPraticado);
       diferencaEntreValores.push(dif);
     });
 
@@ -18,10 +20,9 @@ export default class Calculo {
     const totalPresumido = [];
 
     produtos.forEach((produto) => {
-      // usar a função de multiplicacao e que retorna objetos Dinero
-      const total = retornaDinero((produto.qtdVendida * produto.valorPresumido));
-      // eslint-disable-next-line no-param-reassign
-      produto.valorTotalPresumido = total;
+      const p = produto;
+      const total = p.valorPresumido.multiply(p.getQtdVendida());
+      p.valorTotalPresumido = total;
       totalPresumido.push(total);
     });
 
@@ -32,7 +33,7 @@ export default class Calculo {
     const diferencaTotalPresumidoETotalPraticado = [];
 
     produtos.forEach((produto) => {
-      const diferenca = retornaDinero((produto.valorTotalPresumido - produto.valorTotalPraticado));
+      const diferenca = produto.valorTotalPresumido.subtract(produto.valorTotalPraticado);
       diferencaTotalPresumidoETotalPraticado.push(diferenca);
     });
 
@@ -43,15 +44,56 @@ export default class Calculo {
     const valoresAseremRestituidos = [];
 
     diferencaTotalPresumidoETotalPraticado.forEach((dif) => {
-      const restiuicao = retornaDinero(dif * 0.25);
+      const restiuicao = dif.percentage(25);
       valoresAseremRestituidos.push(restiuicao);
     });
 
     return valoresAseremRestituidos;
   }
 
-  static retornaAsSomatoria(linhasTabela) {
+  // static mostraOvalor(arraysDeValores) {
+  //   arraysDeValores.forEach((valor) => {
+  //     console.log(valor.getPrecision());
+  //     console.log(valor.getAmount());
+  //     console.log(valor.toFormat('$0,0.0000'));
+  //   });
+  // }
+
+  static calculaSomatorioValorPresumido(valoresPresumidos) {
+    let somatorio = 0;
+    valoresPresumidos.forEach((valorPresumido) => {
+      somatorio = valorPresumido.add(Dinero({ amount: somatorio })).getAmount();
+    });
+    return somatorio;
+  }
+
+  static calculaSomatorioValorPraticado(valoresPraticados) {
+    let somatorio = 0;
+    valoresPraticados.forEach((valorPraticado) => {
+      somatorio = valorPraticado.add(Dinero({ amount: somatorio })).getAmount();
+    });
+    return somatorio;
+  }
+
+  static calculaSomatorioDiferenca(somaDiferencas) {
+    let somatorio = 0;
+    somaDiferencas.forEach((somaDiferenca) => {
+      somatorio = somaDiferenca.add(Dinero({ amount: somatorio })).getAmount();
+    });
+    return somatorio;
+  }
+
+  static calculaSomatorioIcms(somaIcms) {
+    let somatorio = 0;
+    somaIcms.forEach((somaIcm) => {
+      somatorio = somaIcm.add(Dinero({ amount: somatorio })).getAmount();
+    });
+    return somatorio;
+  }
+
+  static retornaAsSomatorias(linhasTabela) {
     const lt = linhasTabela;
+
     let valorPresumido = 0;
     let valorPraticado = 0;
     let somaDiferenca = 0;
@@ -59,26 +101,36 @@ export default class Calculo {
 
     lt.forEach((linha) => {
       if (linha.statusNotaFiscal === 'Válida') {
-        const valoresPresumidos = linha.valorTotalPresumido;
-        const somaPresumidos = valoresPresumidos.reduce((soma, valorAtual) => soma + valorAtual, 0);
-        valorPresumido += somaPresumidos;
+        const valoresPresumidos = linha.valorPresumido;
+        valorPresumido += Calculo.calculaSomatorioValorPresumido(valoresPresumidos);
 
-        const valoresPraticados = linha.valorTotalPraticado;
-        const somaValPrati = valoresPraticados.reduce((soma, valorAtual) => soma + valorAtual, 0);
-        valorPraticado += somaValPrati;
+        const valoresPraticados = linha.valorPraticado;
+        valorPraticado += Calculo.calculaSomatorioValorPraticado(valoresPraticados);
 
-        const diferencas = linha.difEntreTotPresumidoEPraticado;
-        const somaDiferencas = diferencas.reduce((soma, valorAtual) => soma + valorAtual, 0);
-        somaDiferenca += somaDiferencas;
+        const somaDiferencas = linha.difEntreTotPresumidoEPraticado;
+        somaDiferenca += Calculo.calculaSomatorioDiferenca(somaDiferencas);
 
-        const icms = linha.icmsRestituicao;
-        const somaIcms = icms.reduce((soma, valorAtual) => soma + valorAtual, 0);
-        somaIcm += somaIcms;
+        const somaIcms = linha.icmsRestituicao;
+        somaIcm += Calculo.calculaSomatorioIcms(somaIcms);
+
+        // Calculo.mostraOvalor(valPresumidos);
+        // Calculo.mostraOvalor(linha.valorPraticado);
+        // Calculo.mostraOvalor(linha.difEntreTotPresumidoEPraticado);
+        // Calculo.mostraOvalor(linha.icmsRestituicao);
       }
     });
 
+    // console.log(valorPresumido);
+    // console.log(valorPraticado);
+    // console.log(somaDiferenca);
+    // console.log(somaIcm);
+    const valor1 = Dinero({ amount: valorPresumido });
+    const valor2 = Dinero({ amount: valorPraticado });
+    const valor3 = Dinero({ amount: somaDiferenca });
+    const valor4 = Dinero({ amount: somaIcm });
+
     const somatorias = [];
-    somatorias.push(valorPresumido, valorPraticado, somaDiferenca, somaIcm);
+    somatorias.push(valor1, valor2, valor3, valor4);
     return somatorias;
   }
 }

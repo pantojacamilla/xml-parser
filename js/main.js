@@ -10,13 +10,17 @@ import listaDeAtos from './listaDeAtos.js';
 import LinhaTabela from './LinhaTabela.js';
 import Relatorio from './Relatorio.js';
 import UI from './UI.js';
-import retornaDinero from './retornaDinero.js';
 import Calculo from './Calculo.js';
+import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
 
-// const num1 = retornaDinero(123);
-// console.log(num1);
-// console.log(num1.getAmount());
-// console.log(num1.toFormat());
+Dinero.defaultCurrency = 'BRL';
+Dinero.globalLocale = 'pt-br';
+Dinero.defaultPrecision = 4;
+
+// const din1 = Dinero({ amount: 2 });
+// const din2 = Dinero({ amount: 3 });
+// const valor = (din1.add(din2)).getAmount();
+// console.log(valor);
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
@@ -193,6 +197,9 @@ const retornaValoresPresumidos = (produtos, ato) => {
     } else if (produto.nomeDoProduto === 'DIESEL S10') {
       p.valorPresumido = ato.produtoImposto.d10;
     }
+    // console.log('Valor Presumido:');
+    // console.log(p.valorPresumido.getAmount());
+    // console.log(p.valorPresumido.toFormat('$0,0.0000'));
   });
 
   const valoresPresumidos = produtos.map((produto) => produto.valorPresumido);
@@ -212,6 +219,12 @@ const retornaNomeCombustiveis = (produtos) => {
 
 const retornaValoresPraticados = (produtos) => {
   const valoresPraticados = produtos.map((produto) => produto.valorPraticado);
+  // console.log('Valor Praticado:');
+  // produtos.forEach((produto) => {
+  //   console.log(produto.valorPraticado.getAmount());
+  //   console.log(produto.valorPraticado.toFormat('$0,0.0000'));
+  // });
+
   return valoresPraticados;
 };
 
@@ -221,7 +234,7 @@ const retornaQtdLitros = (produtos) => {
 };
 
 const retornaValoresTotaisPraticados = (produtos) => {
-  const valorTotalPraticado = produtos.map((produto) => retornaDinero(produto.valorTotalPraticado));
+  const valorTotalPraticado = produtos.map((produto) => produto.valorTotalPraticado);
   return valorTotalPraticado;
 };
 
@@ -293,9 +306,14 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
 
   setTimeout(() => {
     const linhasTabela = preparaLinhasTabela(objetosNotaFiscal);
-    console.log(linhasTabela);
-    // const somatorias = Calculo.retornaAsSomatoria(linhasTabela);
+    const somatorias = Calculo.retornaAsSomatorias(linhasTabela);
+    console.log(somatorias);
+    console.log(somatorias[0].getAmount());
+    console.log(somatorias[0].toFormat('$0,0.0000'));
+    console.log(somatorias[1].getAmount());
+    console.log(somatorias[2].getAmount());
+    console.log(somatorias[3].getAmount());
     // const relatorio = retornaRelatorio(linhasTabela, somatorias);
     // UI.mostraRelatorio(relatorio);
-  }, 2000);
+  }, 5000);
 });

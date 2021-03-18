@@ -12,6 +12,10 @@ export default class Produto {
     this.valorTotalPraticado = retornaDinero(valorTotalPraticado); // <vProd> //Dinero
   }
 
+  getQtdVendida() {
+    return (this.qtdVendida / 10000);
+  }
+
   get valorPresumido() {
     return this.valorPresumido;
   }
