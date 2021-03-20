@@ -1,8 +1,33 @@
-// /* eslint-disable import/extensions */
-// import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
-// import truncaValor from './retornaDinero.js';
-
 export default class UI {
+  static mostraNomeDaEmpresaNaTela(empresa) {
+    const { nomeEmpresa } = empresa;
+    const divNome = document.querySelector('#nome-empresa');
+    divNome.textContent = nomeEmpresa;
+  }
+
+  static mostraCnpjDaEmpresaNaTela(empresa) {
+    const { cnpjFormatado } = empresa;
+    const divCnpj = document.querySelector('#cnpj-empresa');
+    divCnpj.textContent = cnpjFormatado;
+  }
+
+  static mostraTipoDeNotaNaTela(empresa) {
+    let resposta;
+    const { nomeEmpresa } = empresa;
+    if (nomeEmpresa === 'F S S COMERCIO VAREJISTA DE COMB E LUBRIFICANTES LTDA') {
+      resposta = 'SAÍDA';
+    } else {
+      resposta = 'ENTRADA';
+    }
+    const divTipoDeNota = document.querySelector('#tipo-nota');
+    divTipoDeNota.textContent = resposta;
+  }
+
+  static mostraCompetenciaNaTela(competencia) {
+    const divCompetencia = document.querySelector('#competencia');
+    divCompetencia.textContent = competencia;
+  }
+
   static mostraSomatorias(relatorio) {
     const { somaValoresPresumidos } = relatorio;
     const somaPresumidos = document.querySelector('#somaPresumidos');
@@ -85,7 +110,7 @@ export default class UI {
 
     // Nome do arquivo
     td = document.createElement('td');
-    td.textContent = linhaRelatorio.truncaValorchaveDeAcesso;
+    td.textContent = linhaRelatorio.chaveDeAcesso;
     row.appendChild(td);
 
     // Mensagem
@@ -309,5 +334,6 @@ export default class UI {
     });
 
     UI.mostraSomatorias(relatorio);
+    UI.mostraCompetenciaNaTela(relatorio.competencia);
   }
 }

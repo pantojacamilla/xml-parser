@@ -23,33 +23,9 @@ Dinero.defaultPrecision = 4;
 // console.log(valor);
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
-const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
-
-const mostraNomeDaEmpresaNaTela = () => {
-  const { nomeEmpresa } = empresa;
-  const divNome = document.querySelector('#nome-empresa');
-  divNome.textContent = nomeEmpresa;
-};
-
-const mostraCnpjDaEmpresaNaTela = () => {
-  const { cnpjFormatado } = empresa;
-  const divCnpj = document.querySelector('#cnpj-empresa');
-  divCnpj.textContent = cnpjFormatado;
-};
-
-const mostraTipoDeNotaNaTela = () => {
-  let resposta;
-  const { nomeEmpresa } = empresa;
-  if (nomeEmpresa === 'F S S COMERCIO VAREJISTA DE COMB E LUBRIFICANTES LTDA') {
-    resposta = 'SAÍDA';
-  } else {
-    resposta = 'ENTRADA';
-  }
-  const divTipoDeNota = document.querySelector('#tipo-nota');
-  divTipoDeNota.textContent = resposta;
-};
 
 const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
+  const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
   const nfsEmpresaSelecionada = notasFiscais.filter((nf) => nf.name.includes(cnpjSoNumeros));
   return nfsEmpresaSelecionada;
 };
@@ -197,9 +173,6 @@ const retornaValoresPresumidos = (produtos, ato) => {
     } else if (produto.nomeDoProduto === 'DIESEL S10') {
       p.valorPresumido = ato.produtoImposto.d10;
     }
-    // console.log('Valor Presumido:');
-    // console.log(p.valorPresumido.getAmount());
-    // console.log(p.valorPresumido.toFormat('$0,0.0000'));
   });
 
   const valoresPresumidos = produtos.map((produto) => produto.valorPresumido);
@@ -219,12 +192,6 @@ const retornaNomeCombustiveis = (produtos) => {
 
 const retornaValoresPraticados = (produtos) => {
   const valoresPraticados = produtos.map((produto) => produto.valorPraticado);
-  // console.log('Valor Praticado:');
-  // produtos.forEach((produto) => {
-  //   console.log(produto.valorPraticado.getAmount());
-  //   console.log(produto.valorPraticado.toFormat('$0,0.0000'));
-  // });
-
   return valoresPraticados;
 };
 
@@ -238,6 +205,24 @@ const retornaValoresTotaisPraticados = (produtos) => {
   return valorTotalPraticado;
 };
 
+let competencia;
+const guardaCompetencia = (dataEmissao) => {
+  let mes = dataEmissao.getMonth() + 1;
+  const ano = dataEmissao.getFullYear();
+
+  if (mes <= 9) {
+    mes = `0${mes}`;
+  }
+
+  const mesAno = `${mes}/${ano}`;
+
+  if (competencia !== mesAno) {
+    console.log(`Competencia Atual: ${competencia}`);
+    console.log(`Nova Competencia: ${mesAno}`);
+    competencia = mesAno;
+  }
+};
+
 const preparaLinhasTabela = (notasFiscais) => {
   const linhasTabela = [];
 
@@ -247,6 +232,7 @@ const preparaLinhasTabela = (notasFiscais) => {
       const numeroSequencial = retornaNumeroSequencial(nf);
       const nota = retornaNomeNotaFiscal(nf);
       const dataEmissao = retornaDataDeEmissao(nf);
+      guardaCompetencia(dataEmissao);
       const combustiveis = retornaNomeCombustiveis(produtos);
       const ato = retornaOAto(dataEmissao);
       const atoAno = retornaAtoEAno(ato);
@@ -272,19 +258,23 @@ const preparaLinhasTabela = (notasFiscais) => {
   return linhasTabela;
 };
 
-const retornaRelatorio = (linhasTabela, somatorias) => {
+const retornaRelatorio = (linhasTabela, somatorias, competencia) => {
   const valorPresumido = somatorias[0];
   const valorPraticado = somatorias[1];
   const somaDiferenca = somatorias[2];
   const somaIcm = somatorias[3];
+  const relatorio = new Relatorio(linhasTabela, valorPresumido,
+    valorPraticado, somaDiferenca, somaIcm);
 
-  return new Relatorio(linhasTabela, valorPresumido, valorPraticado, somaDiferenca, somaIcm);
+  relatorio.competencia = competencia;
+
+  return relatorio;
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  mostraNomeDaEmpresaNaTela();
-  mostraCnpjDaEmpresaNaTela();
-  mostraTipoDeNotaNaTela();
+  UI.mostraNomeDaEmpresaNaTela(empresa);
+  UI.mostraCnpjDaEmpresaNaTela(empresa);
+  UI.mostraTipoDeNotaNaTela(empresa);
 });
 
 document.querySelector('#geraRelatorioPdf').addEventListener('click', () => {
@@ -307,8 +297,7 @@ document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   setTimeout(() => {
     const linhasTabela = preparaLinhasTabela(objetosNotaFiscal);
     const somatorias = Calculo.retornaAsSomatorias(linhasTabela);
-    const relatorio = retornaRelatorio(linhasTabela, somatorias);
-    // console.log(relatorio);
+    const relatorio = retornaRelatorio(linhasTabela, somatorias, competencia);
     UI.mostraRelatorio(relatorio);
   }, 5000);
 });
