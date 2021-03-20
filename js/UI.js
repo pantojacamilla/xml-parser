@@ -199,7 +199,9 @@ export default class UI {
     this.criaLinhaTabela(difPresumidoEPraticado, linha, true, 'dinero');
 
     // Quantidade de litros
-    const qtdLitros = linhaRelatorio.qtdLitros[0];
+    const qtdLitros = new Intl.NumberFormat('pt-BR',
+      { minimumFractionDigits: 4 }).format(linhaRelatorio.qtdLitros[0]);
+    // const qtdLitros = linhaRelatorio.qtdLitros[0];
     this.criaLinhaTabela(qtdLitros, linha);
 
     // Valor total Presumido
@@ -273,8 +275,11 @@ export default class UI {
       this.criaLinhaTabela(difPresumidoEPraticado, linha, true, 'dinero');
 
       // Quantidade de litros
-      const qtdLitros = linhaRelatorio.qtdLitros[i];
+      const qtdLitros = new Intl.NumberFormat('pt-BR',
+        { minimumFractionDigits: 4 }).format(linhaRelatorio.qtdLitros[i]);
       this.criaLinhaTabela(qtdLitros, linha);
+      // const qtdLitros = linhaRelatorio.qtdLitros[i];
+      // this.criaLinhaTabela(qtdLitros, linha);
 
       // Valor total Presumido
       const valorTotalPresumido = linhaRelatorio.valorTotalPresumido[i];

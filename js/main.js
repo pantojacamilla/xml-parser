@@ -196,7 +196,7 @@ const retornaValoresPraticados = (produtos) => {
 };
 
 const retornaQtdLitros = (produtos) => {
-  const qtdLitros = produtos.map((produto) => produto.qtdVendida);
+  const qtdLitros = produtos.map((produto) => produto.getQtdVendida());
   return qtdLitros;
 };
 
