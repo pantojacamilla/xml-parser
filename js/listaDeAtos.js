@@ -5,13 +5,87 @@ import ProdutoImposto from './ProdutoImposto.js';
 
 const listaDeAtos = [];
 let produtoImposto;
+const atos2015 = [];
 const atos2016 = [];
 const atos2017 = [];
-// const atos2018 = [];
-// const atos2019 = [];
-// const atos2020 = [];
+const atos2018 = [];
+const atos2019 = [];
+const atos2020 = [];
+
+// 2015
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2015.push(new Ato('025', '2016-01-01', '2016-01-15', produtoImposto, 2015));
 
 // 2016
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('001', '2016-01-16', '2016-01-31', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('002', '2016-02-01', '2016-02-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('003', '2016-02-16', '2016-02-29', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('004', '2016-03-01', '2016-03-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('005', '2016-03-16', '2016-03-31', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('006', '2016-04-01', '2016-04-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('007', '2016-04-16', '2016-04-30', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('008', '2016-05-01', '2016-05-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('009', '2016-05-16', '2016-05-31', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.8240, 3.8240, 3.2480, 3.2100);
+atos2016.push(new Ato('010', '2016-06-01', '2016-06-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9720, 3.9720, 3.3450, 3.2740);
+atos2016.push(new Ato('011', '2016-06-16', '2016-06-30', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9720, 3.9720, 3.3450, 3.2740);
+atos2016.push(new Ato('012', '2016-07-01', '2016-07-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9720, 3.9720, 3.3450, 3.2740);
+atos2016.push(new Ato('013', '2016-07-16', '2016-07-31', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9720, 3.9720, 3.3450, 3.2740);
+atos2016.push(new Ato('014', '2016-08-01', '2016-08-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9720, 3.9720, 3.3450, 3.2740);
+atos2016.push(new Ato('015', '2016-08-16', '2016-08-31', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9720, 3.9720, 3.3450, 3.2740);
+atos2016.push(new Ato('016', '2016-09-01', '2016-09-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9720, 3.9720, 3.3450, 3.2740);
+atos2016.push(new Ato('017', '2016-09-16', '2016-09-30', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9720, 3.9720, 3.3450, 3.2740);
+atos2016.push(new Ato('018', '2016-10-01', '2016-10-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9940, 3.9940, 3.3990, 3.2920);
+atos2016.push(new Ato('019', '2016-10-16', '2016-10-31', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9940, 3.9940, 3.3990, 3.2920);
+atos2016.push(new Ato('020', '2016-11-01', '2016-11-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9940, 3.9940, 3.3990, 3.2920);
+atos2016.push(new Ato('021', '2016-11-16', '2016-11-30', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9940, 3.9940, 3.3990, 3.2920);
+atos2016.push(new Ato('022', '2016-12-01', '2016-12-15', produtoImposto, 2016));
+
+produtoImposto = new ProdutoImposto(3.9940, 3.9940, 3.3990, 3.2920);
+atos2016.push(new Ato('023', '2016-12-16', '2016-12-31', produtoImposto, 2016));
+
 produtoImposto = new ProdutoImposto(4.0670, 4.0670, 3.4430, 3.3490);
 atos2016.push(new Ato('024', '2017-01-01', '2017-01-15', produtoImposto, 2016));
 
@@ -112,10 +186,6 @@ atos2017.push(new Ato('023', '2017-12-16', '2017-12-31', produtoImposto, 2017));
 produtoImposto = new ProdutoImposto(3.9710, 3.9710, 3.3360, 3.2390);
 atos2017.push(new Ato('024', '2018-01-01', '2018-01-15', produtoImposto, 2017));
 
-listaDeAtos.push(atos2016, atos2017);
+listaDeAtos.push(atos2015, atos2016, atos2017);
 
 export default listaDeAtos;
-
-// 2018
-// 2019
-// 2020
