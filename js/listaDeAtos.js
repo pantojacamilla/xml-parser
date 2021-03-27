@@ -351,10 +351,78 @@ produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
 atos2019.push(new Ato('030', '2020-01-01', '2020-01-15', produtoImposto, 2019));
 
 // 2020
+produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
+atos2020.push(new Ato('002', '2020-01-16', '2020-01-31', produtoImposto, 2020));
 
-// produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
-// atos2020.push(new Ato('001', '2020-01-16', '2020-01-xxxx', produtoImposto, 2020));
+produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
+atos2020.push(new Ato('004', '2020-02-01', '2020-02-15', produtoImposto, 2020));
 
-listaDeAtos.push(atos2015, atos2016, atos2017, atos2018, atos2019);
+produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
+atos2020.push(new Ato('006', '2020-02-16', '2020-02-29', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
+atos2020.push(new Ato('007', '2020-03-01', '2020-03-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
+atos2020.push(new Ato('008', '2020-03-16', '2020-03-31', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
+atos2020.push(new Ato('009', '2020-04-01', '2020-04-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.5230, 4.5230, 3.8370, 3.8940);
+atos2020.push(new Ato('011', '2020-04-16', '2020-04-30', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.2810, 4.2810, 3.7090, 3.7710);
+atos2020.push(new Ato('013', '2020-05-01', '2020-05-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.0950, 4.0950, 3.5410, 3.6640);
+atos2020.push(new Ato('014', '2020-05-16', '2020-05-31', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.0240, 4.0240, 3.4330, 3.5210);
+atos2020.push(new Ato('016', '2020-06-01', '2020-06-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.0210, 4.0210, 3.3770, 3.4660);
+atos2020.push(new Ato('018', '2020-06-16', '2020-06-30', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.0650, 4.0650, 3.3600, 3.4860);
+atos2020.push(new Ato('021', '2020-07-01', '2020-07-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.1280, 4.1280, 3.3780, 3.5020);
+atos2020.push(new Ato('022', '2020-07-16', '2020-07-31', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.2300, 4.2300, 3.5500, 3.6240);
+atos2020.push(new Ato('024', '2020-08-01', '2020-08-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.2820, 4.2820, 3.5840, 3.6840);
+atos2020.push(new Ato('025', '2020-08-16', '2020-08-31', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.3540, 4.3540, 3.6830, 3.7660);
+atos2020.push(new Ato('026', '2020-09-01', '2020-09-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.3540, 4.3540, 3.6830, 3.7660);
+atos2020.push(new Ato('027', '2020-09-16', '2020-09-30', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.3540, 4.3540, 3.6830, 3.7660);
+atos2020.push(new Ato('029', '2020-10-01', '2020-10-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.3540, 4.3540, 3.6830, 3.7660);
+atos2020.push(new Ato('030', '2020-10-16', '2020-10-31', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.3540, 4.3540, 3.6830, 3.7660);
+atos2020.push(new Ato('032', '2020-11-01', '2020-11-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.4553, 5.0958, 3.6826, 3.7118);
+atos2020.push(new Ato('033', '2020-11-16', '2020-11-30', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.5478, 5.8376, 3.7090, 3.7314);
+atos2020.push(new Ato('034', '2020-12-01', '2020-12-15', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.5661, 6.5794, 3.7537, 3.7866);
+atos2020.push(new Ato('035', '2020-12-16', '2020-12-31', produtoImposto, 2020));
+
+produtoImposto = new ProdutoImposto(4.6273, 6.7890, 3.8233, 3.8513);
+atos2020.push(new Ato('036', '2021-01-01', '2021-01-15', produtoImposto, 2020));
+
+listaDeAtos.push(atos2015, atos2016, atos2017, atos2018, atos2019, atos2020);
 
 export default listaDeAtos;
