@@ -281,32 +281,26 @@ atos2019.push(new Ato('006', '2019-04-01', '2019-04-15', produtoImposto, 2019));
 produtoImposto = new ProdutoImposto(4.4130, 4.4130, 3.8710, 3.8550);
 atos2019.push(new Ato('007', '2019-04-16', '2019-04-30', produtoImposto, 2019));
 
-// aqui
 // produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
 // atos2019.push(new Ato('008', '2019-05-01', '2019-05-15xxx', produtoImposto, 2019));
 
-// aqui
-// produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
-// atos2019.push(new Ato('009', '2019-05-xxxx', '2019-05-15xxx', produtoImposto, 2019));
+produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
+atos2019.push(new Ato('009', '2019-05-01', '2019-05-15', produtoImposto, 2019));
 
-// aqui
 // produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
 // atos2019.push(new Ato('010', '2019-05-16', '2019-05-31xxx', produtoImposto, 2019));
 
-// aqui
-// produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
-// atos2019.push(new Ato('011', '2019-05-xxxx', '2019-05-xxxx', produtoImposto, 2019);
+produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
+atos2019.push(new Ato('011', '2019-05-16', '2019-05-31', produtoImposto, 2019));
 
 produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
 atos2019.push(new Ato('012', '2019-06-01', '2019-06-15', produtoImposto, 2019));
 
-// aqui
 // produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
 // atos2019.push(new Ato('013', '2019-06-16', '2019-06-xxxx', produtoImposto, 2019));
 
-// aqui
-// produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
-// atos2019.push(new Ato('014', '2019-06-16', '2019-06-xxxx', produtoImposto, 2019));
+produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
+atos2019.push(new Ato('014', '2019-06-16', '2019-06-30', produtoImposto, 2019));
 
 produtoImposto = new ProdutoImposto(4.5430, 4.5430, 3.8930, 3.8710);
 atos2019.push(new Ato('015', '2019-07-01', '2019-07-15', produtoImposto, 2019));
@@ -323,12 +317,11 @@ atos2019.push(new Ato('018', '2019-08-16', '2019-08-31', produtoImposto, 2019));
 produtoImposto = new ProdutoImposto(4.5250, 4.5250, 3.8620, 3.8870);
 atos2019.push(new Ato('019', '2019-09-01', '2019-09-15', produtoImposto, 2019));
 
-// aqui
 // produtoImposto = new ProdutoImposto(4.4920, 4.4920, 3.8340, 3.8570);
 // atos2019.push(new Ato('020', '2019-09-16', '2019-09-xxxx', produtoImposto, 2019));
 
-// produtoImposto = new ProdutoImposto(4.4920, 4.4920, 3.8340, 3.8570);
-// atos2019.push(new Ato('021', '2019-09-16', '2019-09-xxxx', produtoImposto, 2019));
+produtoImposto = new ProdutoImposto(4.4920, 4.4920, 3.8340, 3.8570);
+atos2019.push(new Ato('021', '2019-09-16', '2019-09-30', produtoImposto, 2019));
 
 produtoImposto = new ProdutoImposto(4.5090, 4.5090, 3.8620, 3.9290);
 atos2019.push(new Ato('022', '2019-10-01', '2019-10-15', produtoImposto, 2019));
@@ -336,21 +329,17 @@ atos2019.push(new Ato('022', '2019-10-01', '2019-10-15', produtoImposto, 2019));
 produtoImposto = new ProdutoImposto(4.5090, 4.5090, 3.8620, 3.9290);
 atos2019.push(new Ato('023', '2019-10-16', '2019-10-31', produtoImposto, 2019));
 
-// aqui
 // produtoImposto = new ProdutoImposto(4.5090, 4.5090, 3.8620, 3.9290);
 // atos2019.push(new Ato('024', '2019-11-01', '2019-10-xxxx', produtoImposto, 2019));
 
-// aqui
-// produtoImposto = new ProdutoImposto(4.4920, 4.4920, 3.8340, 3.8570);
-// atos2019.push(new Ato('025', '2019-11-xxxx', '2019-11-xxxx', produtoImposto, 2019));
+produtoImposto = new ProdutoImposto(4.4920, 4.4920, 3.8340, 3.8570);
+atos2019.push(new Ato('025', '2019-11-01', '2019-11-15', produtoImposto, 2019));
 
-// aqui
 // produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
 // atos2019.push(new Ato('026', '2019-11-16', '2019-11-xxxx', produtoImposto, 2019));
 
-// aqui
-// produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
-// atos2019.push(new Ato('027', '2019-11-xxxx', '2019-11-xxxx', produtoImposto, 2019));
+produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
+atos2019.push(new Ato('027', '2019-11-16', '2019-11-30', produtoImposto, 2019));
 
 produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
 atos2019.push(new Ato('028', '2019-12-01', '2019-12-15', produtoImposto, 2019));
@@ -362,7 +351,7 @@ produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
 atos2019.push(new Ato('030', '2020-01-01', '2020-01-15', produtoImposto, 2019));
 
 // 2020
-// aqui
+
 // produtoImposto = new ProdutoImposto(4.5680, 4.5680, 4.0170, 4.0880);
 // atos2020.push(new Ato('001', '2020-01-16', '2020-01-xxxx', produtoImposto, 2020));
 
