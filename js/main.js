@@ -17,11 +17,6 @@ Dinero.defaultCurrency = 'BRL';
 Dinero.globalLocale = 'pt-br';
 Dinero.defaultPrecision = 4;
 
-// const din1 = Dinero({ amount: 2 });
-// const din2 = Dinero({ amount: 3 });
-// const valor = (din1.add(din2)).getAmount();
-// console.log(valor);
-
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 
 const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
