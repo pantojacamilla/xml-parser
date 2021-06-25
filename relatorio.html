@@ -20,86 +20,88 @@
     <br><br>
   </div>
 
-  <div id="cabecalho">
+  <div id="teste">
+    <div id="cabecalho">
 
-    <table id="tabela-cabecalho">
+      <table id="tabela-cabecalho">
 
+        <thead>
+          <tr id="ralatorio-fiscal">
+            <td colspan="8">RELATÓRIO FISCAL</td>
+          </tr>
+          <tr id="resumo-competencia">
+            <td colspan="7">RESUMO</td>
+            <td>COMPETÊNCIA</td>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              <div id="nome-empresa"></div>
+            </td>
+            <td rowspan="2">DEMONSTRATIVO</td>
+            <td>TIPO DE NOTA</td>
+            <td>BASE DE CALCULO RECOLHIDO NA COMPETENCIA <br>
+              (BASEADO NO ATO PMPF CONFAZ x XML ENTRADA)/L no exercicio</td>
+            <td>MONTANTE EFETIVAMENTE PRATICADO AO CONSUMIDOR FINAL <br>
+              (BASEADO NOS XMLS DE SAIDA ANEXOS) No exercicio</td>
+            <td>DIFERENÇA APURADA NA SAÍDA <br>
+              (PREÇO EFETIVAMENTE PRATICADO NO ESTABELECIMENTO) No exercicio</td>
+            <td>VALOR DE ICMS DEVIDO NA RESTITUIÇÃO <br>
+              (No exercício)</td>
+            <td rowspan="2">
+              <div id="competencia"></div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              CNPJ: <div id="cnpj-empresa"></div>
+            </td>
+            <td>
+              <div id="tipo-nota"></div>
+            </td>
+            <td>
+              <div class="somas" id="somaPresumidos"></div>
+            </td>
+            <td>
+              <div class="somas" id="somaPraticado"></div>
+            </td>
+            <td>
+              <div class="somas" id="somaDiferencas"></div>
+            </td>
+            <td>
+              <div class="somas" id="somaIcms"></div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+    <table id='relatorio'>
       <thead>
-        <tr id="ralatorio-fiscal">
-          <td colspan="8">RELATÓRIO FISCAL</td>
-        </tr>
-        <tr id="resumo-competencia">
-          <td colspan="7">RESUMO</td>
-          <td>COMPETÊNCIA</td>
+        <tr>
+          <th>Nº</th>
+          <th>Nota</th>
+          <th>Data de Emissão</th>
+          <th>Combustível</th>
+          <th>Ato CONTEPE-PMPF</th>
+          <th>Valor Presumido <br> (Ato Contepe Pmpf) / Litro</th>
+          <th>Valor de Venda / Litro</th>
+          <th>Diferença <br> (Valor presumido - Valor venda) / Litro</th>
+          <th>Qtde. de Litros</th>
+          <th>Valor total <br> (Valor presumido sobre a venda x Qtde. Litros)</th>
+          <th>Valor Total <br> (Vendido Ao Consumidor)</th>
+          <th>Diferença Entre <br> (Valor total presumido e Valor total vendido ao Consumidor)</th>
+          <th>Valor a ser restituído na venda (aliq. 25%)</th>
         </tr>
       </thead>
 
-      <tbody>
-        <tr>
-          <td>
-            <div id="nome-empresa"></div>
-          </td>
-          <td rowspan="2">DEMONSTRATIVO</td>
-          <td>TIPO DE NOTA</td>
-          <td>BASE DE CALCULO RECOLHIDO NA COMPETENCIA <br>
-            (BASEADO NO ATO PMPF CONFAZ x XML ENTRADA)/L no exercicio</td>
-          <td>MONTANTE EFETIVAMENTE PRATICADO AO CONSUMIDOR FINAL <br>
-            (BASEADO NOS XMLS DE SAIDA ANEXOS) No exercicio</td>
-          <td>DIFERENÇA APURADA NA SAÍDA <br>
-            (PREÇO EFETIVAMENTE PRATICADO NO ESTABELECIMENTO) No exercicio</td>
-          <td>VALOR DE ICMS DEVIDO NA RESTITUIÇÃO <br>
-            (No exercício)</td>
-          <td rowspan="2">
-            <div id="competencia"></div>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            CNPJ: <div id="cnpj-empresa"></div>
-          </td>
-          <td>
-            <div id="tipo-nota"></div>
-          </td>
-          <td>
-            <div class="somas" id="somaPresumidos"></div>
-          </td>
-          <td>
-            <div class="somas" id="somaPraticado"></div>
-          </td>
-          <td>
-            <div class="somas" id="somaDiferencas"></div>
-          </td>
-          <td>
-            <div class="somas" id="somaIcms"></div>
-          </td>
-        </tr>
-      </tbody>
-
+      <tbody id="tabela-relatorio"></tbody>
     </table>
   </div>
-
-  <table id='relatorio'>
-    <thead>
-      <tr>
-        <th>Nº</th>
-        <th>Nota</th>
-        <th>Data de Emissão</th>
-        <th>Combustível</th>
-        <th>Ato CONTEPE-PMPF</th>
-        <th>Valor Presumido <br> (Ato Contepe Pmpf) / Litro</th>
-        <th>Valor de Venda / Litro</th>
-        <th>Diferença <br> (Valor presumido - Valor venda) / Litro</th>
-        <th>Qtde. de Litros</th>
-        <th>Valor total <br> (Valor presumido sobre a venda x Qtde. Litros)</th>
-        <th>Valor Total <br> (Vendido Ao Consumidor)</th>
-        <th>Diferença Entre <br> (Valor total presumido e Valor total vendido ao Consumidor)</th>
-        <th>Valor a ser restituído na venda (aliq. 25%)</th>
-      </tr>
-    </thead>
-
-    <tbody id="tabela-relatorio"></tbody>
-  </table>
 
   <script src="/js/main.js" type="module"></script>
   <script src="/js/NotaFiscal.js" type="module"></script>
@@ -114,6 +116,7 @@
   <script src="/js/retornaValorFormatado.js" type="module"></script>
   <script src="/js/retornaData.js" type="module"></script>
   <script src="/js/Calculo.js" type="module"></script>
+  <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 </body>
 
 </html>

@@ -4,7 +4,6 @@
 /* eslint-disable no-labels */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/extensions */
-import html2pdf from '../node_modules/html2pdf.js/dist/require/html2pdf.cjs.js';
 import NotaFiscal from './NotaFiscal.js';
 import Produto from './Produto.js';
 import listaDeAtos from './listaDeAtos.js';
@@ -274,21 +273,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.querySelector('#geraRelatorioPdf').addEventListener('click', () => {
-  const controles = document.querySelector('#controles');
-  controles.style.display = 'none';
+  // const controles = document.querySelector('#controles');
+  // controles.style.display = 'none';
 
-  const element = document.querySelector('body');
-  const opt = {
-    margin: 1,
-    filename: 'myfile.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
-  };
-
-  // New Promise-based usage:
-  html2pdf().from(element).set(opt).save();
-  // window.print();
+  const table = document.querySelector('teste');
+  const win = window.open('', '', 'height=700,width=700');
+  win.document.write(table);
+  win.document.close();
+  win.print();
 });
 
 window.addEventListener('afterprint', () => {
