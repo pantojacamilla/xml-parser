@@ -273,20 +273,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.querySelector('#geraRelatorioPdf').addEventListener('click', () => {
-  // const controles = document.querySelector('#controles');
-  // controles.style.display = 'none';
-
-  const table = document.querySelector('teste');
-  const win = window.open('', '', 'height=700,width=700');
-  win.document.write(table);
-  win.document.close();
-  win.print();
-});
-
-window.addEventListener('afterprint', () => {
   const controles = document.querySelector('#controles');
-  controles.style.display = '';
+  controles.style.display = 'none';
+  // window.print();
 });
+
+// window.addEventListener('afterprint', () => {
+//   const controles = document.querySelector('#controles');
+//   controles.style.display = '';
+// });
 
 document.querySelector('#notasFiscais').addEventListener('change', (event) => {
   const arquivos = Array.from(event.target.files);
