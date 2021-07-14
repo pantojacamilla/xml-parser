@@ -1,0 +1,37 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "plugins": [
+    "@babel"
+  ],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "allowImportExportEverywhere": false,
+    "ecmaFeatures": {
+      "globalReturn": false // allow return statements in the global scope when used with sourceType: "script".
+    }
+  },
+  "rules": {
+    "require-jsdoc": "off",
+    "arrow-body-style": "off",
+    "prefer-arrow-callback": "off",
+    "no-unused-expressions": "warn",
+    "no-unused-vars": "warn",
+    // These are all the rules that Babel-Plugin has support for. If the plugin will implement a rule, you should have it do so instead of using ESLint's equal rule.
+    "@babel/new-cap": "error",
+    "@babel/no-invalid-this": "error",
+    "@babel/no-unused-expressions": "error",
+    "@babel/object-curly-spacing": "error",
+    "@babel/semi": "error"
+    /*
+    I Omitted this rule because @Babel-Plugin offers this rule.
+    "semi": ["error", "always"],    */
+  }
+}
