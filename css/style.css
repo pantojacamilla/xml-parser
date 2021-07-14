@@ -1,0 +1,77 @@
+*{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.centered {
+margin:50px auto;
+text-align:center;
+}
+
+/* CABEÇALHO */
+
+#tabela-cabecalho {
+  text-align: center;
+  font-size: 13px;
+  border-collapse: collapse;
+  margin-left:auto;
+  margin-right:auto;
+  width:100%;
+  font-weight: bold;
+}
+
+#resumo-competencia {
+  color: white;
+  background-color: black;
+ }
+
+
+ #cabecalho td,#cabecalho th {
+  border: 1px solid #999;
+}
+
+.somas{
+  font-size: 16px;
+}
+
+
+/*  RELATORIO */
+
+#inputNotasFiscais {
+  /* padding: 12px 30px; */
+  margin-left: 50px;
+}
+
+#relatorio {
+  font-size: 12px;
+  border-collapse: collapse;
+  margin-left:auto;
+  margin-right:auto;
+  width:100%;
+}
+
+#relatorio td, #relatorio th {
+  border: 1px solid #ddd;
+  /* padding: 5px; */
+  text-align: center;
+}
+
+#relatorio th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+}
+
+.grey {
+  background-color: #acacac;
+}
+
+.positivo {
+  background-color: lightgreen;
+}
+
+.negativo{
+  background-color: red;
+}
+
+#relatorio tr:hover {background-color: rgb(21, 212, 47);}
