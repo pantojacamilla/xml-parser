@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
 
 Dinero.defaultCurrency = 'BRL';
@@ -62,7 +61,7 @@ export default class Calculo {
   static calculaSomatorioValorPresumido(valoresPresumidos) {
     let somatorio = 0;
     valoresPresumidos.forEach((valorPresumido) => {
-      somatorio = valorPresumido.add(Dinero({ amount: somatorio })).getAmount();
+      somatorio = valorPresumido.add(Dinero({amount: somatorio})).getAmount();
     });
     return somatorio;
   }
@@ -70,7 +69,7 @@ export default class Calculo {
   static calculaSomatorioValorPraticado(valoresPraticados) {
     let somatorio = 0;
     valoresPraticados.forEach((valorPraticado) => {
-      somatorio = valorPraticado.add(Dinero({ amount: somatorio })).getAmount();
+      somatorio = valorPraticado.add(Dinero({amount: somatorio})).getAmount();
     });
     return somatorio;
   }
@@ -78,7 +77,7 @@ export default class Calculo {
   static calculaSomatorioDiferenca(somaDiferencas) {
     let somatorio = 0;
     somaDiferencas.forEach((somaDiferenca) => {
-      somatorio = somaDiferenca.add(Dinero({ amount: somatorio })).getAmount();
+      somatorio = somaDiferenca.add(Dinero({amount: somatorio})).getAmount();
     });
     return somatorio;
   }
@@ -86,7 +85,7 @@ export default class Calculo {
   static calculaSomatorioIcms(somaIcms) {
     let somatorio = 0;
     somaIcms.forEach((somaIcm) => {
-      somatorio = somaIcm.add(Dinero({ amount: somatorio })).getAmount();
+      somatorio = somaIcm.add(Dinero({amount: somatorio})).getAmount();
     });
     return somatorio;
   }
@@ -124,10 +123,10 @@ export default class Calculo {
     // console.log(valorPraticado);
     // console.log(somaDiferenca);
     // console.log(somaIcm);
-    const valor1 = Dinero({ amount: valorPresumido });
-    const valor2 = Dinero({ amount: valorPraticado });
-    const valor3 = Dinero({ amount: somaDiferenca });
-    const valor4 = Dinero({ amount: somaIcm });
+    const valor1 = Dinero({amount: valorPresumido});
+    const valor2 = Dinero({amount: valorPraticado});
+    const valor3 = Dinero({amount: somaDiferenca});
+    const valor4 = Dinero({amount: somaIcm});
 
     const somatorias = [];
     somatorias.push(valor1, valor2, valor3, valor4);

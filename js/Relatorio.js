@@ -10,7 +10,6 @@ export default class Relatorio {
     this.somaIcmsRestituido = somaIcmsRestituido;
   }
 
-
   get competencia() {
     return this.competencia;
   }
@@ -21,5 +20,4 @@ export default class Relatorio {
   set competencia(competencia) {
     this.competencia = competencia;
   }
-
 }

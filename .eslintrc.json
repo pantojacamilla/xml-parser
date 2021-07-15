@@ -24,14 +24,43 @@
     "prefer-arrow-callback": "off",
     "no-unused-expressions": "warn",
     "no-unused-vars": "warn",
-    // These are all the rules that Babel-Plugin has support for. If the plugin will implement a rule, you should have it do so instead of using ESLint's equal rule.
-    "@babel/new-cap": "error",
-    "@babel/no-invalid-this": "error",
-    "@babel/no-unused-expressions": "error",
-    "@babel/object-curly-spacing": "error",
-    "@babel/semi": "error"
+    "object-curly-spacing": [
+      "error",
+      "never",
+      {
+        "objectsInObjects": true
+      }
+    ],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "import/extensions": [
+      "error",
+      {
+        "js": "always"
+      }
+    ],
+    "new-cap": [
+      "error",
+      {
+        "capIsNewExceptions": [
+          "Dinero"
+        ]
+      }
+    ],
     /*
     I Omitted this rule because @Babel-Plugin offers this rule.
-    "semi": ["error", "always"],    */
+    "semi": ["error", "always"],
+    */
+    // These are all the rules that Babel-Plugin has support for. If the plugin will implement a rule, you should have it do so instead of using ESLint's equal rule.
+    // "@babel/new-cap": "error",
+    "@babel/no-invalid-this": "error",
+    "@babel/no-unused-expressions": "error",
+    // "@babel/object-curly-spacing": "error",
+    "@babel/semi": "error"
   }
 }

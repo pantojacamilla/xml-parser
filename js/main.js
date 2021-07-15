@@ -1,9 +1,3 @@
-/* eslint-disable no-shadow */
-/* eslint-disable import/no-named-as-default-member */
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable no-labels */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable import/extensions */
 import NotaFiscal from './NotaFiscal.js';
 import Produto from './Produto.js';
 import listaDeAtos from './listaDeAtos.js';
@@ -294,5 +288,5 @@ document.querySelector('#inputNotasFiscais').addEventListener('change', (event) 
     const somatorias = Calculo.retornaAsSomatorias(linhasTabela);
     const relatorio = retornaRelatorio(linhasTabela, somatorias, competencia);
     UI.mostraRelatorio(relatorio);
-  }, 50000);
+  }, 100000);
 });

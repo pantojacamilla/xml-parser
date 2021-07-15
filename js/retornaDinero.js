@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import Dinero from '../node_modules/dinero.js/build/esm/dinero.js';
 
 const retornaDinero = (valor) => {

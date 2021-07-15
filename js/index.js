@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import Empresa from './Empresa.js';
 
 const criaUmObjetoEmpresa = (empresaSelecionada) => {

@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import retornaDinero from './retornaDinero.js';
 
 export default class ProdutoImposto {

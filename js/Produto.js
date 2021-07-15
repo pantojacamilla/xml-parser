@@ -1,6 +1,6 @@
-/* eslint-disable import/extensions */
 import retornaDinero from './retornaDinero.js';
 import retornaValorFormatado from './retornaValorFormatado.js';
+
 export default class Produto {
   valorPresumido;
   valorTotalPresumido;
