@@ -217,7 +217,7 @@ const preparaLinhasTabela = (notasFiscais) => {
 
   notasFiscais.forEach((nf) => {
     if (nf.statusNotaFiscal === 'Válida') {
-      const { produtos } = nf;
+      const {produtos} = nf;
       const numeroSequencial = retornaNumeroSequencial(nf);
       const nota = retornaNomeNotaFiscal(nf);
       const dataEmissao = retornaDataDeEmissao(nf);
@@ -277,6 +277,7 @@ document.querySelector('#geraRelatorioPdf').addEventListener('click', () => {
 //   controles.style.display = '';
 // });
 
+// Início do Programa
 document.querySelector('#inputNotasFiscais').addEventListener('change', (event) => {
   const arquivos = Array.from(event.target.files);
   const arquivosSelecionados = removeNotasFiscaisDeOutrasEmpresas(arquivos);
