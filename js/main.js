@@ -13,8 +13,13 @@ Dinero.defaultPrecision = 4;
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 
+const retornaCNPJsemCaracteresEspeciais = () => {
+  const regexCNPJ = /[!"#$%& '() * +,-./: ;<=>?@[\]^ `{|}~]/g;
+  return empresa.cnpjFormatado.replace(regexCNPJ, '');
+};
+
 const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
-  const cnpjSoNumeros = empresa.cnpjFormatado.replace(/[!"#$%&'() * +,-./: ;<=>?@[\]^ `{|}~]/g, '');
+  const cnpjSemCaracteresEspeciais = retornaCNPJsemCaracteresEspeciais();
   const nfsEmpresaSelecionada = notasFiscais.filter((nf) => nf.name.includes(cnpjSoNumeros));
   return nfsEmpresaSelecionada;
 };
