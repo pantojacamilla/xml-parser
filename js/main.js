@@ -13,19 +13,21 @@ Dinero.defaultPrecision = 4;
 
 const empresa = JSON.parse(window.localStorage.getItem('empresa'));
 
-const retornaCNPJsemCaracteresEspeciais = () => {
+const retornaOsNumerosDoCNPJ = () => {
   const regexCNPJ = /[!"#$%& '() * +,-./: ;<=>?@[\]^ `{|}~]/g;
   return empresa.cnpjFormatado.replace(regexCNPJ, '');
 };
 
-const removeNotasFiscaisDeOutrasEmpresas = (notasFiscais) => {
-  const cnpjSemCaracteresEspeciais = retornaCNPJsemCaracteresEspeciais();
+const retornaNFsDaEmpresaSelecionada = (notasFiscais) => {
+  const cnpjSoNumeros = retornaOsNumerosDoCNPJ();
   const nfsEmpresaSelecionada = notasFiscais.filter((nf) => nf.name.includes(cnpjSoNumeros));
   return nfsEmpresaSelecionada;
 };
 
-// Remove as notas canceladas com final (-nfce e -nfe) deixando apenas as
-// notas fiscais com final(-can)
+/*
+    Remove as notas canceladas com final (-nfce e -nfe)
+    deixando apenas as notas fiscais com final(-can)
+*/
 const removeNotasFiscaisCanceladas = (notasFiscais) => {
   const nfsCanceladas = notasFiscais.filter((nf) => nf.name.includes('-can'));
   const chavesDeAcesso = nfsCanceladas.map((nfCancelada) => nfCancelada.name.replace('-can.xml', '-nf'));
@@ -285,7 +287,7 @@ document.querySelector('#geraRelatorioPdf').addEventListener('click', () => {
 // Início do Programa
 document.querySelector('#inputNotasFiscais').addEventListener('change', (event) => {
   const arquivos = Array.from(event.target.files);
-  const arquivosSelecionados = removeNotasFiscaisDeOutrasEmpresas(arquivos);
+  const arquivosSelecionados = retornaNFsDaEmpresaSelecionada(arquivos);
   const arquivosParaClassificacao = removeNotasFiscaisCanceladas(arquivosSelecionados);
   const objetosNotaFiscal = retornaObjetosDoTipoNotaFiscal(arquivosParaClassificacao);
 
