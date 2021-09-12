@@ -13,9 +13,9 @@
 <body>
 
   <div id="controles">
-    <button class="large blue button" onclick="window.location.replace('index.html');">TROCAR EMPRESA</button>
-    <button class="large green button" id="geraRelatorioPdf">SALVAR EM PDF</button>
-    <button class="large red button" onClick="window.location.reload(true)">LIMPAR PÁGINA</button>
+    <button onclick="window.location.replace('index.html');">TROCAR EMPRESA</button>
+    <button id="geraRelatorioPdf">SALVAR EM PDF</button>
+    <button onClick="window.location.reload(true)">LIMPAR PÁGINA</button>
     <input type="file" id="inputNotasFiscais" accept="application/xml" multiple>
     <br><br>
   </div>
@@ -116,7 +116,6 @@
   <script src="/js/retornaValorFormatado.js" type="module"></script>
   <script src="/js/retornaData.js" type="module"></script>
   <script src="/js/Calculo.js" type="module"></script>
-  <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 </body>
 
 </html>

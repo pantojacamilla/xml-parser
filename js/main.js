@@ -5,6 +5,6 @@
  */
 
 // Início do Programa
-document.querySelector('#inputNotasFiscais').addEventListener('change', (event) => {
-
+document.querySelector('#inputNotasFiscais').addEventListener('change', (e) => {
+  e.preventDefault();
 });
