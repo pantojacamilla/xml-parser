@@ -6,5 +6,5 @@
 
 // Início do Programa
 document.querySelector('#inputNotasFiscais').addEventListener('change', (e) => {
-  e.preventDefault();
+  const arquivosEnviados = document.getElementById('inputNotasFiscais').files;
 });
