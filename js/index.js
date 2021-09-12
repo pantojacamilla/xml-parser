@@ -1,4 +1,4 @@
-// import Empresa from './Empresa.js';
+import Empresa from './Empresa.js';
 
 // const criaUmObjetoEmpresa = (empresaSelecionada) => {
 //   let empresa = {};
