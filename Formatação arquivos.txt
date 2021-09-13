@@ -1,0 +1,56 @@
+NOVAS NOTAS
+
+(58 chars) NFCe_15190807533992000242650010000013651280368670-proc.xml
+
+(57 chars) NFe_15190807533992000242550010000000021971799760-proc.xml
+
+
+
+-------------------------------------------------------------------------------------------
+PÁGINA 91
+
+   16   07533992000161 65 001 1046 1046-inu.xml
+
+15 1602 07533992000161 55 001 000000924 1 10831055 7 -can.xml
+15 1602 07533992000161 55 001 000000924 1 10831055 7 -nfe.xml
+
+
+Código UF (2)
+AAMM (4)
+CNPJ (14)
+MODELO DO DOC (2)
+SÉRIRE (3)
+NÚMERO DA NF-E (9)
+FORMA DE EMISSÃO (1)
+CÓDIGO NÚMERICO (8)
+DV (1)
+
+
+Inutilização de Numeração:O nome do arquivo será composto por:
+Ano de inutilização +
+CNPJ do emitente +
+Modelo +
+Série +
+Número Inicial +
+Número Final com extensão “-inu.xml”
+
+Cancelamento de NF-e:O nome do arquivo será a chave de  acesso completa com extensão “-can.xml”;
+
+
+moc7-visao-geral.pdf - Page 97
+C14 cSitNFe E C01 N 1-1 1 Situação da NF-e: 1=Uso autorizado; 2=Uso denegado;
+3=NF-e Cancelada;
+
+
+Page 84
+5.4.5. Final do Processamento
+O  processamento  do  pedido  de consulta de status de NF-e pode resultar em uma mensagem de erro
+ou retornar  à situação atual da NF-e consultada.
+
+No  caso  de  localização  da  NF-e  retornar  o  cStat  com  os  valores
+
+100 - Autorizado o Uso
+
+101 - Cancelamento de NF-e Homologado
+
+110 - Uso Denegado
