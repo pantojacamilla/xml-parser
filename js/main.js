@@ -1,5 +1,6 @@
 const fileListInputNotasFiscais = document.getElementById('inputNotasFiscais');
 let i;
+
 // Início do Programa
 document.querySelector('#inputNotasFiscais').addEventListener('change', (e) => {
   const arrayNotasFiscais = [];
