@@ -1,10 +1,11 @@
-/**
- * Como passar a informação do CNPJ da empresa escolhida para main.js
- *  Método anterior - Salvar em Local Storage
- *
- */
-
+const fileListInputNotasFiscais = document.getElementById('inputNotasFiscais');
+let i;
 // Início do Programa
 document.querySelector('#inputNotasFiscais').addEventListener('change', (e) => {
-  const arquivosEnviados = document.getElementById('inputNotasFiscais').files;
+  const arrayNotasFiscais = [];
+
+  // Transforma o fileFist em um array
+  for (i = 0; i < fileListInputNotasFiscais.files.length; i += 1) {
+    arrayNotasFiscais.push(fileListInputNotasFiscais.files[i]);
+  }
 });
